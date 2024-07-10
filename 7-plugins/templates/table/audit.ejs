@@ -1,0 +1,92 @@
+<div class="row">
+    <table class="table table-bordered" id="tb-custom">
+        <thead class="">
+            <tr>
+                <th width="30%" class="bg-<%= COLOR.secundary %>" dragonlanguage><language>MESSAGE.i('columns.created_at')</language></th>
+                <th id="created_at"></th>
+            </tr>
+            <tr>
+                <th width="30%" class="bg-<%= COLOR.secundary %>"dragonlanguage><language>MESSAGE.i('columns.created_by')</language></th>
+                <th id="created_by"></th>
+            </tr>
+            <tr>
+                <th width="30%" class="bg-<%= COLOR.secundary %>"dragonlanguage><language>MESSAGE.i('columns.created_ip')</language></th>
+                <th id="created_by_ip"></th>
+            </tr>
+            <tr>
+                <th width="30%" class="bg-<%= COLOR.secundary %>"dragonlanguage><language>MESSAGE.i('columns.updated_at')</language></th>
+                <th id="updated_at"></th>
+            </tr>
+            <tr>
+                <th width="30%" class="bg-<%= COLOR.secundary %>"dragonlanguage><language>MESSAGE.i('columns.updated_by')</language></th>
+                <th id="updated_by"></th>
+            </tr>
+            <tr>
+                <th width="30%" class="bg-<%= COLOR.secundary %>"dragonlanguage><language>MESSAGE.i('columns.updated_ip')</language></th>
+                <th id="updated_by_ip"></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<!--Table List-->
+<script>
+    $(function() {
+        SWEETALERT.loading({message: "Cargando Historial"});
+        var created_info;
+        var updated_info;
+        var currentsession = new SESSION().current();
+        BASEAPI.listp('dragon_audit',{
+            limit: 10,
+            orderby: "id",
+            order: "desc",
+            where:[{
+                field:"modelname",
+                value: <%= scope %>.crudConfig.table.view
+            }]
+        }).then(function (data) {
+            created_info = data.data;
+            console.log(created_info);
+            data.data.forEach(d=>{
+                try {
+                    if (d.dataJson)
+                        d.dataJson = JSON.parse(d.dataJson);
+                    if (d.updatedJson)
+                        d.updatedJson = JSON.parse(d.updatedJson);
+                }catch (e) {
+
+                }
+            });
+            updated_info = data.data.filter(d => {
+                if(d.updatedJson)
+                return (d.action == "update") && ((<%= scope %>.dataForView.id == d.updatedJson.id));
+                return false;
+            });
+            created_info = data.data.filter(d => {
+                if(d.dataJson)
+                return (d.action == "insert" ) && ((<%= scope %>.dataForView.id == d.dataJson.id ));
+                return false;
+            });
+           <%= scope %>.refreshAngular();
+            console.log(created_info, updated_info, currentsession);
+            if(created_info.length > 0) {
+                document.getElementById("created_at").innerHTML = LAN.datetime(created_info[0].date);
+                document.getElementById("created_by").innerHTML = created_info[0].username;
+                document.getElementById("created_by_ip").innerHTML = created_info[0].ip;
+            }else{
+                document.getElementById("created_at").innerHTML = "Fuera del sistema";
+                document.getElementById("created_by").innerHTML = "Desarrollador";
+                document.getElementById("created_by_ip").innerHTML = "Ninguna";
+            }
+            if(updated_info.length > 0) {
+                document.getElementById("updated_at").innerHTML = LAN.datetime(updated_info[0].date);
+                document.getElementById("updated_by").innerHTML = updated_info[0].username;
+                document.getElementById("updated_by_ip").innerHTML = updated_info[0].ip;
+            }else{
+                document.getElementById("updated_at").innerHTML = "Sin Actualizar aún";
+                document.getElementById("updated_by").innerHTML = "Nadie";
+                document.getElementById("updated_by_ip").innerHTML = "Ninguna";
+            }
+            SWEETALERT.stop();
+        });
+    });
+</script>

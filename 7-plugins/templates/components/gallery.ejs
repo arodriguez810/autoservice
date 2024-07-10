@@ -1,0 +1,468 @@
+<style>
+    .notsupportitem i {
+        font-size: 140px;
+    }
+</style>
+<script>
+    var viewModel = MODAL.getViewData() || baseController.viewData;
+    <%= DATA.scope %>.galleryFiles = {};
+    <%= DATA.scope %>.CINTILLO = JSON.parse(JSON.stringify(CINTILLO));
+    CINTILLO = "";
+    <%= DATA.scope %>.galleryFiles.viewModel = viewModel;
+    <%= DATA.scope %>.galleryFiles.data = {};
+    <%= DATA.scope %>.galleryFiles.data.files = [];
+    <%= DATA.scope %>.galleryFiles.upload = false;
+    <%= DATA.scope %>.galleryFiles.rootFolder = viewModel.root;
+    <%= DATA.scope %>.galleryFiles.fileName = viewModel.file;
+    <%= DATA.scope %>.maxsize = viewModel.maxsize || 20;
+    var firstThis = true;
+    <%= DATA.scope %>.galleryFiles.refresh = function () {
+        var http = new HTTP();
+        if (!firstThis) {
+            $(`[data-dragonfile='/${viewModel.root}']:not(:hidden)`).each(function () {
+                FILE.runServerFile($(this))
+            });
+        }
+        BASEAPI.ajax.get(http.path(["files", "api"]), {folder: viewModel.root}, async function (data) {
+            let users = await BASEAPI.listp('usuario', {
+                limit: 0,
+                where: [{
+                    field: 'compania',
+                    value: new SESSION().current().compania_id
+                }]
+            });
+            if (users.data)
+                users = users.data;
+            for (var i in data.data.files) {
+                var file = data.data.files[i];
+                let metadata = file.split('___');
+                data.data.files[i] = {
+                    url: `${http.path([FOLDERS.files, viewModel.root])}/${encodeURIComponent(file)}`,
+                    cleanUrl: http.cleanRoot(`${http.path([FOLDERS.files, viewModel.root])}/${encodeURIComponent(file)}`),
+                    selected: false,
+                    fileName: file,
+                    original: file.split('___')[0],
+                    ext: FILE.extension(file),
+                }
+                if (metadata.length > 3) {
+                    data.data.files[i].fecha = LAN.datetime(new Date(parseInt(metadata[2])));
+                    if (users) {
+                        if (users.filter) {
+                            let deuser = users.filter(d => {
+                                return d.id == metadata[3].split('.')[0];
+                            })[0];
+                            if (deuser)
+                                data.data.files[i].usuario = `${deuser.nombre} ${deuser.apellido}`;
+                            else
+                                data.data.files[i].usuario = "N/A";
+                        }
+                    } else
+                        data.data.files[i].usuario = "N/A";
+                } else {
+                    data.data.files[i].fecha = "N/A";
+                    data.data.files[i].usuario = "N/A";
+                }
+                data.data.files[i].originalCrop = DSON.substringif(data.data.files[i].original, 12);
+            }
+            <%= DATA.scope %>.
+            galleryFiles.data = data.data;
+
+
+            <%= DATA.scope %>.
+            galleryFiles.columns = (12 / viewModel.columns);
+            <%= DATA.scope %>.
+            refreshAngular();
+            firstThis = false;
+        });
+    };
+    <%= DATA.scope %>.galleryFiles.refresh();
+    <%= DATA.scope %>.galleryFiles.isSingle = function () {
+        return <%= DATA.scope %>.
+        galleryFiles.viewModel.maxfiles == 1;
+    };
+    <%= DATA.scope %>.galleryFiles.reachMaxFiles = function () {
+        if (<%= DATA.scope %>.
+        allow(['file.upload'])
+    )
+        {
+            return true
+        }
+        return (<%= DATA.scope %>.galleryFiles.data.files.length > 1
+    ) &&
+        (<%= DATA.scope %>.galleryFiles.data.files.length < <%= DATA.scope %>.
+        galleryFiles.viewModel.maxfiles
+    )
+        ;
+    };
+    <%= DATA.scope %>.galleryFiles.uploadview = function (file) {
+        <%= DATA.scope %>.
+        galleryFiles.upload = !<%= DATA.scope %>.
+        galleryFiles.upload;
+    };
+    <%= DATA.scope %>.galleryFiles.Icon = function (file) {
+        if (DSON.oseaX(file))
+            return "";
+        if (FILE.isImage(file.fileName)) {
+            return "image";
+        } else {
+            return FILE.fileToIcon(file.fileName);
+        }
+    };
+    <%= DATA.scope %>.galleryFiles.view = function (file) {
+        var load = new LOAD();
+        if (FILE.isImage(file.fileName)) {
+            load.template('templates/components/crop', {src: file.url}, function (html) {
+                <%= DATA.scope %>.
+                modal.simpleModal(html, {header: {title: MESSAGE.i('mono.preview')}});
+            });
+        } else {
+            load.template('templates/components/object', {src: file.url}, function (html) {
+                <%= DATA.scope %>.
+                modal.simpleModal(html, {header: {title: MESSAGE.ic('mono.preview')}});
+            });
+        }
+    };
+    <%= DATA.scope %>.galleryFiles.check = function (file) {
+        console.log("CHEKEADO");
+        file.selected = !file.selected;
+    };
+    <%= DATA.scope %>.galleryFiles.allChecked = function () {
+        var allSelected = <%= DATA.scope %>.
+        galleryFiles.data.files.filter(function (file) {
+            return !file.selected;
+        });
+        return allSelected.length === 0;
+    };
+    <%= DATA.scope %>.galleryFiles.allCheckedText = function () {
+        return <%= DATA.scope %>.
+        galleryFiles.allChecked() ? "UnCheck" : "Check";
+    };
+    <%= DATA.scope %>.galleryFiles.allCheckedIcon = function () {
+        return !<%= DATA.scope %>.
+        galleryFiles.allChecked() ? "checkbox-unchecked" : "checkbox-checked";
+    };
+    <%= DATA.scope %>.galleryFiles.checkAll = function () {
+        if (<%= DATA.scope %>.
+        galleryFiles.allChecked()
+    )
+
+        {
+            for (var file of <%= DATA.scope %>.
+            galleryFiles.data.files
+        )
+            {
+                file.selected = false;
+            }
+        }
+    else
+        {
+            for (var file of <%= DATA.scope %>.
+            galleryFiles.data.files
+        )
+            {
+                file.selected = true;
+            }
+        }
+    };
+    <%= DATA.scope %>.galleryFiles.getIcon = function (file) {
+        return !file.selected ? "checkbox-unchecked" : "checkbox-checked";
+    };
+    <%= DATA.scope %>.galleryFiles.deleteSelected = function () {
+
+        var allSelected = <%= DATA.scope %>.
+        galleryFiles.data.files.filter(function (file) {
+            return file.selected;
+        });
+
+        <%= DATA.scope %>.
+        galleryFiles.delete(allSelected);
+    };
+    <%= DATA.scope %>.galleryFiles.delete = function (files) {
+
+        var finalArray = [];
+        if (!Array.isArray(files)) {
+            finalArray.push(files.cleanUrl);
+        } else
+            for (var i in files) {
+                finalArray.push(files[i].cleanUrl);
+            }
+        SWEETALERT.confirm({
+            message: MESSAGE.i('alerts.AYSDeleteFile'),
+            confirm: function () {
+                SWEETALERT.loading({message: MESSAGE.ic('mono.deleting')});
+                BASEAPI.ajax.post(new HTTP().path(["files", "api", "delete"]), {filename: finalArray}, function (data) {
+                    SWEETALERT.stop();
+                    if (data.data.deleted) {
+                        <%= DATA.scope %>.
+                        galleryFiles.refresh();
+                    }
+                });
+            }
+        });
+    };
+
+    <%= DATA.scope %>.galleryFiles.downloadAll = function () {
+        if(<%= DATA.scope %>.galleryFiles.data.files.length>0)
+        {
+        SWEETALERT.confirm({
+            message: MESSAGE.i('alerts.AYSDownloadAll'),
+            confirm: function () {
+                var http = new HTTP();
+                SWEETALERT.loading({message: MESSAGE.i('mono.Preparingdownloadforfiles')});
+                BASEAPI.ajax.get(http.path(["files", "api", "download"]), {
+                    folder: viewModel.root,
+                    name: MODAL.current().header.title + ".zip"
+                }, function (data) {
+
+
+                        if (data) {
+                            if (data.zipped) {
+                                SWEETALERT.stop();
+
+                                var url = http.path(["files", viewModel.root, MODAL.current().header.title + ".zip"]);
+                                console.log()
+                                DOWNLOAD.fileUrl(url, MODAL.current().header.title + ".zip");
+                                return;
+                            }
+                        }
+
+                    SWEETALERT.show({
+                        type: "error",
+                        message: "Los archivos no se pudieron descargar, favor asegurese de que en esta sección de archivos haya por lo menos 1 archivos subido para ejecutar 'Descargar Todo'"
+                    });
+                });
+            }
+        });
+    }else{
+
+            SWEETALERT.show({
+                type: "error",
+                message: "Favor asegurese de que en esta sección de archivos haya por lo menos 1 archivos subido para ejecutar 'Descargar Todo'"
+            });
+        }
+    };
+</script>
+<div class="alert alpha-<%= COLOR.secundary %> border-<%= COLOR.secundary %> alert-styled-left" style="text-align: left"
+     ng-show="<%= DATA.scope %>.CINTILLO">
+    <h6 class="panel-title">{{<%= DATA.scope %>.CINTILLO}}</h6>
+</div>
+<div dragonlanguage=""
+     ng-show="<%= DATA.scope %>.allow(['file.remove','file.upload']) || <%= DATA.scope %>.galleryFiles.data.files.length<=0"
+     class="alert alpha-<%= COLOR.secundary %> border-<%= COLOR.secundary %> alert-styled-left">
+    <ul>
+        <li ng-show="baseController.viewData.showMymessage">
+            {{baseController.viewData.Mymessage || ""}}
+        </li>
+        <li ng-show="<%= DATA.scope %>.allow(['file.remove','file.upload'])">
+            El límite de cada archivo es de <b>{{<%= DATA.scope %>.maxsize || 20}}mb</b>
+        </li>
+        <li ng-show="<%= DATA.scope %>.galleryFiles.columns && <%= DATA.scope %>.galleryFiles.data.files.length<=0">
+            <language>MESSAGE.i('mono.Thereisnofilestoshow')</language>
+        </li>
+    </ul>
+</div>
+
+<div class="row"
+     ng-show="!baseController.viewData.showMymessage && <%= DATA.scope %>.allow(['file.remove','file.upload'])">
+    <div class="col-md-3">
+        <a ng-click="<%= DATA.scope %>.showfiletypes()">
+            <p style="font-size: 14px; color: red">
+                <i class="icon-eye" style="font-size: 14px"></i> Ver tipos de archivo permitidos
+            </p>
+        </a>
+    </div>
+</div>
+<div class="col-md-4 pull-right22 pl-0" ng-show="<%= DATA.scope %>.allow(['file.remove','file.download','file.upload'])"
+     class="panel panel-<%= COLOR.secundary %>">
+    <div class="panel panel-<%= COLOR.secundary %>">
+        <div class="panel-body" ng-show="<%= DATA.scope %>.galleryFiles.reachMaxFiles()">
+            <div class="row">
+                <center>
+                    <div class="btn-group">
+                        <button
+                                title="Subir Evidencia" type="button"
+                                role="button"
+                                class=" btn bg-<%= COLOR.secundary %>-600 btn-labeled btn-xs"
+                                ng-show="<%= DATA.scope %>.allow('file.upload')"
+                                ng-click="<%= DATA.scope %>.galleryFiles.uploadview()" dragonlanguage="">
+                            <b><i class="icon-upload"></i></b>
+                            <language>Subir Evidencia</language>
+                        </button>
+                    </div>
+
+                    <div class="btn-group" ng-show="!<%= DATA.scope %>.galleryFiles.isSingle()">
+                        <button title="{{<%= DATA.scope %>.galleryFiles.allCheckedText()}} All"
+                                ng-click="<%= DATA.scope %>.galleryFiles.checkAll()" type="button"
+                                ng-show="<%= DATA.scope %>.allow(['file.remove','file.download','file.upload'])"
+                                class="btn bg-<%= COLOR.secundary %>-600 btn-icon">
+                            <span class="icon-{{<%= DATA.scope %>.galleryFiles.allCheckedIcon()}}"></span>
+                        </button>
+                    </div>
+
+                    <div class="btn-group"
+                         ng-if="false"
+                         ng-show="!<%= DATA.scope %>.galleryFiles.isSingle() && <%= DATA.scope %>.allow('file.download') && <%= DATA.scope %>.galleryFiles.data.files.length>0">
+                        <button title="Descargar todo" ng-click="<%= DATA.scope %>.galleryFiles.downloadAll()"
+                                type="button"
+                                class="btn bg-<%= COLOR.secundary %>-600 btn-icon">
+                            <span class="icon-download"></span>
+                        </button>
+                    </div>
+
+                    <!--<div class="btn-group"-->
+                    <!--ng-show="!<%= DATA.scope %>.galleryFiles.isSingle() && <%= DATA.scope %>.allow('file.download')">-->
+                    <!--<button title="Descargar imágenes seleccionados" ng-click="" type="button"-->
+                    <!--class="btn bg-<%= COLOR.secundary %>-600 btn-icon">-->
+                    <!--<span class="icon-download10"></span>-->
+                    <!--</button>-->
+                    <!--</div>-->
+
+
+                    <div class="btn-group"
+                         ng-show="!<%= DATA.scope %>.galleryFiles.isSingle() && <%= DATA.scope %>.allow('file.remove')">
+                        <button title="Eliminar imágenes seleccionadas"
+                                ng-click="<%= DATA.scope %>.galleryFiles.deleteSelected()" type="button"
+                                class="btn bg-<%= COLOR.secundary %>-600 btn-icon" style="margin-right: 0">
+                            <span class="icon-trash"></span>
+                        </button>
+                    </div>
+                </center>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="col-md-4 pull-right pl-0">
+    <!--<div class="panel panel-<%= COLOR.secundary %>">-->
+    <!--<div class="panel-body">-->
+    <!--<div class="row">-->
+    <!--<center>-->
+    <!--<label style="margin-bottom: 0; font-size: 18px;">Archivos subidos (0)</label>-->
+    <!--</center>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+</div>
+
+<div class="panel panel-flat galleryImagesClass"
+     ng-show="(<%= DATA.scope %>.galleryFiles.upload && <%= DATA.scope %>.galleryFiles.columns) && <%= DATA.scope %>.galleryFiles.reachMaxFiles()">
+    <div class="panel-heading">
+        <h5 dragonlanguage class="panel-title">
+            <language>MESSAGE.i('alerts.SelectorDropFiles')</language>
+        </h5>
+    </div>
+    <div class="panel-body">
+        <form class="dropzone" id="filesForm" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="folder" value="{{<%= DATA.scope %>.galleryFiles.rootFolder}}">
+            <input type="hidden" name="user" value="{{baseController.userID}}">
+            <input type="hidden" name="filename" value="{{<%= DATA.scope %>.galleryFiles.fileName}}">
+        </form>
+    </div>
+</div>
+<div class="row imagen-panel" id="galleryFiles">
+    <div class="col-md-{{<%= DATA.scope %>.galleryFiles.columns}}"
+         ng-repeat="(key,file) in <%= DATA.scope %>.galleryFiles.data.files track by key">
+        <div class="panel panel-flat galleryImagesClass">
+            <div class="panel-body image-body">
+                <div class="thumbnail" style="width: 100%">
+                    <div class="thumb" style="width: 100%;min-height: 200px;">
+                        <div ng-if="<%= DATA.scope %>.galleryFiles.Icon(file)!=='image'"
+                             class="notsupportitem"
+                             ng-bind-html="<%= DATA.scope %>.galleryFiles.Icon(file)"></div>
+
+                        <object ng-if="<%= DATA.scope %>.galleryFiles.Icon(file)!=='image' && file.fileName.indexOf('docx')===-1 && file.fileName.indexOf('doc')===-1 && file.fileName.indexOf('xls')===-1 && file.fileName.indexOf('xlsx')===-1"
+                                title="{{file.original}}"
+                                style='height: auto;width: 200px'
+                                data='{{file.url}}'></object>
+
+
+                        <img ng-if="<%= DATA.scope %>.galleryFiles.Icon(file)==='image'"
+                             style='max-height: 198px;width: 200px'
+                             src='{{file.url}}'/>
+
+                    </div>
+                    <div class="panel-footer panel-footer-transparent">
+                        <div style="padding-right: 0px;text-align: center;">
+                            <strong>{{file.original}}</strong>
+                        </div>
+                        <div class="" style="padding-right: 0px;text-align: center;">
+
+
+                            <a title="Agrandar" ng-click="<%= DATA.scope %>.galleryFiles.view(file)"
+                               ng-show="file.fileName.indexOf('docx')===-1 && file.fileName.indexOf('doc')===-1 && file.fileName.indexOf('xls')===-1 && file.fileName.indexOf('xlsx')===-1"
+                               class="btn  border-<%= COLOR.primary %>-300 text-black btn-icon">
+                                <i class="icon-zoomin3"></i>
+                            </a>
+
+
+                            <a title="Descargar" href="{{file.url}}" download="{{file.original}}"
+                               ng-show="<%= DATA.scope %>.allow('file.download')"
+                               class="btn  border-<%= COLOR.primary %>-300 text-black btn-icon">
+                                <i class="icon-download"></i>
+                            </a>
+                            <a title="Eliminar" ng-click="<%= DATA.scope %>.galleryFiles.delete(file)"
+                               ng-show="<%= DATA.scope %>.allow('file.remove')"
+                               class="btn  border-<%= COLOR.primary %>-300 text-black btn-icon">
+                                <i class="icon-trash"></i>
+                            </a>
+                            <a title="Seleccionar" ng-click="<%= DATA.scope %>.galleryFiles.check(file)"
+                               ng-show="<%= DATA.scope %>.allow(['file.remove','file.download','file.upload'])"
+                               class="btn  border-<%= COLOR.primary %>-300 text-black btn-icon check-button">
+                                <i class="icon-{{<%= DATA.scope %>.galleryFiles.getIcon(file)}} position-left"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <b>Subido por:</b> {{file.usuario}}<br>
+                <b>Fecha:</b> {{file.fecha}}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var http = new HTTP();
+        $("#filesForm").attr('action', http.path(["files", "api", "upload"]));
+        var myDropzone = $("#filesForm").dropzone({
+            paramName: "toupload", // The name that will be used to transfer the file
+            dictDefaultMessage: MESSAGE.i('alerts.upload'),
+            maxFilesize: viewModel.maxsize || 20, // MB
+            maxFiles: viewModel.maxfiles || 20,
+            acceptedFiles: viewModel.acceptedFiles || null,
+
+            accept: function (file, done) {
+                if (file.type.indexOf("application/x-msdownload") !== -1) {
+                    SWEETALERT.show({
+                        type: 'error',
+                        message: "Error! este archivo no es permitido",
+                        confirm: function () {
+                            done("Error! este archivo no es permitido");
+                        }
+                    })
+                } else {
+                    done();
+                }
+            },
+            init: function () {
+                this.on('complete', function (file) {
+                    this.removeFile(file);
+                    if ((file.size / 1000000) > viewModel.maxsize) {
+                        SWEETALERT.show({message: `El tamaño del archivo excede el límite soportado por el sistema. El límite es  (` + viewModel.maxsize + ` MB).`});
+                    } else {
+                        <%= DATA.scope %>.
+                        galleryFiles.refresh();
+                    }
+                });
+                this.on('completemultiple', function (file) {
+                    if ((file.size / 1000000) > viewModel.maxsize) {
+                        SWEETALERT.show({message: `El tamaño del archivo excede el límite soportado por el sistema. El límite es  (` + viewModel.maxsize + ` MB).`});
+                    } else {
+                        <%= DATA.scope %>.
+                        galleryFiles.refresh();
+                    }
+                });
+            }
+        });
+    });
+</script>

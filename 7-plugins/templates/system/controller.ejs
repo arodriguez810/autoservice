@@ -1,0 +1,16 @@
+app.controller("<%= scope %>", function ($scope, $http, $compile) {
+    <%= scope %> = this;
+    RUNCONTROLLER("<%= scope %>", <%= scope %>, $scope, $http, $compile);
+    <%= scope %>.formulary = function (data, mode, defaultData) {
+        if (<%= scope %> !== undefined) {
+            RUN_B("<%= scope %>", <%= scope %>, $scope, $http, $compile);
+            <%= scope %>.form.readonly = {};
+            <%= scope %>.createForm(data, mode, defaultData);
+            <%= scope %>.$scope.$watch('<%= scope %>.name', function (value) {
+                var rules = [];
+                rules.push(VALIDATION.general.required(value));
+                VALIDATION.validate(<%= scope %>, "name", rules);
+            });
+        }
+    };
+});

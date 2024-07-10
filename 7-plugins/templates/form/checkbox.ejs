@@ -1,0 +1,129 @@
+<%
+if (DATA.name !== undefined) {
+    var name, model, opts;
+    name = DATA.name;
+    model = DATA.model;
+    if (DATA.opts !== "")
+        opts = eval("(" + DATA.opts + ")");
+}
+var name = name || "";
+var options = {
+    text: name + "?",
+    checked: false,
+    posttype: "checkbox",
+    disabled: false,
+    size: 'switchery',
+    icon: {
+        class: "none",
+        position: "left",
+        color: COLOR.secundary + "-800"
+    },
+};
+options = OBJECT.merge(options, opts); var nameclean = name.replace(/\./g, '_');
+options.icon.spyce = options.icon.class === "none" ? "remove-input-space" : "";
+options.model = options.model ? options.model : false;
+popopme = function (entity, field) {
+    var prueba = HINTS.filter(d => {
+        return (d.trueEntity === entity || d.entities === entity) && d.field_names === field
+    })
+
+    function sortArray() {
+        options.popover = prueba.sort(function (a, b) {
+            return b.id - a.id
+        })[0];
+    }
+
+    sortArray();
+}
+popopme(model, nameclean);
+var toclient = JSON.stringify(options);
+%>
+<script>
+    <%= model %>.triggers.table.before.control("<%= nameclean %>");
+    <%= model %>.form.schemas.insert["<%= name %>"] = FORM.schemasType.checkbox;
+    <%= model %>.form.schemas.select["<%= name %>"] = FORM.schemasType.checkbox;
+    <%= model %>.form.registerField("<%= name %>", "<%= toclient %>");
+    if (MESSAGE.exist('columns.<%= nameclean %>')) {
+        <%= model %>.
+        form.options.<%= name %>.text = MESSAGE.i('columns.<%= nameclean %>');
+    }
+    var isReadProgram = <%= model %>.form.isReadOnly('<%= name %>');
+    if (isReadProgram !== false) {
+        <%= model %>.
+        form.options.<%= name %>.disabled = true;
+        if (isReadProgram !== undefined) {
+            <%= model %>.<%= name %> = isReadProgram;
+            checkbox<%= model %>_<%= nameclean %> = isReadProgram;
+        }
+    }
+
+    <%= model %>.<%= name %> = eval(<%= model %>.<%= name %>)
+    ;
+    <%= model %>.<%= name %> = <%= model %>.<%= name %>? true : false;
+</script>
+<label>
+
+    {{<%= model %>.form.options.<%= name %>.truetext || <%= model %>.form.options.<%= name %>.text}}
+    <% if(options.popover){ %>
+        <i
+                id="popover<%= model %>_<%= nameclean %>" class="icon-help">
+        </i>
+    <% } %>
+</label>
+<div>
+    <div class="checkbox checkbox-switchery <%= options.size %>"
+         ng-show="!<%= model %>.form.options.<%= name %>.disabled">
+        <input
+                type="checkbox"
+                name="<%= model %>_<%= nameclean %>"
+                id="<%= model %>_<%= nameclean %>"
+                class="switchery"
+        />
+
+    </div>
+    <div class="checkbox checkbox-switchery" ng-show="<%= model %>.form.options.<%= name %>.disabled">
+
+        {{<%= model + "." + name %> ? "Sí" : "No"  }}
+    </div>
+</div>
+
+<script>
+    var element = document.getElementById("<%= model %>_<%= nameclean %>");
+    var checkbox<%= model %>_<%= nameclean %> = new Switchery(element, {size: "small"});
+    if (<%= model %>.<%= name %>)
+    {
+        checkbox<%= model %>_<%= nameclean %>.setPosition(<%= model + "." + name %>);
+    }
+    <% if(options.popover){ %>
+        $('#popover<%= model %>_<%= nameclean %>').popover({
+            container: 'body',
+            title: eval("`" +<%= model %>.form.options.<%= name %>.truetext + "`") !== "undefined" ?  eval("`" +<%= model %>.form.options.<%= name %>.truetext + "`")  : eval("`" +<%= model %>.form.options.<%= name %>.text + "`"),
+            content: eval("`" +<%= model %>.form.options.<%= name %>.popover.text + "`"),
+        trigger: 'manual'
+        });
+        // Obtén el elemento que deseas observar
+        const elemento = document.getElementById("popover<%= model %>_<%= nameclean %>");
+
+        // Agrega un event listener al objeto document
+        document.addEventListener("click", function(evento) {
+            // Verifica si el evento ocurrió fuera del elemento que estamos observando
+            if (elemento !== evento.target && !elemento.contains(evento.target)) {
+                // Se hizo clic fuera del elemento
+                $('#popover<%= model %>_<%= nameclean %>').popover('hide')
+
+            }
+        });
+        $('#popover<%= model %>_<%= nameclean %>').on('click', function(evento) {
+            evento.stopPropagation();
+            $(this).popover('show');
+        });
+    <% } %>
+
+    $("#<%= model %>_<%= nameclean %>").change(function (val) {
+        <%= model %>.<%= name %> = $(this).prop("checked");
+
+        <%= model %>.
+        refreshAngular();
+    });
+    <%= model %>.triggers.table.after.control("<%= nameclean %>");
+</script>

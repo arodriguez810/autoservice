@@ -1,0 +1,19 @@
+
+
+
+<tr ng-repeat="(keycolum, value) in <%= scope %>.columns() track by keycolum" ng-show="value.visibleDetail!=false">
+    <td class="text-white bg-<%= COLOR.secundary %> text-bold">
+        <span ng-bind-html="<%= scope %>.columnLabel(value,keycolum)"></span>
+    </td>
+    <td>
+        <span
+                ng-bind-html="<%= scope %>.cellValue(keycolum,value,<%= scope %>.records.data[0])"
+                ng-click="<%= scope %>.cell.click(keycolum,value,<%= scope %>.records.data[0])"
+                ng-dblclick="<%= scope %>.cell.dblclick(keycolum,value,<%= scope %>.records.data[0])"
+
+        >
+
+        </span>
+    </td>
+
+</tr>

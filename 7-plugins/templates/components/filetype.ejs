@@ -1,0 +1,49 @@
+<div class="subcontent">
+    <table class="table table-bordered" style="margin-top: 15px;">
+        <thead class="">
+        <tr height="20"  class="centralizarth" style="background-color: <%=CONFIG.ui.theme.primary.indexOf("rgb") > -1 ? CONFIG.ui.theme.primary : '#' + CONFIG.ui.theme.primary%> !important; color: white; ">
+            <th style="width: 0px;">Imagen</th>
+            <th style="width: 0px;">Audio</th>
+            <th style="width: 0px;">Archivo comprimido</th>
+            <th style="width: 0px;">Vídeo</th>
+            <th style="width: 0px;">Texto</th>
+            <th style="width: 0px;">Sólo lectura</th>
+            <th style="width: 0px;">Hoja de cálculo</th>
+            <th style="width: 0px;">Presentación</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr style="vertical-align: middle" class="centralizartd" ng-repeat="(key,value) in <%= scope %>.permitted_files">
+                <td style="text-align: center;">
+                    <span style="font-size: 11px">{{value.image}}</span>
+                </td>
+                <td style="text-align: center;">
+                    <span style="font-size: 11px">{{value.audio}}</span>
+                </td>
+                <td style="text-align: center;">
+                    <span style="font-size: 11px">{{value.compressed}}</span>
+                </td>
+                <td style="text-align: center;">
+                    <span style="font-size: 11px">{{value.video}}</span>
+                </td>
+                <td style="text-align: center;">
+                    <span style="font-size: 11px">{{value.text}}</span>
+                </td>
+                <td style="text-align: center;">
+                    <span style="font-size: 11px">{{value.readonlytext}}</span>
+                </td>
+                <td style="text-align: center;">
+                    <span style="font-size: 11px">{{value.excel}}</span>
+                </td>
+                <td style="text-align: center;">
+                    <span style="font-size: 11px">{{value.powerpoint}}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    $(function(){
+        <%= scope %>.refreshAngular();
+    });
+</script>

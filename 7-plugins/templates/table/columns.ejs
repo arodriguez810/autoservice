@@ -1,0 +1,24 @@
+
+
+<a ng-if="value.sortable!==false && <%= scope %>.characterist('sortable')"
+   style="cursor: pointer;color: <%= CONFIG.ui.theme.text1 %> !important;text-decoration: underline"
+   title="{{<%= scope %>.sortTitle(value,key)}}" ng-click="<%= scope %>.sort(value,key)"
+   ng-bind-html="<%= scope %>.columnLabel(value,key)"></a>
+
+<span ng-if="value.sortable===false || !<%= scope %>.characterist('sortable')"
+      style="cursor: pointer;color: <%= CONFIG.ui.theme.text1 %> !important;"
+      ng-bind-html="<%= scope %>.columnLabel(value,key)"></span>
+
+
+<i ng-show="<%= scope %>.characterist('sortable')"
+   ng-if="value.sortable!==false"
+   class="{{<%= scope %>.sortIcon(value)}} cursor-pointer"
+   title="{{<%= scope %>.sortTitleIcon(value,key)}}"
+>
+
+</i>
+<i ng-show="<%= scope %>.characterist('persist')"
+   ng-click="<%= scope %>.hideColumn(key)"
+   style="float:right"
+   class="float-right cursor-pointer icon-eye-blocked show-tr">
+</i>

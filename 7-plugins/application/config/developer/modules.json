@@ -1,0 +1,204 @@
+{
+  "modules": [
+    {
+      "var": "express",
+      "module": "express"
+    },
+    {
+      "var": "cors",
+      "module": "cors"
+    },
+    {
+      "var": "os",
+      "module": "os"
+    },
+    {
+      "var": "ejs",
+      "module": "ejs"
+    },
+    {
+      "var": "compression",
+      "module": "compression"
+    },
+    {
+      "var": "morgan",
+      "module": "morgan"
+    },
+    {
+      "var": "bodyParser",
+      "module": "body-parser"
+    },
+    {
+      "var": "methodOverride",
+      "module": "method-override"
+    },
+    {
+      "var": "publicIp ",
+      "module": "public-ip"
+    },
+    {
+      "var": "S",
+      "module": "string"
+    },
+    {
+      "var": "util",
+      "module": "util"
+    },
+    {
+      "var": "layout",
+      "module": "express-layout"
+    },
+    {
+      "var": "mssql",
+      "module": "mssql"
+    },
+    {
+      "var": "nodemssql",
+      "module": "node-mssql"
+    },
+    {
+      "var": "mysql",
+      "module": "mysql"
+    },
+    {
+      "var": "MysqlPoolBooster",
+      "module": "mysql-pool-booster"
+    },
+    {
+      "var": "postgre",
+      "module": "pg"
+    },
+    {
+      "var": "colors",
+      "module": "colors"
+    },
+    {
+      "var": "co",
+      "module": "co"
+    },
+    {
+      "var": "format",
+      "module": "string-format"
+    },
+    {
+      "var": "child_process",
+      "module": "child_process"
+    },
+    {
+      "var": "pluralize",
+      "module": "pluralize"
+    },
+    {
+      "var": "capitalize",
+      "module": "capitalize"
+    },
+    {
+      "var": "sleep",
+      "module": "system-sleep"
+    },
+    {
+      "var": "PDF",
+      "module": "phantom-html2pdf"
+    },
+    {
+      "var": "HtmlDocx",
+      "module": "html-docx-js"
+    },
+    {
+      "var": "docxConverter",
+      "module": "docx-pdf"
+    },
+    {
+      "var": "HTMLPDF",
+      "module": "html-pdf"
+    },
+    {
+      "var": "md5",
+      "module": "md5"
+    },
+    {
+      "var": "http",
+      "module": "http"
+    },
+    {
+      "var": "https",
+      "module": "https"
+    },
+    {
+      "var": "fetch ",
+      "module": "node-fetch"
+    },
+    {
+      "var": "deepmerge",
+      "module": "deepmerge"
+    },
+    {
+      "var": "JSZip",
+      "module": "jszip"
+    },
+    {
+      "var": "zipdir",
+      "module": "zip-dir"
+    },
+    {
+      "var": "multer",
+      "module": "multer"
+    },
+    {
+      "var": "shelljs",
+      "module": "shelljs"
+    },
+    {
+      "var": "XLSX",
+      "module": "xlsx"
+    },
+    {
+      "var": "csvtojson",
+      "module": "csvtojson"
+    },
+    {
+      "var": "rimraf",
+      "module": "rimraf"
+    },
+    {
+      "var": "jwt",
+      "module": "jsonwebtoken"
+    },
+    {
+      "var": "storage",
+      "module": "node-persist"
+    },
+    {
+      "var": "mail",
+      "module": "nodemailer"
+    },
+    {
+      "var": "OneSignal",
+      "module": "onesignal-node"
+    },
+    {
+      "var": "tinycolor",
+      "module": "tinycolor2"
+    },
+    {
+      "var": "schedule",
+      "module": "node-schedule"
+    },
+    {
+      "var": "moment",
+      "module": "moment"
+    },
+    {
+      "var": "session",
+      "module": "express-session"
+    }
+    //    {
+    //      "var": "edge",
+    //      "module": "edge-js"
+    //    },
+    //    {
+    //      "var": "msopdf",
+    //      "module": "node-msoffice-pdf"
+    //    }
+  ]
+}

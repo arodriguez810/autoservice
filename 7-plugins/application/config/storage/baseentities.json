@@ -1,0 +1,195 @@
+{
+  "storageEntities": {
+    "user_group": {
+      "key": "id",
+      "type": "one",
+      "fields": [
+        "user",
+        "group",
+        "created",
+        "updated",
+        "tempid",
+        "user_created",
+        "user_updated"
+      ]
+    },
+    "permission": {
+      "type": "deep"
+    },
+    "configuration": {
+      "type": "deep"
+    },
+    "menu": {
+      "type": "deep"
+    },
+    "notifications": {
+      "key": "id",
+      "type": "one",
+      "fields": [
+        "subject",
+        "showSegments",
+        "advance",
+        "schedule",
+        "count",
+        "interval",
+        "until",
+        "notificationID",
+        "sendAfter",
+        "headings",
+        "url",
+        "content",
+        "created",
+        "updated",
+        "user_created",
+        "user_updated"
+      ]
+    },
+    "segment": {
+      "key": "id",
+      "type": "one",
+      "base": true,
+      "fields": [
+        "name",
+        "description",
+        "created",
+        "updated",
+        "user_created",
+        "user_updated"
+      ]
+    },
+    "interval": {
+      "key": "id",
+      "type": "one",
+      "base": true,
+      "fields": [
+        "name",
+        "description",
+        "code",
+        "created",
+        "updated",
+        "user_created",
+        "user_updated"
+      ]
+    },
+    "notifications_segment": {
+      "key": "id",
+      "type": "one",
+      "fields": [
+        "notifications",
+        "segment",
+        "created",
+        "updated",
+        "tempid",
+        "user_created",
+        "user_updated"
+      ]
+    },
+    "user_notifications": {
+      "key": "id",
+      "type": "one",
+      "fields": [
+        "user",
+        "notifications",
+        "created",
+        "updated",
+        "tempid",
+        "user_created",
+        "user_updated"
+      ]
+    },
+    "customfield": {
+      "key": "id",
+      "type": "one",
+      "open": true,
+      "fields": [
+        "name",
+        "description",
+        "variable",
+        "length",
+        "elements",
+        "multiple",
+        "mask",
+        "parent",
+        "type",
+        "isDecimal",
+        "positions",
+        "fileCount",
+        "multiplefile",
+        "documentType",
+        "created",
+        "updated",
+        "user_created",
+        "user_updated"
+      ]
+    },
+    "fieldtype": {
+      "key": "id",
+      "type": "one",
+      "base": true,
+      "fields": [
+        "name",
+        "key",
+        "description",
+        "created",
+        "updated",
+        "user_created",
+        "user_updated"
+      ]
+    },
+
+    "mime": {
+      "key": "id",
+      "type": "one",
+      "base": true,
+      "fields": [
+        "name",
+        "key",
+        "description",
+        "created",
+        "updated",
+        "user_created",
+        "user_updated"
+      ]
+    },
+    "base_currency": {
+      "key": "id",
+      "type": "one",
+      "base": true,
+      "fields": [
+        "name",
+        "description",
+        "symbol",
+        "decimal",
+        "separator",
+        "precision",
+        "created",
+        "updated",
+        "user_created",
+        "user_updated"
+      ]
+    },
+    "audit_action": {
+      "key": "id",
+      "type": "one",
+      "base": true,
+      "open": true,
+      "fields": [
+        "nombre",
+        "description"
+      ]
+    },
+    "unidad_medida": {
+      "key": "id",
+      "type": "one",
+      "base": true,
+      "open": true,
+      "fields": [
+        "nombre",
+        "descripcion",
+        "compania",
+        "institucion",
+        "active"
+      ]
+    }
+  }
+}

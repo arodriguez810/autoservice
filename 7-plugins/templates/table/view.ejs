@@ -1,0 +1,27 @@
+<table class="table table-togglable table-framed">
+    <tbody>
+
+
+    <tr ng-repeat="(keycolum, value) in <%= scope %>.columns() track by keycolum"
+        ng-show="<%= scope %>.showallview || value.visibleDetail!=false">
+        <td class="text-white bg-<%= COLOR.secundary %>" style="width: 30%">
+            <span ng-bind-html="<%= scope %>.columnLabel(value,keycolum)"></span>
+        </td>
+        <td style="width: 70%">
+        <span class="break"
+              ng-bind-html="<%= scope %>.cellValue(keycolum,value,<%= scope %>.dataForView)"
+              ng-click="<%= scope %>.cell.click(keycolum,value,<%= scope %>.dataForView)"
+              ng-dblclick="<%= scope %>.cell.dblclick(keycolum,value,<%= scope %>.dataForView)"
+
+        >
+
+        </span>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+<!--Table List-->
+<script>
+    <%= scope %>.refreshAngular();
+</script>

@@ -1,0 +1,19 @@
+CRUD_<%= scope %> = {};
+DSON.keepmerge(CRUD_<%= scope %>, CRUDDEFAULTS);
+DSON.keepmerge(CRUD_<%= scope %>, {
+    table: {
+        columns: {
+            id: {
+                visible: false,
+                visibleDetail: false,
+                export: false,
+                exportExample: false
+            },
+            name: {shorttext: 360},
+            description: {shorttext: 360}
+        },
+        filters: {
+            columns: true
+        }
+    }
+});

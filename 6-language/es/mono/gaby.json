@@ -1,0 +1,16 @@
+{
+  "auditof": "Auditoría de ",
+  "timeouttitle": "¿Sigues ahí?",
+  "timeoutbody": "Parece que has estado fuera de la aplicación durante mucho tiempo, debido a esto la sesión pronto se cerrará. ¿Deseas continuar conectado?",
+  "extendsession": "Extender la sesión",
+  "logmeout": "Desconectame!",
+  "notificationend": "Notificar proximos a vencer",
+  "config_toolkit": "Configuración [ctrl + alt + c]",
+  "SaveAndContinueLabel": "Guardar y continuar",
+  "saveComment": "Guardar comentario",
+  "export_condition": "Condiciones a exportar",
+  "export_columns": "Columnas a exportar",
+  "solicitud_cracion": "hizo una solicitud de creación",
+  "solicitud_modificacion": "hizo una solicitud de modificación",
+  "solicitud_eliminacion": "hizo una solicitud de eliminación"
+}

@@ -1,0 +1,127 @@
+<%
+if (DATA.name !== undefined) {
+    var name, model, opts;
+    name = DATA.name;
+    model = DATA.model;
+    opts = DATA.opts;
+}
+var name = name || "";
+var options = {
+    title: params.capitalize(name),
+    type: "text",
+    icon: {
+        class: "none",
+        position: "left",
+        color: COLOR.secundary + "-800"
+    },
+    items: ['n/a']
+};
+
+options = OBJECT.merge(options, opts); var nameclean = name.replace(/\./g, '_');
+options.model = options.model ? options.model : false;
+var toclient = JSON.stringify(options);
+%>
+<script>
+    <%= model %>.triggers.table.before.control("<%= name %>");
+    if (!<%= model %>.charts)<%= model %>.charts = {};
+    eval(`<%= model %>.charts.<%= name %> = ${"<%= toclient %>".replaceAll("&#34;", '"').replaceAll("&#39", "'")}`);
+</script>
+
+<script>
+    <%= model + "." %>charts<%= "." + name %>_chart = echarts.init(document.getElementById('<%= name %>'));
+
+    if (<%= model + "." + name + "_events" %>) {
+        for(event in <%= model + "." + name + "_events" %>){
+            eval(`<%= model + "." %>charts<%= "." + name %>_chart.on('${event}', (data) => {
+            <%= model + "." + name + "_events" %>['${event}'](data);
+        })`)
+        }
+    }
+
+    <%= model + "." %>charts<%= "." + name %>.refresh = function () {
+        <%= model %>.
+        charts.<%= name %>_chart_options = {
+            title: {text: "<%= options.label || "" %>", textStyle: {fontSize: 12}},
+            tooltip: {
+                trigger: 'item',
+                zlevel: 2,
+                z: 100,
+                showContent: true,
+                textStyle: {
+                    fontSize: <%= model + "." %>charts<%= "." + name %>.tooltipTextSize
+                },
+                formatter: function (params){
+                    if (params.data.cantidad){
+                        return <%= model %>.<%= name %>_menssageHover ? `${params.name} <br> ${params.value}: (${((params.value / params.data.cantidad) * 100).toFixed(2)}%) <br> ${ <%= model %>.<%= name %>_menssageHover}`: `${params.name} <br> ${params.value} :(${((params.value / params.data.cantidad) * 100).toFixed(2)}%)`;
+                    }else{
+                        return  <%= model %>.<%= name %>_menssageHover ? `${params.name} <br> ${params.value}: (${params.percent}%) <br> ${ <%= model %>.<%= name %>_menssageHover}` : `${params.name} <br> ${params.value}: (${params.percent}%)`;
+                    }
+                },
+                position: function (point, params, dom, rect, size) {
+
+                    return [(point[0] - 50), (point[1] + 30)];
+                }
+            },
+            legend: {
+                x : 'center',
+                y : 'bottom',
+                data: <%= model %>.<%= name %>_legend || []
+            },
+            toolbox: {
+                show: true,
+                orient: 'vertical',
+                x: 'right',
+                feature: {
+                    restore: {
+                        show: true,
+                        title: MESSAGE.ic('mono.restore')
+                    },
+                    saveAsImage: {
+                        show: true,
+                        title: MESSAGE.ic('mono.Sameasimage'),
+                        lang: ['Save']
+                    }
+                }
+            },
+            calculable: true,
+                hover:true,
+            series: [{
+                type: 'pie',
+                radius: <%= model + "." %>charts<%= "." + name %>.radius || ['40%', "60%"],
+                legendHoverLink: true,
+                avoidLabelOverlap: false,
+                center: <%= model + "." %>charts<%= "." + name %>.charPosition || ['45%', '50%'],
+                label : {
+                    show : true,
+                    textStyle: {
+                        fontSize: <%= model + "." %>charts<%= "." + name %>.fontSize || 12
+                    },
+                    position: 'outside',
+                    formatter: function (params){
+                        if (params.data.cantidad){
+                            if ((((params.value / params.data.cantidad) * 100) + "").indexOf(".") == -1)
+                                return `${params.value}: (${((params.value / params.data.cantidad) * 100)}%)`;
+                            else
+                                return `${params.value}: (${((params.value / params.data.cantidad) * 100).toFixed(2)}%)`;
+                        }else{
+                            return `${params.value}: (${(params.percent)})%`;
+                        }
+                    }
+                },
+                data: <%= model %>.<%= name %>_data || [{}],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+        }]};
+        if (<%= model + "." %>charts<%= "." + name %>_chart) {
+            <%= model + "." %>charts<%= "." + name %>_chart.setOption(<%= model + "." %>charts<%= "." + name %>_chart_options, true, true);
+        }
+
+        <!--<= model + "." >charts<= "." + name >_chart.on('hover', function (params) {-->
+        <!---->
+        <!--});-->
+    }
+    if (<%= model + "." %>charts<%= "." + name %>)
+        <%= model + "." %>charts<%= "." + name %>.refresh();
+</script>

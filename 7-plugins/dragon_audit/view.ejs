@@ -1,0 +1,163 @@
+<script>
+    if (!<%= scope %>.
+    dataForView
+    )
+    {
+        <%= scope %>.
+        dataForView = DRAGONID;
+    }
+
+</script>
+
+<style>
+    .c-mamut {
+        float: left;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .tatu {
+        float: left;
+        width: 100%;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    table a {
+        color: #333;
+    }
+
+    table a:hover {
+        color: #333;
+        cursor: default;
+    }
+</style>
+
+<div class="row">
+    <div class="col-lg-2">
+        <label class="control-label c-mamut" dragonlanguage>
+            <language>MESSAGE.i('columns.modelname')</language>
+        </label>
+        <input class="tatu" value="{{dragon_audit.dataForView.modelname}}" readonly>
+    </div>
+    <div class="col-lg-2">
+        <label class="control-label c-mamut" dragonlanguage>
+            <language>MESSAGE.i('columns.action')</language>
+        </label>
+        <input class="tatu" value="{{dragon_audit.dataForView.action}}" readonly>
+    </div>
+    <div class="col-lg-2">
+        <label class="control-label c-mamut" dragonlanguage>
+            <language>MESSAGE.i('columns.user')</language>
+        </label>
+        <input class="tatu" value="{{dragon_audit.dataForView.username}}" readonly>
+    </div>
+    <div class="col-lg-2">
+        <label class="control-label c-mamut" dragonlanguage>
+            <language>MESSAGE.i('columns.date')</language>
+        </label>
+        <input class="tatu" value="{{dragon_audit.dataForView.date | date: 'd MMMM yyyy hh:mm'}}" readonly>
+    </div>
+    <div class="col-lg-2">
+        <label class="control-label c-mamut" dragonlanguage>
+            <language>MESSAGE.i('columns.version')</language>
+        </label>
+        <input class="tatu" value="{{dragon_audit.dataForView.version}}" readonly>
+    </div>
+    <div class="col-lg-2">
+        <label class="control-label c-mamut" dragonlanguage>
+            <language>MESSAGE.i('columns.ip')</language>
+        </label>
+        <input class="tatu" value="{{dragon_audit.dataForView.ip}}" readonly>
+    </div>
+</div>
+
+<div ng-if="dragon_audit.dataForView.updatedJson" style="margin-top: 30px;" dragonlanguage>
+    <h4 style="font-size: 18px;margin-bottom: 0;">
+        <language>Data Anterior</language>
+    </h4>
+    <table ng-if="dragon_audit.dataForView.updatedJson" class="table table-togglable table-framed">
+        <tbody>
+        <tr ng-repeat="(keycolum, value) in dragon_audit.dataForView.updatedJson"
+            ng-show="(value.visibleDetail!=false && value != 'null' && value) && (keycolum != 'where' && value != '[NULL]')"
+            ng-if="keycolum !== 'where' && value.length > 0">
+            <td class="text-white bg-<%= COLOR.secundary %>" style="width: 30%">
+                <span ng-bind-html="dragon_audit.columnLabel(value,keycolum)"></span>
+            </td>
+            <td style="width: 70%">
+                <span class="break"
+                      ng-bind-html="value"> </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div style="margin-top: 30px;" dragonlanguage>
+    <h4 style="font-size: 18px;margin-bottom: 0;" ng-if="dragon_audit.dataForView.updatedJson">
+        <language>Data Actual</language>
+    </h4>
+    <table class="table table-togglable table-framed">
+        <tbody>
+        <tr ng-repeat="(keycolum, value) in dragon_audit.dataForView.dataJson"
+            ng-show="(value.visibleDetail!=false && value != 'null' && value) && (keycolum != 'where' && value != '[NULL]')"
+            ng-if="keycolum !== 'where' && value.length > 0">
+            <td class="text-white bg-<%= COLOR.secundary %>" style="width: 30%">
+                <span ng-bind-html="dragon_audit.columnLabel(value,keycolum)"></span>
+            </td>
+            <td style="width: 70%">
+                <span class="break"
+                      ng-bind-html="value">
+            </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<table class="table table-togglable table-framed">
+    <tbody>
+    <td ng-show="<%= scope %>.allow(['edit','remove','active'])"
+        class="text-center bg-<%= COLOR.primary %>">
+        Actions
+    </td>
+    <td class="text-left"
+        ng-show="(<%= scope %>.allow(['edit','remove','active']))">
+        <ul class="icons-list" style="z-index: 99999">
+            <li ng-repeat="(min, option) in <%= scope %>.getOptions(false) track by min"
+                ng-show="<%= scope %>.allow(<%= scope %>.option.permission(option,dragon_audit.dataForView.dataJson)) && <%= scope %>.option.show(option,dragon_audit.dataForView.dataJson)">
+                <a
+                        data-action="{{<%= scope %>.option.action(option,dragon_audit.dataForView.dataJson)}}"
+                        title="{{<%= scope %>.option.title(option,dragon_audit.dataForView.dataJson)}}"
+                        ng-click="<%= scope %>.option.click(option,dragon_audit.dataForView.dataJson,false)"
+                        class="dropdown-toggle"
+                        data-toggle="dropdown">
+                    <i class=" icon-{{<%= scope %>.option.icon(option,dragon_audit.dataForView.dataJson)}}"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right dragon-menu" ng-show="option.menus">
+                    <li ng-repeat="(item, menu) in option.menus track by item"
+                        ng-show="<%= scope %>.allow(<%= scope %>.option.permission(menu,dragon_audit.dataForView.dataJson)) && <%= scope %>.option.show(menu,dragon_audit.dataForView.dataJson)">
+                        <a
+                                title="{{<%= scope %>.option.text(menu,dragon_audit.dataForView.dataJson)}}"
+                                data-action="{{<%= scope %>.option.action(menu,dragon_audit.dataForView.dataJson)}}"
+                                ng-click="<%= scope %>.option.click(menu,dragon_audit.dataForView.dataJson)">
+                            <i class="icon-{{<%= scope %>.option.icon(menu,dragon_audit.dataForView.dataJson)}}"></i>
+                            {{<%= scope %>.option.text(menu,dragon_audit.dataForView.dataJson)}}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </td>
+
+
+    </tbody>
+</table>
+
+<!--Table List-->
+<script>
+    <%= scope %>.refreshAngular();
+</script>

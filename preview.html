@@ -1,0 +1,1426 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        font-size: 100%;
+        font-family: "Avenir Next", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+        line-height: 1.65;
+    }
+
+    img {
+        max-width: 100%;
+        margin: 0 auto;
+        display: block;
+    }
+
+    body, .body-wrap {
+        width: 100% !important;
+        height: 100%;
+        background: #f8f8f8;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .button {
+        display: inline-block;
+        border-width: 10px 20px 8px;
+        font-weight: bold;
+        border-radius: 4px;
+    }
+
+    .button:hover {
+        text-decoration: none;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        margin-bottom: 20px;
+        line-height: 1.25;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    h3 {
+        font-size: 24px;
+    }
+
+    h4 {
+        font-size: 20px;
+    }
+
+    h5 {
+        font-size: 16px;
+    }
+
+    p, ul, ol {
+        font-size: 16px;
+        font-weight: normal;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        display: block !important;
+        clear: both !important;
+        margin: 0 auto !important;
+        max-width: 580px !important;
+    }
+
+    .container table {
+        width: 100% !important;
+        border-collapse: collapse;
+    }
+
+    .container .masthead {
+        padding: 80px 0;
+    }
+
+    .container .masthead h1 {
+        margin: 0 auto !important;
+        max-width: 90%;
+        text-transform: uppercase;
+    }
+
+    .container .content {
+        background: white;
+        padding: 30px 35px;
+    }
+
+    .container .content.footer {
+        background: none;
+    }
+
+    .container .content.footer p {
+        margin-bottom: 0;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .container .content.footer a {
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .container .content.footer a:hover {
+        text-decoration: underline;
+    }
+
+    .table {
+        border-collapse: collapse !important;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+        border: 1px solid #ddd !important;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+    .table > thead > tr > th,
+    .table > tbody > tr > th,
+    .table > tfoot > tr > th,
+    .table > thead > tr > td,
+    .table > tbody > tr > td,
+    .table > tfoot > tr > td {
+        padding: 12px 20px;
+        line-height: 1.5384616;
+        vertical-align: top;
+        border-top: 1px solid #ddd;
+    }
+    .table > thead > tr > th {
+        vertical-align: bottom;
+        border-bottom: 2px solid #ddd;
+    }
+    .table > caption + thead > tr:first-child > th,
+    .table > colgroup + thead > tr:first-child > th,
+    .table > thead:first-child > tr:first-child > th,
+    .table > caption + thead > tr:first-child > td,
+    .table > colgroup + thead > tr:first-child > td,
+    .table > thead:first-child > tr:first-child > td {
+        border-top: 0;
+    }
+    .table > tbody + tbody {
+        border-top: 2px solid #ddd;
+    }
+    .table .table {
+        background-color: #eeeded;
+    }
+    .table-condensed > thead > tr > th,
+    .table-condensed > tbody > tr > th,
+    .table-condensed > tfoot > tr > th,
+    .table-condensed > thead > tr > td,
+    .table-condensed > tbody > tr > td,
+    .table-condensed > tfoot > tr > td {
+        padding: 8px 20px;
+    }
+    .table-bordered {
+        border: 1px solid #ddd;
+    }
+    .table-bordered > thead > tr > th,
+    .table-bordered > tbody > tr > th,
+    .table-bordered > tfoot > tr > th,
+    .table-bordered > thead > tr > td,
+    .table-bordered > tbody > tr > td,
+    .table-bordered > tfoot > tr > td {
+        border: 1px solid #ddd;
+    }
+    .table-bordered > thead > tr > th,
+    .table-bordered > thead > tr > td {
+        border-bottom-width: 2px;
+    }
+    .table-striped > tbody > tr:nth-of-type(odd) {
+        background-color: #fcfcfc;
+    }
+    .table-hover > tbody > tr:hover {
+        background-color: #f8f8f8;
+    }
+    table col[class*="col-"] {
+        position: static;
+        float: none;
+        display: table-column;
+    }
+    table td[class*="col-"],
+    table th[class*="col-"] {
+        position: static;
+        float: none;
+        display: table-cell;
+    }
+    .table > thead > tr > td.active,
+    .table > tbody > tr > td.active,
+    .table > tfoot > tr > td.active,
+    .table > thead > tr > th.active,
+    .table > tbody > tr > th.active,
+    .table > tfoot > tr > th.active,
+    .table > thead > tr.active > td,
+    .table > tbody > tr.active > td,
+    .table > tfoot > tr.active > td,
+    .table > thead > tr.active > th,
+    .table > tbody > tr.active > th,
+    .table > tfoot > tr.active > th {
+        background-color: #f8f8f8;
+    }
+    .table-hover > tbody > tr > td.active:hover,
+    .table-hover > tbody > tr > th.active:hover,
+    .table-hover > tbody > tr.active:hover > td,
+    .table-hover > tbody > tr:hover > .active,
+    .table-hover > tbody > tr.active:hover > th {
+        background-color: #ebebeb;
+    }
+    .table > thead > tr > td.success,
+    .table > tbody > tr > td.success,
+    .table > tfoot > tr > td.success,
+    .table > thead > tr > th.success,
+    .table > tbody > tr > th.success,
+    .table > tfoot > tr > th.success,
+    .table > thead > tr.success > td,
+    .table > tbody > tr.success > td,
+    .table > tfoot > tr.success > td,
+    .table > thead > tr.success > th,
+    .table > tbody > tr.success > th,
+    .table > tfoot > tr.success > th {
+        background-color: #E8F5E9;
+    }
+    .table-hover > tbody > tr > td.success:hover,
+    .table-hover > tbody > tr > th.success:hover,
+    .table-hover > tbody > tr.success:hover > td,
+    .table-hover > tbody > tr:hover > .success,
+    .table-hover > tbody > tr.success:hover > th {
+        background-color: #d6edd8;
+    }
+    .table > thead > tr > td.info,
+    .table > tbody > tr > td.info,
+    .table > tfoot > tr > td.info,
+    .table > thead > tr > th.info,
+    .table > tbody > tr > th.info,
+    .table > tfoot > tr > th.info,
+    .table > thead > tr.info > td,
+    .table > tbody > tr.info > td,
+    .table > tfoot > tr.info > td,
+    .table > thead > tr.info > th,
+    .table > tbody > tr.info > th,
+    .table > tfoot > tr.info > th {
+        background-color: #E0F7FA;
+    }
+    .table-hover > tbody > tr > td.info:hover,
+    .table-hover > tbody > tr > th.info:hover,
+    .table-hover > tbody > tr.info:hover > td,
+    .table-hover > tbody > tr:hover > .info,
+    .table-hover > tbody > tr.info:hover > th {
+        background-color: #caf1f6;
+    }
+    .table > thead > tr > td.warning,
+    .table > tbody > tr > td.warning,
+    .table > tfoot > tr > td.warning,
+    .table > thead > tr > th.warning,
+    .table > tbody > tr > th.warning,
+    .table > tfoot > tr > th.warning,
+    .table > thead > tr.warning > td,
+    .table > tbody > tr.warning > td,
+    .table > tfoot > tr.warning > td,
+    .table > thead > tr.warning > th,
+    .table > tbody > tr.warning > th,
+    .table > tfoot > tr.warning > th {
+        background-color: #FFF3E0;
+    }
+    .table-hover > tbody > tr > td.warning:hover,
+    .table-hover > tbody > tr > th.warning:hover,
+    .table-hover > tbody > tr.warning:hover > td,
+    .table-hover > tbody > tr:hover > .warning,
+    .table-hover > tbody > tr.warning:hover > th {
+        background-color: #ffe9c6;
+    }
+    .table > thead > tr > td.danger,
+    .table > tbody > tr > td.danger,
+    .table > tfoot > tr > td.danger,
+    .table > thead > tr > th.danger,
+    .table > tbody > tr > th.danger,
+    .table > tfoot > tr > th.danger,
+    .table > thead > tr.danger > td,
+    .table > tbody > tr.danger > td,
+    .table > tfoot > tr.danger > td,
+    .table > thead > tr.danger > th,
+    .table > tbody > tr.danger > th,
+    .table > tfoot > tr.danger > th {
+        background-color: #FBE9E7;
+    }
+    .table-hover > tbody > tr > td.danger:hover,
+    .table-hover > tbody > tr > th.danger:hover,
+    .table-hover > tbody > tr.danger:hover > td,
+    .table-hover > tbody > tr:hover > .danger,
+    .table-hover > tbody > tr.danger:hover > th {
+        background-color: #f7d5d1;
+    }
+    .table-responsive {
+        overflow-x: auto;
+        min-height: 0.01%;
+    }
+    @media screen and (max-width: 768px) {
+        .table-responsive {
+            width: 100%;
+            margin-bottom: 15px;
+            overflow-y: hidden;
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+            border: 1px solid #ddd;
+        }
+        .table-responsive > .table {
+            margin-bottom: 0;
+        }
+        .table-responsive > .table > thead > tr > th,
+        .table-responsive > .table > tbody > tr > th,
+        .table-responsive > .table > tfoot > tr > th,
+        .table-responsive > .table > thead > tr > td,
+        .table-responsive > .table > tbody > tr > td,
+        .table-responsive > .table > tfoot > tr > td {
+            white-space: nowrap;
+        }
+        .table-responsive > .table-bordered {
+            border: 0;
+        }
+        .table-responsive > .table-bordered > thead > tr > th:first-child,
+        .table-responsive > .table-bordered > tbody > tr > th:first-child,
+        .table-responsive > .table-bordered > tfoot > tr > th:first-child,
+        .table-responsive > .table-bordered > thead > tr > td:first-child,
+        .table-responsive > .table-bordered > tbody > tr > td:first-child,
+        .table-responsive > .table-bordered > tfoot > tr > td:first-child {
+            border-left: 0;
+        }
+        .table-responsive > .table-bordered > thead > tr > th:last-child,
+        .table-responsive > .table-bordered > tbody > tr > th:last-child,
+        .table-responsive > .table-bordered > tfoot > tr > th:last-child,
+        .table-responsive > .table-bordered > thead > tr > td:last-child,
+        .table-responsive > .table-bordered > tbody > tr > td:last-child,
+        .table-responsive > .table-bordered > tfoot > tr > td:last-child {
+            border-right: 0;
+        }
+        .table-responsive > .table-bordered > tbody > tr:last-child > th,
+        .table-responsive > .table-bordered > tfoot > tr:last-child > th,
+        .table-responsive > .table-bordered > tbody > tr:last-child > td,
+        .table-responsive > .table-bordered > tfoot > tr:last-child > td {
+            border-bottom: 0;
+        }
+    }
+
+</style>
+    <style>
+        .bg-primary {
+    background-color: #004d80;
+    border-color: #004d80;
+    color: #FFF !important;
+}
+.bg-primary-100 {
+    background-color: #006bb3;
+    border-color: #006bb3;
+    color: #FFF !important;
+}
+.bg-primary-200 {
+    background-color: #006bb3;
+    border-color: #006bb3;
+    color: #FFF !important;
+}
+.bg-primary-300 {
+    background-color: #006bb3;
+    border-color: #006bb3;
+    color: #FFF !important;
+}
+.bg-primary-400 {
+    background-color: #004d80;
+    border-color: #004d80;
+    color: #FFF !important;
+}
+.bg-primary-500 {
+    background-color: #004d80;
+    border-color: #004d80;
+    color: #FFF !important;
+}
+.bg-primary-600 {
+    background-color: #004d80;
+    border-color: #004d80;
+    color: #FFF !important;
+}
+.bg-primary-700 {
+    background-color: #002e4d;
+    border-color: #002e4d;
+    color: #FFF !important;
+}
+.bg-primary-800 {
+    background-color: #002e4d;
+    border-color: #002e4d;
+    color: #FFF !important;
+}
+.bg-primary-900 {
+    background-color: #002e4d;
+    border-color: #002e4d;
+    color: #FFF !important;
+}
+.bg-primary-1000 {
+    background-color: #000f1a;
+    border-color: #000f1a;
+    color: #FFF !important;
+}
+.alpha-primary {
+    background-color: #006bb3;
+    border-color: #006bb3;
+}
+
+.border-primary {
+    border-color: #004d80;
+}
+.border-primary-100 {
+    border-color: #006bb3;
+}
+.border-primary-200 {
+    border-color: #006bb3;
+}
+.border-primary-300 {
+    border-color: #006bb3;
+}
+.border-primary-400 {
+    border-color: #004d80;
+}
+.border-primary-500 {
+    border-color: #004d80;
+}
+.border-primary-600 {
+    border-color: #004d80;
+}
+.border-primary-700 {
+    border-color: #002e4d;
+}
+.border-primary-800 {
+    border-color: #002e4d;
+}
+.border-primary-900 {
+    border-color: #002e4d;
+}
+.border-primary-1000 {
+    border-color: #000f1a;
+}
+
+.border-top-primary {
+    border-top-color: #004d80;
+}
+.border-top-primary-100 {
+    border-top-color: #006bb3;
+}
+.border-top-primary-200 {
+    border-top-color: #006bb3;
+}
+.border-top-primary-300 {
+    border-top-color: #006bb3;
+}
+.border-top-primary-400 {
+    border-top-color: #004d80;
+}
+.border-top-primary-500 {
+    border-top-color: #004d80;
+}
+.border-top-primary-600 {
+    border-top-color: #004d80;
+}
+.border-top-primary-700 {
+    border-top-color: #002e4d;
+}
+.border-top-primary-800 {
+    border-top-color: #002e4d;
+}
+.border-top-primary-900 {
+    border-top-color: #002e4d;
+}
+.border-top-primary-1000 {
+    border-top-color: #000f1a;
+}
+.border-bottom-primary {
+    border-bottom-color: #004d80;
+}
+
+
+.border-bottom-primary-100 {
+    border-bottom-color: #006bb3;
+}
+.border-bottom-primary-200 {
+    border-bottom-color: #006bb3;
+}
+.border-bottom-primary-300 {
+    border-bottom-color: #006bb3;
+}
+.border-bottom-primary-400 {
+    border-bottom-color: #004d80;
+}
+.border-bottom-primary-500 {
+    border-bottom-color: #004d80;
+}
+.border-bottom-primary-600 {
+    border-bottom-color: #004d80;
+}
+.border-bottom-primary-700 {
+    border-bottom-color: #002e4d;
+}
+.border-bottom-primary-800 {
+    border-bottom-color: #002e4d;
+}
+.border-bottom-primary-900 {
+    border-bottom-color: #002e4d;
+}
+.border-bottom-primary-1000 {
+    border-bottom-color: #000f1a;
+}
+
+
+.border-left-primary {
+    border-left-color: #004d80;
+}
+.border-left-primary-100 {
+    border-left-color: #006bb3;
+}
+.border-left-primary-200 {
+    border-left-color: #006bb3;
+}
+.border-left-primary-300 {
+    border-left-color: #006bb3;
+}
+.border-left-primary-400 {
+    border-left-color: #004d80;
+}
+.border-left-primary-500 {
+    border-left-color: #004d80;
+}
+.border-left-primary-600 {
+    border-left-color: #004d80;
+}
+.border-left-primary-700 {
+    border-left-color: #002e4d;
+}
+.border-left-primary-800 {
+    border-left-color: #002e4d;
+}
+.border-left-primary-900 {
+    border-left-color: #002e4d;
+}
+.border-left-primary-1000 {
+    border-left-color: #000f1a;
+}
+
+
+.border-right-primary {
+    border-right-color: #004d80;
+}
+.border-right-primary-100 {
+    border-right-color: #006bb3;
+}
+.border-right-primary-200 {
+    border-right-color: #006bb3;
+}
+.border-right-primary-300 {
+    border-right-color: #006bb3;
+}
+.border-right-primary-400 {
+    border-right-color: #004d80;
+}
+.border-right-primary-500 {
+    border-right-color: #004d80;
+}
+.border-right-primary-600 {
+    border-right-color: #004d80;
+}
+.border-right-primary-700 {
+    border-right-color: #002e4d;
+}
+.border-right-primary-800 {
+    border-right-color: #002e4d;
+}
+.border-right-primary-900 {
+    border-right-color: #002e4d;
+}
+.border-right-primary-1000 {
+    border-right-color: #000f1a;
+}
+
+
+.text-primary,
+.text-primary:hover,
+.text-primary:focus {
+    color: #004d80 !important;
+}
+.text-primary-100,
+.text-primary-100:hover,
+.text-primary-100:focus {
+    color: #006bb3 !important;
+}
+.text-primary-200,
+.text-primary-200:hover,
+.text-primary-200:focus {
+    color: #006bb3 !important;
+}
+.text-primary-300,
+.text-primary-300:hover,
+.text-primary-300:focus {
+    color: #006bb3 !important;
+}
+.text-primary-400,
+.text-primary-400:hover,
+.text-primary-400:focus {
+    color: #004d80 !important;
+}
+.text-primary-600,
+.text-primary-600:hover,
+.text-primary-600:focus {
+    color: #004d80 !important;
+}
+.text-primary-700,
+.text-primary-700:hover,
+.text-primary-700:focus {
+    color: #002e4d !important;
+}
+.text-primary-800,
+.text-primary-800:hover,
+.text-primary-800:focus {
+    color: #002e4d !important;
+}
+.text-primary-900,
+.text-primary-900:hover,
+.text-primary-900:focus {
+    color: #002e4d !important;
+}
+.text-primary-1000,
+.text-primary-1000:hover,
+.text-primary-1000:focus {
+    color: #000f1a !important;
+}
+
+.bg-primary-700.navbar-inverse a {
+    color: #FFF !important;
+}
+
+.bg-primary-700.navbar-inverse a:hover {
+    color: #FFF !important;
+}
+
+.bg-primary-700.navbar-inverse .navbar-text {
+    color: #FFF !important;
+}
+
+.nav-tabs.bg-primary-700 > .active > a, .nav-tabs.bg-primary-800 > .active > a:hover, .nav-tabs.bg-primary-800 > .active > a:focus {
+    color: #FFF !important;;
+}
+
+.nav-tabs.bg-primary-700 > li > a {
+    color: #FFF !important;
+}
+.nav-primary li.active {
+    border-bottom: #004d80 1px solid;
+    border-block-width: 2px;
+}
+    </style>
+    <style>
+        .bg-secundary {
+    background-color: #1aa3ff;
+    border-color: #1aa3ff;
+    color: #FFF !important;
+}
+.bg-secundary-100 {
+    background-color: #e5f5ff;
+    border-color: #e5f5ff;
+    color: #FFF !important;
+}
+.bg-secundary-200 {
+    background-color: #b3e0ff;
+    border-color: #b3e0ff;
+    color: #FFF !important;
+}
+.bg-secundary-300 {
+    background-color: #80ccff;
+    border-color: #80ccff;
+    color: #FFF !important;
+}
+.bg-secundary-400 {
+    background-color: #4db8ff;
+    border-color: #4db8ff;
+    color: #FFF !important;
+}
+.bg-secundary-500 {
+    background-color: #1aa3ff;
+    border-color: #1aa3ff;
+    color: #FFF !important;
+}
+.bg-secundary-600 {
+    background-color: #008ae6;
+    border-color: #008ae6;
+    color: #FFF !important;
+}
+.bg-secundary-700 {
+    background-color: #006bb3;
+    border-color: #006bb3;
+    color: #FFF !important;
+}
+.bg-secundary-800 {
+    background-color: #004d80;
+    border-color: #004d80;
+    color: #FFF !important;
+}
+.bg-secundary-900 {
+    background-color: #002e4d;
+    border-color: #002e4d;
+    color: #FFF !important;
+}
+.bg-secundary-1000 {
+    background-color: #000f1a;
+    border-color: #000f1a;
+    color: #FFF !important;
+}
+.alpha-secundary {
+    background-color: #e5f5ff;
+    border-color: #e5f5ff;
+}
+
+.border-secundary {
+    border-color: #1aa3ff;
+}
+.border-secundary-100 {
+    border-color: #e5f5ff;
+}
+.border-secundary-200 {
+    border-color: #b3e0ff;
+}
+.border-secundary-300 {
+    border-color: #80ccff;
+}
+.border-secundary-400 {
+    border-color: #4db8ff;
+}
+.border-secundary-500 {
+    border-color: #1aa3ff;
+}
+.border-secundary-600 {
+    border-color: #008ae6;
+}
+.border-secundary-700 {
+    border-color: #006bb3;
+}
+.border-secundary-800 {
+    border-color: #004d80;
+}
+.border-secundary-900 {
+    border-color: #002e4d;
+}
+.border-secundary-1000 {
+    border-color: #000f1a;
+}
+
+.border-top-secundary {
+    border-top-color: #1aa3ff;
+}
+.border-top-secundary-100 {
+    border-top-color: #e5f5ff;
+}
+.border-top-secundary-200 {
+    border-top-color: #b3e0ff;
+}
+.border-top-secundary-300 {
+    border-top-color: #80ccff;
+}
+.border-top-secundary-400 {
+    border-top-color: #4db8ff;
+}
+.border-top-secundary-500 {
+    border-top-color: #1aa3ff;
+}
+.border-top-secundary-600 {
+    border-top-color: #008ae6;
+}
+.border-top-secundary-700 {
+    border-top-color: #006bb3;
+}
+.border-top-secundary-800 {
+    border-top-color: #004d80;
+}
+.border-top-secundary-900 {
+    border-top-color: #002e4d;
+}
+.border-top-secundary-1000 {
+    border-top-color: #000f1a;
+}
+.border-bottom-secundary {
+    border-bottom-color: #1aa3ff;
+}
+
+
+.border-bottom-secundary-100 {
+    border-bottom-color: #e5f5ff;
+}
+.border-bottom-secundary-200 {
+    border-bottom-color: #b3e0ff;
+}
+.border-bottom-secundary-300 {
+    border-bottom-color: #80ccff;
+}
+.border-bottom-secundary-400 {
+    border-bottom-color: #4db8ff;
+}
+.border-bottom-secundary-500 {
+    border-bottom-color: #1aa3ff;
+}
+.border-bottom-secundary-600 {
+    border-bottom-color: #008ae6;
+}
+.border-bottom-secundary-700 {
+    border-bottom-color: #006bb3;
+}
+.border-bottom-secundary-800 {
+    border-bottom-color: #004d80;
+}
+.border-bottom-secundary-900 {
+    border-bottom-color: #002e4d;
+}
+.border-bottom-secundary-1000 {
+    border-bottom-color: #000f1a;
+}
+
+
+.border-left-secundary {
+    border-left-color: #1aa3ff;
+}
+.border-left-secundary-100 {
+    border-left-color: #e5f5ff;
+}
+.border-left-secundary-200 {
+    border-left-color: #b3e0ff;
+}
+.border-left-secundary-300 {
+    border-left-color: #80ccff;
+}
+.border-left-secundary-400 {
+    border-left-color: #4db8ff;
+}
+.border-left-secundary-500 {
+    border-left-color: #1aa3ff;
+}
+.border-left-secundary-600 {
+    border-left-color: #008ae6;
+}
+.border-left-secundary-700 {
+    border-left-color: #006bb3;
+}
+.border-left-secundary-800 {
+    border-left-color: #004d80;
+}
+.border-left-secundary-900 {
+    border-left-color: #002e4d;
+}
+.border-left-secundary-1000 {
+    border-left-color: #000f1a;
+}
+
+
+.border-right-secundary {
+    border-right-color: #1aa3ff;
+}
+.border-right-secundary-100 {
+    border-right-color: #e5f5ff;
+}
+.border-right-secundary-200 {
+    border-right-color: #b3e0ff;
+}
+.border-right-secundary-300 {
+    border-right-color: #80ccff;
+}
+.border-right-secundary-400 {
+    border-right-color: #4db8ff;
+}
+.border-right-secundary-500 {
+    border-right-color: #1aa3ff;
+}
+.border-right-secundary-600 {
+    border-right-color: #008ae6;
+}
+.border-right-secundary-700 {
+    border-right-color: #006bb3;
+}
+.border-right-secundary-800 {
+    border-right-color: #004d80;
+}
+.border-right-secundary-900 {
+    border-right-color: #002e4d;
+}
+.border-right-secundary-1000 {
+    border-right-color: #000f1a;
+}
+
+
+.text-secundary,
+.text-secundary:hover,
+.text-secundary:focus {
+    color: #1aa3ff !important;
+}
+.text-secundary-100,
+.text-secundary-100:hover,
+.text-secundary-100:focus {
+    color: #e5f5ff !important;
+}
+.text-secundary-200,
+.text-secundary-200:hover,
+.text-secundary-200:focus {
+    color: #b3e0ff !important;
+}
+.text-secundary-300,
+.text-secundary-300:hover,
+.text-secundary-300:focus {
+    color: #80ccff !important;
+}
+.text-secundary-400,
+.text-secundary-400:hover,
+.text-secundary-400:focus {
+    color: #4db8ff !important;
+}
+.text-secundary-600,
+.text-secundary-600:hover,
+.text-secundary-600:focus {
+    color: #008ae6 !important;
+}
+.text-secundary-700,
+.text-secundary-700:hover,
+.text-secundary-700:focus {
+    color: #006bb3 !important;
+}
+.text-secundary-800,
+.text-secundary-800:hover,
+.text-secundary-800:focus {
+    color: #004d80 !important;
+}
+.text-secundary-900,
+.text-secundary-900:hover,
+.text-secundary-900:focus {
+    color: #002e4d !important;
+}
+.text-secundary-1000,
+.text-secundary-1000:hover,
+.text-secundary-1000:focus {
+    color: #000f1a !important;
+}
+
+.bg-secundary-700.navbar-inverse a {
+    color: #FFF !important;
+}
+
+.bg-secundary-700.navbar-inverse a:hover {
+    color: #FFF !important;
+}
+
+.bg-secundary-700.navbar-inverse .navbar-text {
+    color: #FFF !important;
+}
+
+.nav-tabs.bg-secundary-700 > .active > a, .nav-tabs.bg-secundary-800 > .active > a:hover, .nav-tabs.bg-secundary-800 > .active > a:focus {
+    color: #FFF !important;;
+}
+
+.nav-tabs.bg-secundary-700 > li > a {
+    color: #FFF !important;
+}
+.nav-secundary li.active {
+    border-bottom: #1aa3ff 1px solid;
+    border-block-width: 2px;
+}
+    </style>
+    <style>
+        .bg-extra {
+    background-color: #004d80;
+    border-color: #004d80;
+    color: #FFF !important;
+}
+.bg-extra-100 {
+    background-color: #006bb3;
+    border-color: #006bb3;
+    color: #FFF !important;
+}
+.bg-extra-200 {
+    background-color: #006bb3;
+    border-color: #006bb3;
+    color: #FFF !important;
+}
+.bg-extra-300 {
+    background-color: #006bb3;
+    border-color: #006bb3;
+    color: #FFF !important;
+}
+.bg-extra-400 {
+    background-color: #004d80;
+    border-color: #004d80;
+    color: #FFF !important;
+}
+.bg-extra-500 {
+    background-color: #004d80;
+    border-color: #004d80;
+    color: #FFF !important;
+}
+.bg-extra-600 {
+    background-color: #004d80;
+    border-color: #004d80;
+    color: #FFF !important;
+}
+.bg-extra-700 {
+    background-color: #002e4d;
+    border-color: #002e4d;
+    color: #FFF !important;
+}
+.bg-extra-800 {
+    background-color: #002e4d;
+    border-color: #002e4d;
+    color: #FFF !important;
+}
+.bg-extra-900 {
+    background-color: #002e4d;
+    border-color: #002e4d;
+    color: #FFF !important;
+}
+.bg-extra-1000 {
+    background-color: #000f1a;
+    border-color: #000f1a;
+    color: #FFF !important;
+}
+.alpha-extra {
+    background-color: #006bb3;
+    border-color: #006bb3;
+}
+
+.border-extra {
+    border-color: #004d80;
+}
+.border-extra-100 {
+    border-color: #006bb3;
+}
+.border-extra-200 {
+    border-color: #006bb3;
+}
+.border-extra-300 {
+    border-color: #006bb3;
+}
+.border-extra-400 {
+    border-color: #004d80;
+}
+.border-extra-500 {
+    border-color: #004d80;
+}
+.border-extra-600 {
+    border-color: #004d80;
+}
+.border-extra-700 {
+    border-color: #002e4d;
+}
+.border-extra-800 {
+    border-color: #002e4d;
+}
+.border-extra-900 {
+    border-color: #002e4d;
+}
+.border-extra-1000 {
+    border-color: #000f1a;
+}
+
+.border-top-extra {
+    border-top-color: #004d80;
+}
+.border-top-extra-100 {
+    border-top-color: #006bb3;
+}
+.border-top-extra-200 {
+    border-top-color: #006bb3;
+}
+.border-top-extra-300 {
+    border-top-color: #006bb3;
+}
+.border-top-extra-400 {
+    border-top-color: #004d80;
+}
+.border-top-extra-500 {
+    border-top-color: #004d80;
+}
+.border-top-extra-600 {
+    border-top-color: #004d80;
+}
+.border-top-extra-700 {
+    border-top-color: #002e4d;
+}
+.border-top-extra-800 {
+    border-top-color: #002e4d;
+}
+.border-top-extra-900 {
+    border-top-color: #002e4d;
+}
+.border-top-extra-1000 {
+    border-top-color: #000f1a;
+}
+.border-bottom-extra {
+    border-bottom-color: #004d80;
+}
+
+
+.border-bottom-extra-100 {
+    border-bottom-color: #006bb3;
+}
+.border-bottom-extra-200 {
+    border-bottom-color: #006bb3;
+}
+.border-bottom-extra-300 {
+    border-bottom-color: #006bb3;
+}
+.border-bottom-extra-400 {
+    border-bottom-color: #004d80;
+}
+.border-bottom-extra-500 {
+    border-bottom-color: #004d80;
+}
+.border-bottom-extra-600 {
+    border-bottom-color: #004d80;
+}
+.border-bottom-extra-700 {
+    border-bottom-color: #002e4d;
+}
+.border-bottom-extra-800 {
+    border-bottom-color: #002e4d;
+}
+.border-bottom-extra-900 {
+    border-bottom-color: #002e4d;
+}
+.border-bottom-extra-1000 {
+    border-bottom-color: #000f1a;
+}
+
+
+.border-left-extra {
+    border-left-color: #004d80;
+}
+.border-left-extra-100 {
+    border-left-color: #006bb3;
+}
+.border-left-extra-200 {
+    border-left-color: #006bb3;
+}
+.border-left-extra-300 {
+    border-left-color: #006bb3;
+}
+.border-left-extra-400 {
+    border-left-color: #004d80;
+}
+.border-left-extra-500 {
+    border-left-color: #004d80;
+}
+.border-left-extra-600 {
+    border-left-color: #004d80;
+}
+.border-left-extra-700 {
+    border-left-color: #002e4d;
+}
+.border-left-extra-800 {
+    border-left-color: #002e4d;
+}
+.border-left-extra-900 {
+    border-left-color: #002e4d;
+}
+.border-left-extra-1000 {
+    border-left-color: #000f1a;
+}
+
+
+.border-right-extra {
+    border-right-color: #004d80;
+}
+.border-right-extra-100 {
+    border-right-color: #006bb3;
+}
+.border-right-extra-200 {
+    border-right-color: #006bb3;
+}
+.border-right-extra-300 {
+    border-right-color: #006bb3;
+}
+.border-right-extra-400 {
+    border-right-color: #004d80;
+}
+.border-right-extra-500 {
+    border-right-color: #004d80;
+}
+.border-right-extra-600 {
+    border-right-color: #004d80;
+}
+.border-right-extra-700 {
+    border-right-color: #002e4d;
+}
+.border-right-extra-800 {
+    border-right-color: #002e4d;
+}
+.border-right-extra-900 {
+    border-right-color: #002e4d;
+}
+.border-right-extra-1000 {
+    border-right-color: #000f1a;
+}
+
+
+.text-extra,
+.text-extra:hover,
+.text-extra:focus {
+    color: #004d80 !important;
+}
+.text-extra-100,
+.text-extra-100:hover,
+.text-extra-100:focus {
+    color: #006bb3 !important;
+}
+.text-extra-200,
+.text-extra-200:hover,
+.text-extra-200:focus {
+    color: #006bb3 !important;
+}
+.text-extra-300,
+.text-extra-300:hover,
+.text-extra-300:focus {
+    color: #006bb3 !important;
+}
+.text-extra-400,
+.text-extra-400:hover,
+.text-extra-400:focus {
+    color: #004d80 !important;
+}
+.text-extra-600,
+.text-extra-600:hover,
+.text-extra-600:focus {
+    color: #004d80 !important;
+}
+.text-extra-700,
+.text-extra-700:hover,
+.text-extra-700:focus {
+    color: #002e4d !important;
+}
+.text-extra-800,
+.text-extra-800:hover,
+.text-extra-800:focus {
+    color: #002e4d !important;
+}
+.text-extra-900,
+.text-extra-900:hover,
+.text-extra-900:focus {
+    color: #002e4d !important;
+}
+.text-extra-1000,
+.text-extra-1000:hover,
+.text-extra-1000:focus {
+    color: #000f1a !important;
+}
+
+.bg-extra-700.navbar-inverse a {
+    color: #FFF !important;
+}
+
+.bg-extra-700.navbar-inverse a:hover {
+    color: #FFF !important;
+}
+
+.bg-extra-700.navbar-inverse .navbar-text {
+    color: #FFF !important;
+}
+
+.nav-tabs.bg-extra-700 > .active > a, .nav-tabs.bg-extra-800 > .active > a:hover, .nav-tabs.bg-extra-800 > .active > a:focus {
+    color: #FFF !important;;
+}
+
+.nav-tabs.bg-extra-700 > li > a {
+    color: #FFF !important;
+}
+.nav-extra li.active {
+    border-bottom: #004d80 1px solid;
+    border-block-width: 2px;
+}
+    </style>
+</head>
+<body>
+
+
+
+
+<table class="body-wrap">
+    <tr>
+        <td class="container" style="margin: 0 0 !important;max-width: 5000px !important;">
+            <table class="table table-bordered">
+                <thead class="bg-secundary" style="visibility: hidden;">
+                <tr class="bg-secundary">
+
+                        <th height="0">Descripción</th>
+
+                </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+
+                            <td>Ubicación y/o Localización de la DIGEIG</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Expansión  de  la  IPAC-Gobierno  Abierto  con  las  comunidades  a  través  de  las  gobernaciones</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Capacidad  de  mediación  entre  ciudadanos  e  instituciones  gubernamentales para brindar acceso a la información pública conforme a la Ley 200-04</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Responsables de impulsar y monitorear la iniciativa Gobierno Abierto y la IPAC</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Disponibilidad de presupuesto</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Disponibilidad  de  recursos  tecnológicos,  de  comunicación  y  herramientas  de trabajo</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Existencia de planes de trabajo</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Organigrama aprobado por el MAP y puesto en ejecución</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Impacto social y político de la Máxima Autoridad (MAE)-Director General</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Personal técnico de alto nivel profesional</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Presencia en medios webs</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Responsables    de    dar    seguimiento    y    hacer    operativos    los    acuerdos internacionales  (Convención  Interamericana  contra  la  Corrupción  (CICC)  y  la Convención de las Naciones Unidas contra la Corrupción  (CNUCC), los cuales son ley interna en la  República Dominicana y tienen rango constitucional</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Responsables  de  la  implementación  de  la  Ley  de  Acceso  a  la  Información Pública (Ley 200-04)</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Diversidad  de  atribuciones  (funciones)  para  llegar  a  diferentes  sectores  de  la sociedad</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Convenios  establecidos  (organismos internacionales,  alianzas  con  instituciones públicas, privadas y académicas)</td>
+
+                    </tr>
+
+                    <tr>
+
+                            <td>Presencia en las gobernaciones provinciales
+</td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

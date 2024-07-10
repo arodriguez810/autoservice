@@ -1,0 +1,11 @@
+<ul class="nav nav-<%= COLOR.primary %> nav-tabs <%= COLOR.primary %> nav-justified" dragonlanguage="">
+    <% var first = "active"; for(var tab of tabs) { %>
+        <li class="<%= first %>" ng-if="<%= tab.condition || "true" %>">
+            <a href="#<%= tab.id %>" data-toggle="tab" id="tab<%= tab.id %>">
+                <i class="<%= tab.icon %> position-left" style="<%= tab.icon_style %>"></i>
+                <%= tab.text %>
+                <i class="border-white  position-right"></i>
+            </a>
+        </li>
+    <% first = ""; } %>
+</ul>

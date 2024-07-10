@@ -1,0 +1,87 @@
+<script>
+    RUNTABLE('<%= scope %>');
+</script>
+
+<div ng-show="<%= scope %>.table.loaded" class="dragon-panel" id="<%= scope %>TablePanel"
+     style="overflow-x: scroll;overflow-y: visible">
+    <!--Table List -->
+
+    <div dragonlanguage=""
+         ng-show="<%= scope %>.records.data.length<=0 || <%= scope %>.records.data == undefined"
+         class="alert alpha-<%= COLOR.secundary %> border-<%= COLOR.secundary %> alert-styled-left">
+        <language>MESSAGE.ic('table.nodata')</language>
+    </div>
+
+
+    <table ng-show="<%= scope %>.records.data.length>0"
+           class="table-responsive table table-striped -striped  table table-togglable table-framed sindu-table dragon-table <%= scope %>-drag"
+           ng-class="[<%= scope %>.CRUD().fixheader?'fixheaders':'']"
+           data-animation="bounceInUp"
+           id="<%= scope %>Table"
+           style="{{<%= scope %>.funcWidth}}margin-bottom: {{<%= scope %>.firstCountOption(false)*40}}px"
+           data-scope="<%= scope %>">
+        <tr>
+            <td colspan="100%" style="padding: 5px">
+                <%- include('paginator',{scope:scope}); %>
+                <div class="visible-md visible-lg" ng-show="<%= scope %>.filters.lastFilter.length>0"
+                     style="padding-left: 10px">
+                    <div ng-bind-html="<%= scope %>.filters.description()">
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <thead class="bg-<%= COLOR.secundary %>" id="<%= scope %>head">
+
+        <!--Columns-->
+        <tr class="bg-<%= COLOR.secundary %> dragon-columns" ng-if="!<%= scope %>.CRUD().columnsOrder">
+            <th ng-if="<%= scope %>.characterist('batch')">
+                <span style="margin-top: 1px;" title="Seleccionar Todo" class="cursor-pointer "
+                      ng-bind-html="<%= scope %>.drawCheck(key)"
+                      ng-click="<%= scope %>.checkAll()">
+                </span>
+            </th>
+            <th ng-repeat="(key, value) in <%= scope %>.columns() track by key"
+                ng-show="<%= scope %>.columnVisible(value) && (!value.clrow||value.clrow==1)"
+                data-column="{{key}}"
+                ng-dblclick="<%= scope %>.cell.dblColumnSelect($event)"
+                class="handle {{value.responsive}}"
+            >
+                <%- include('columns',{scope:scope}); %>
+            </th>
+            <%- include('columnOption',{scope:scope}); %>
+        </tr>
+        <tr class="bg-<%= COLOR.secundary %> dragon-columns" ng-if="<%= scope %>.CRUD().columnsOrder"
+            ng-repeat="(r, larow) in <%= scope %>.CRUD().columnsOrder">
+            <th ng-repeat="(key, value) in larow" class="handle {{value.responsive}} text-center"
+                colspan="{{value.col||1}}" rowspan="{{value.row||1}}">
+                {{value.label}}
+            </th>
+        </tr>
+        </thead>
+        <tbody id="<%= scope %>TableBody">
+        <!--Rows-->
+
+        <tr ng-repeat="(rowkey, row) in <%= scope %>.records.data track by rowkey" data-object="{{row}}"
+
+            style="{{<%= scope %>.rowStyle(row)}}"
+            class="dragon-rows {{<%= scope %>.rowClass(row)}}  {{<%= scope %>.rowDeleted(row)}} {{<%= scope %>.trCheck(row)}}">
+            <%- include('rows',{scope:scope}); %>
+            <!--Options-->
+            <%- include('rowOptions',{scope:scope}); %>
+        </tr>
+        </tbody>
+        <tr>
+            <td colspan="100%" style="padding: 5px">
+                <%- include('paginator',{scope:scope}); %>
+            </td>
+        </tr>
+    </table>
+
+
+    <!--Table List-->
+</div>
+<script>
+    $(function () {
+
+    });
+</script>

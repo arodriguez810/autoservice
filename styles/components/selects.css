@@ -1,0 +1,26 @@
+.select2-selection__rendered {
+    padding-left: 15px !important;
+}
+
+
+
+textarea {
+    resize: none;
+}
+
+.select2-selection--single:not([class*="bg-"]):not([class*="border-"]) {
+    border-bottom-color: #fff;
+}
+
+.select2-selection__choice {
+    font-size: 12px !important;
+
+}
+
+/*.select2-selection__rendered {*/
+/*border-bottom: 1px solid #eee;*/
+/*}*/
+
+/*select[class*="select2-hidden-accessible"] + .select2 {*/
+/*display: none;*/
+/*}*/

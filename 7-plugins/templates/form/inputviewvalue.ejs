@@ -1,0 +1,158 @@
+<%
+if(DATA.name!==undefined){
+    var name, model, opts;
+    name = DATA.name;
+    model = DATA.model;
+    opts = DATA.opts;
+}
+var name  = name || "";
+var options = {
+    placeholder: params.capitalize(name),
+    model: 1,
+    icon: {
+        class: "none",
+        position: "left",
+        color: COLOR.secundary + "-800"
+    },
+    helptext: '',
+    posttype: "view",
+    when: null,
+    label_custom: false
+
+};
+
+options = OBJECT.merge(options, opts); var nameclean = name.replace(/\./g, '_');
+options.icon.spyce = options.icon.class === "none" ? "remove-input-space" : "";
+if (options.label_custom){
+    options.placeholder = options.label;
+}
+popopme = function(entity, field){
+    var prueba = HINTS.filter(d => {
+        return ( d.trueEntity || d.entities ) === entity && d.field_names === field
+    })
+    function sortArray() {
+        options.mess = prueba.sort(function(a, b){return b.id - a.id});
+    }
+    sortArray();
+}
+popopme(model, nameclean);
+var toclient = JSON.stringify(options);
+%>
+<script>
+    <%= model %>.triggers.table.before.control("<%= nameclean %>");
+    <%= model %>.form.registerField("<%= name %>", "<%= toclient %>");
+
+    <%= model %>.form.schemas.insert["<%= name %>"] = FORM.schemasType.calculated;
+
+    if (MESSAGE.exist('columns.<%= nameclean %>') && <%= model %>.form.options.<%= name %>.traduce !== false) {
+        <%= model %>.
+        form.options.<%= name %>.placeholder = MESSAGE.ic('columns.<%= nameclean %>');
+    }
+    <% if (options.label_custom){%>
+    <%= model %>.form.options.<%= name %>.placeholder = "<%=options.label%>";
+    <%}%>
+    if(new SESSION().isLogged()) {
+        <%= model %>.form.options.<%= name %>.mess = <%= model %>.form.options.<%= name %>.mess.filter(d => {
+            return d.company == new SESSION().current().compania_id;
+        })
+        if(<%= model %>.form.options.<%= name %>.mess.length == 0){
+            delete <%= model %>.form.options.<%= name %>.mess
+        }
+        if (<%= model %>.form.options.<%= name %>.mess){
+            if (<%= model %>.form.options.<%= name %>.mess[0].cousin){
+                <%= model %>.form.options.<%= name %>.popover = {
+                    title: <%= model %>.form.options.<%= name %>.mess[0].cousin.replace('_',' ').replace('_',' '),
+                    content: <%= model %>.form.options.<%= name %>.mess[0].text,
+                    label: MESSAGE.exist('columns.<%= nameclean %>') ? MESSAGE.i('columns.<%= nameclean %>') : <%= model %>.form.options.<%= name %>.mess[0].cousin.replace('_',' ')
+                }
+            } else {
+                <%= model %>.form.options.<%= name %>.popover = {
+                    title: <%= model %>.form.options.<%= name %>.trueplaceholder || <%= model %>.form.options.<%= name %>.placeholder,
+                    content: <%= model %>.form.options.<%= name %>.mess[0].text,
+                    label: MESSAGE.exist('columns.<%= nameclean %>') ? MESSAGE.i('columns.<%= nameclean %>') : <%= model %>.form.options.<%= name %>.trueplaceholder || <%= model %>.form.options.<%= name %>.placeholder
+                }
+            }
+
+        }
+    }
+</script>
+<div class="<%= options.icon.spyce %> form-group-material form-group has-feedback has-{{<%= model %>.validate['<%= name %>'].type || <%= model %>.defaultColor }}  has-feedback-<%= options.icon.position %>"
+     id="input<%= model %>_<%= nameclean %>">
+    <label
+            id="label<%= model %>_<%= nameclean %>"
+            class="control-label is-visible animate" style="color:#000000 !important;">
+        {{::<%= model %>.form.options.<%= name %>.trueplaceholder || <%= model %>.form.options.<%= name %>.placeholder}}
+        <i ng-show="<%= model %>.form.options.<%= name %>.mess.length>0"
+           id="popover<%= model %>_<%= nameclean %>" class="icon-help">
+        </i>
+    </label>
+    <input style="padding-top: 0px !important;"
+            value="<%= options.value %>" name="<%= name %>"
+            readonly
+            type="text"
+            class="form-control"
+            placeholder="{{::<%= model %>.form.options.<%= name %>.inputPlaceholder}}">
+
+    <div class="form-control-feedback">
+        <i class="icon-<%= options.icon.class %> text-secundary">
+
+        </i>
+    </div>
+    <span ng-show="<%= model %>.form.options.<%= name %>.helptext!=''"
+          class="help-block text-muted">
+    {{<%= model %>.form.options.<%= name %>.helptext}}
+    </span>
+
+    <span ng-show="<%= model %>.validate['<%= name %>'].messages.length>0" class="help-block">
+<p class="text-{{validation.type}}" ng-show="validation.visible!==false || <%= model %>.form.intent===true"
+   ng-repeat="validation in <%= model %>.validate['<%= name %>'].messages">
+<i class="{{validation.icon}}"></i> {{validation.message}}
+    </p>
+    </span>
+</div>
+<script>
+    $(document).ready(function () {
+        if(new SESSION().isLogged()) {
+            if (<%= model %>.form.options.<%= name %>.mess){
+                if (<%= model %>.form.options.<%= name %>.mess[0].cousin){
+                    $('#popover<%= model %>_<%= model %>.form.options.<%= name %>.mess[0].cousin').popover({
+                        container: 'body',
+                        title: eval("`" +<%= model %>.form.options.<%= name %>.popover.label + "`"),
+                        content:eval("`" +<%= model %>.form.options.<%= name %>.popover.content + "`"),
+                    trigger: 'manual'
+                });
+                } else {
+                    $('#popover<%= model %>_<%= nameclean %>').popover({
+                        container: 'body',
+                        title: eval("`" +<%= model %>.form.options.<%= name %>.popover.label + "`"),
+                        content:eval("`" +<%= model %>.form.options.<%= name %>.popover.content + "`"),
+                    trigger: 'manual'
+                });
+                }
+                // Obtén el elemento que deseas observar
+                const elemento = document.getElementById("popover<%= model %>_<%= nameclean %>");
+
+                // Agrega un event listener al objeto document
+                document.addEventListener("click", function(evento) {
+                    // Verifica si el evento ocurrió fuera del elemento que estamos observando
+                    if (elemento !== evento.target && !elemento.contains(evento.target)) {
+                        // Se hizo clic fuera del elemento
+                        $('#popover<%= model %>_<%= nameclean %>').popover('hide')
+
+                    }
+                });
+                $('#popover<%= model %>_<%= nameclean %>').on('click', function(evento) {
+                    evento.stopPropagation();
+                    $(this).popover('show');
+                });
+            }
+        }
+        <%= model %>.triggers.table.after.control("<%= nameclean %>");
+        <% if(options.format){ %>
+        var formaty =<%= model %>.
+        form.options.<%= name %>.format;
+        $('[name="<%= name %>"]').mask(formaty.mask, formaty.options);
+        <% } %>
+
+    });
+</script>

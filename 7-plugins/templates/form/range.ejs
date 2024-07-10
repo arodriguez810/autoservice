@@ -1,0 +1,352 @@
+<%
+if (DATA.name !== undefined) {
+    var name, model, opts;
+    name = DATA.name;
+    model = DATA.model;
+    opts = DATA.opts;
+}
+var name = name || "";
+var options = {
+    icon: {
+        class: "calendar",
+        position: "left",
+        color: COLOR.secundary + "-800"
+    },
+    helptext: '',
+    posttype: "range",
+    timepicker: false,
+    isTime: false,
+    format: 'LL',
+    universal: 'YYYY/MM/DD',
+    minDate: '',
+    maxDate: '',
+    from: '',
+    to: '',
+    disabled: false,
+    singleDatePicker: false,
+    datepicker: true,
+    label_custom: false
+};
+
+options = OBJECT.merge(options, opts); var nameclean = name.replace(/\./g, '_');
+options.placeholder = options.from !== '' ? options.from : name;
+options.from = options.from === '' ? nameclean + "_from" : options.from;
+options.to = options.to === '' ? nameclean + "_to" : options.to;
+if (options.timepicker == false) {
+    options.posttype = 'date';
+} else {
+    options.posttype = 'datetime';
+    options.format += ' LT';
+    options.universal += ' HH:mm';
+}
+if (options.isTime) {
+    options.posttype = 'time';
+    options.format = 'LT';
+}
+if (options.label_custom) {
+    options.placeholder = options.label;
+}
+popopme = function (entity, field) {
+    var prueba = HINTS.filter(d => {
+        return (d.trueEntity || d.entities) === entity && d.field_names === field
+    })
+
+    function sortArray() {
+        options.mess = prueba.sort(function (a, b) {
+            return b.id - a.id
+        });
+    }
+
+    sortArray();
+}
+popopme(model, nameclean);
+var toclient = JSON.stringify(options);
+%>
+<script>
+    //
+    <%= model %>.triggers.table.before.control("<%= nameclean %>");
+    <%= model %>.form.schemas.select["<%= options.from %>"] = FORM.schemasType.range;
+    <%= model %>.form.schemas.select["<%= options.to %>"] = FORM.schemasType.range;
+
+    <%= model %>.form.registerField("<%= options.from %>", "<%= toclient %>");
+    <% if(options.singleDatePicker === false){ %>
+    <%= model %>.form.registerField("<%= options.to %>", "<%= toclient %>");
+    <% } %>
+    if (MESSAGE.exist('columns.<%= nameclean %>')) {
+        <%= model %>.
+        form.options.<%= options.from %>.placeholder = MESSAGE.i('columns.<%= nameclean %>');
+    }
+    <% if (options.label_custom){ %>
+    <%= model %>.form.options.<%= options.from %>.placeholder = "<%= options.label %>";
+    <% } %>
+    if (new SESSION().isLogged()) {
+        <%= model %>.
+        form.options.<%= options.from %>.mess = <%= model %>.
+        form.options.<%= options.from %>.mess.filter(d => {
+            return d.company == new SESSION().current().compania_id;
+        })
+        if (<%= model %>.
+        form.options.<%= options.from %>.mess.length == 0
+    )
+        {
+            delete <%= model %>.
+            form.options.<%= options.from %>.mess
+        }
+        if (<%= model %>.
+        form.options.<%= options.from %>.mess
+    )
+        {
+            <%= model %>.
+            form.options.<%= options.from %>.popover = {
+                title:
+                <%= model %>.form.options.<%= options.from %>.mess[0].field_names.replace('_', ' ').replace('_', ' '),
+                content:
+                <%= model %>.form.options.<%= options.from %>.mess[0].text,
+                label: MESSAGE.exist('columns.<%= nameclean %>') ? MESSAGE.i('columns.<%= nameclean %>') :
+                <%= model %>.form.options.<%= name %>.trueplaceholder ||
+                <%= model %>.form.options.<%= name %>.placeholder
+            }
+        }
+    }
+
+</script>
+<div class="remove-input-space form-group-material form-group has-feedback has-{{<%= model %>.validate['<%= name %>'].type || <%= model %>.defaultColor }}  has-feedback-<%= options.icon.position %>"
+     id="input<%= model %>_<%= nameclean %>">
+    <label
+            id="label<%= model %>_<%= nameclean %>"
+            class="control-label is-visible animate" style="color:#000000 !important;">
+        {{::(<%= model %>.form.options.<%= name %>.trueplaceholder || <%= model %>.form.options.<%= options.from %>.placeholder)}}
+        <i ng-show="<%= model %>.form.options.<%= options.from %>.mess.length>0"
+           id="popover<%= model %>_<%= nameclean %>" class="icon-help">
+        </i>
+    </label>
+
+    <div id="<%= model %>_<%= nameclean %>div"
+         ng-show="<%= model %>.form.options.<%= options.from %>.disabled!==true"
+         class="form-control form-control-custom" style="padding-left: 0px;">
+        <i class="icon-<%= options.icon.class %> text-<%= COLOR.secundary %>"></i>
+        <span>{{<%= model + "." + name %>}}</span>
+    </div>
+
+    <div id="<%= model %>_<%= nameclean %>divcopy"
+         ng-show="<%= model %>.form.options.<%= options.from %>.disabled===true"
+         class="form-control form-control-custom" style="padding-left: 0px;">
+        <i class="icon-<%= options.icon.class %> text-<%= COLOR.secundary %>"></i>
+        <span>{{<%= model + "." + name %>}}</span>
+    </div>
+    <input type="hidden" ng-model="<%= model + "." + name %>">
+    <input type="hidden" ng-model="<%= model + "." + options.from %>">
+    <% if(options.singleDatePicker === false){ %>
+        <input type="hidden" ng-model="<%= model + "." + options.to %>">
+    <% } %>
+
+    <span ng-if="<%= model %>.form.options.<%= name %>.helptext!=''"
+          class="help-block text-muted">
+        {{<%= model %>.form.options.<%= name %>.helptext}}
+    </span>
+
+    <span ng-show="<%= model %>.validate['<%= name %>'].messages.length>0" class="help-block">
+        <p class="text-{{validation.type}}" ng-show="validation.visible!==false || <%= model %>.form.intent===true"
+           ng-repeat="(key,validation) in <%= model %>.validate['<%= name %>'].messages track by key">
+               <i class="{{validation.icon}}"></i> {{validation.message}}
+        </p>
+    </span>
+</div>
+<style>
+
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        if (new SESSION().isLogged()) {
+            if (<%= model %>.form.options.<%= options.from %>.mess) {
+                $('#popover<%= model %>_<%= nameclean %>').popover({
+                    container: 'body',
+                    title: eval("`" +<%= model %>.form.options.<%= options.from %>.popover.label + "`"),
+                    content: eval("`" +<%= model %>.form.options.<%= options.from %>.popover.content + "`"),
+                trigger: 'manual'
+            });
+                // Obtén el elemento que deseas observar
+                const elemento = document.getElementById("popover<%= model %>_<%= nameclean %>");
+
+                // Agrega un event listener al objeto document
+                document.addEventListener("click", function(evento) {
+                    // Verifica si el evento ocurrió fuera del elemento que estamos observando
+                    if (elemento !== evento.target && !elemento.contains(evento.target)) {
+                        // Se hizo clic fuera del elemento
+                        $('#popover<%= model %>_<%= nameclean %>').popover('hide')
+
+                    }
+                });
+                $('#popover<%= model %>_<%= nameclean %>').on('click', function(evento) {
+                    evento.stopPropagation();
+                    $(this).popover('show');
+                });
+            }
+        }
+
+        $('#<%= model %>_<%= nameclean %>').keypress(function (e) {
+            e.preventDefault();
+            return false;
+        });
+
+        var range = '';
+
+        setTimeout(() => {
+
+
+            <%= model %>.
+            <%= name %>_start = function (value) {
+                if ($('#<%= model %>_<%= name %>div').data('daterangepicker'))
+                    $('#<%= model %>_<%= name %>div').data('daterangepicker').setStartDate(moment(value));
+            }
+                    <%= model %>.<%= name %>_end = function (value) {
+                if ($('#<%= model %>_<%= name %>div').data('daterangepicker'))
+                    $('#<%= model %>_<%= name %>div').data('daterangepicker').setEndDate(moment(value));
+            }
+
+                    <%= model %>.<%= name %>_min = function (value) {
+                if ($('#<%= model %>_<%= name %>div').data('daterangepicker'))
+                    $('#<%= model %>_<%= name %>div').data('daterangepicker').minDate = (moment(value));
+            }
+
+                    <%= model %>.<%= name %>_max = function (value) {
+                if ($('#<%= model %>_<%= name %>div').data('daterangepicker'))
+                    $('#<%= model %>_<%= name %>div').data('daterangepicker').maxDate = (moment(value));
+            }
+
+            if (<%= model %>.<%= options.from %> && <%= model %>.<%= options.to %>)
+            {
+                <%= model + "." + name %> = `${moment(<%= model %>.<%= options.from %>).format("<%= options.format %>")} - ${moment(<%= model %>.<%= options.to %>).format("<%= options.format %>")}`;
+            }
+        else
+            if (<%= model %>.<%= options.from %>)
+            {
+                <%= model + "." + name %> = `${moment(<%= model %>.<%= options.from %>).format("<%= options.format %>")}`;
+            }
+        else
+            <%= model + "." + name %>= "";
+
+            <% if(options.singleDatePicker === false){ %>
+            range = moment(<%= model %>.<%= options.from %> || undefined
+        ).
+            format("<%= options.format %>") + " - " + moment(<%= model %>.<%= options.to %> || undefined
+        ).
+            format("<%= options.format %>");
+            <% }else{ %>
+            range = moment(<%= model %>.<%= options.from %> || undefined
+        ).
+            format("<%= options.format %>");
+            <% } %>
+            //<%= model %>.<%= name %> = range;
+
+            <% if(options.disabled !== true){ %>
+            $('#<%= model %>_<%= nameclean %>div').daterangepicker({
+                "applyButtonClasses": "bg-primary",
+                "cancelButtonClasses": "bg-secundary",
+                "autoApply": true,
+                "timePicker24Hour": moment.localeData()._longDateFormat.LT.indexOf("HH") !== -1,
+                timePicker: <%= options.timepicker %>,
+                showDropdowns: true,
+                startDate: moment(<%= model %>.<%= options.from %> || undefined) ,
+                endDate
+        :
+            moment(<%= model %>.<%= options.to %> || undefined
+        ) ,
+            "locale"
+        :
+            {
+                "separator"
+            :
+                " - ",
+                    "applyLabel"
+            :
+                MESSAGE.ic("mono.apply"),
+                    "cancelLabel"
+            :
+                MESSAGE.ic("mono.cancel"),
+                    "fromLabel"
+            :
+                MESSAGE.ic("mono.from"),
+                    "toLabel"
+            :
+                MESSAGE.ic("mono.to"),
+                    "daysOfWeek"
+            :
+                moment().localeData()._weekdaysMin,
+                    "monthNames"
+            :
+                moment().localeData()._months,
+                    "firstDay"
+            :
+                1
+            }
+        ,
+            <%= options.minDate === "" ? "" : ("minDate:moment(" + options.minDate + "),") %>
+            <%= options.maxDate === "" ? "" : ("maxDate:moment(" + options.maxDate + "),") %>
+            <%= options.singleDatePicker === false ? "" : ("singleDatePicker:true,") %>
+        },
+
+            function (start, end, label) {
+                var range = '';
+                <% if(options.singleDatePicker === false){ %>
+                range = moment(start).format("<%= options.format %>") + " - " + moment(end).format("<%= options.format %>");
+                <% }else{ %>
+                range = moment(start).format("<%= options.format %>");
+                <% } %>
+                <%= model %>.<%= name %> = range;
+                <%= model %>.
+                refreshAngular();
+                <%= model %>.<%= options.from %> = moment(start).format("<%= options.universal %>");
+                <% if(options.singleDatePicker === false){ %>
+                <%= model %>.<%= options.to %> = moment(end).format("<%= options.universal %>");
+                <% } %>
+            }
+
+        )
+            ;
+
+            $('#<%= model %>_<%= nameclean %>div').on('apply.daterangepicker', function (ev, picker) {
+                var start = picker.startDate;
+                var end = picker.endDate;
+                var range = '';
+                <% if(options.singleDatePicker === false){ %>
+                range = moment(start).format("<%= options.format %>") + " - " + moment(end).format("<%= options.format %>");
+                <% }else{ %>
+                range = moment(start).format("<%= options.format %>");
+                <% } %>
+                <%= model %>.<%= name %> = range;
+                <%= model %>.
+                refreshAngular();
+                <%= model %>.<%= options.from %> = moment(start).format("<%= options.universal %>");
+                <% if(options.singleDatePicker === false){ %>
+                <%= model %>.<%= options.to %> = moment(end).format("<%= options.universal %>");
+                <% } %>
+            });
+
+
+            $('#<%= model %>_<%= nameclean %>div').on('showCalendar.daterangepicker', function (ev, picker) {
+
+
+                <% if(options.isTime){ %>
+
+                $('.calendar-table, .drp-selected').hide();
+
+                <% }else{ %>
+                $('.calendar-table, .drp-selected').show();
+
+                <% } %>
+
+
+
+            });
+            <% } %>
+            <%= model %>.
+            triggers.table.after.control("<%= nameclean %>");
+
+
+        }, 1);
+
+
+    });
+</script>

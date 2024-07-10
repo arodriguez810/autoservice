@@ -1,0 +1,31 @@
+<div class="text-left" ng-show="!<%= scope %>.hidePaginator">
+    <ul class="pagination" ng-if="<%= scope %>.table.totalPages>1">
+        <li ng-show="<%= scope %>.CRUD().piemessage!==false">
+            <a class="visible-md visible-lg">
+                {{ <%= scope %>.sortmessage || <%= scope %>.tableStatus(<%= scope %>.table.totalPages)}}
+            </a>
+        </li>
+        <li><a dragonlanguage="" data-popup="tooltip" title="Primera Página" ng-click="<%= scope %>.firstPage()">‹‹</a>
+        </li>
+        <li>
+            <a class="visible-md visible-lg" data-popup="tooltip" dragonlanguage="" title="Página Anterior"
+               ng-click="<%= scope %>.backPage()">‹</a>
+        </li>
+        <li class="{{row.current}} {{row.class}}" ng-repeat="(key, row) in <%= scope %>.table.pages track by key">
+            <a class="{{row.current}}" title="Página {{row.number}}{{row.current.length>5?'(Actual)':''}}"
+               ng-dblclick="<%= scope %>.goPageModal()" ng-click="<%= scope %>.goPage(row.number)">{{row.number}}
+            </a>
+        </li>
+        <li><a class="visible-md visible-lg" data-popup="tooltip" dragonlanguage="" title="Página Siguiente"
+               ng-click="<%= scope %>.nextPage()">›</a></li>
+        <li><a class="visible-md visible-lg" data-popup="tooltip" dragonlanguage="" title="Última Página"
+               ng-click="<%= scope %>.lastPage()">››</a></li>
+    </ul>
+    <ul class="pagination" ng-if="<%= scope %>.table.totalPages<=1">
+        <li ng-show="<%= scope %>.CRUD().piemessage!==false">
+            <a class="visible-md visible-lg">
+                {{ <%= scope %>.sortmessage || <%= scope %>.tableStatus(<%= scope %>.table.totalPages)}}
+            </a>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,58 @@
+<script>
+    $('.modal-title').html('Mi Perfil');
+</script>
+<div class="tab-content">
+    <div class="tab-pane active" id="basic">
+        <div class="row">
+            <div class="col-sm-12 col-md-4 remove-input-space">
+                <%- FORM.input("nombre", scope, {maxlength: 64, disabled: true}) %>
+            </div>
+            <div class="col-sm-12 col-md-4 remove-input-space">
+                <%- FORM.input("apellido", scope, {maxlength: 64, disabled: true}) %>
+            </div>
+            <div class="col-sm-12 col-md-4 remove-input-space">
+                <%- FORM.input("correo", scope, {maxlength: 64, disabled: true}) %>
+            </div>
+        </div>
+        <div class="row">
+        </div>
+        <div class="row">
+            <!--<div class="row">-->
+            <!--</div>-->
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-md-4 custom-upload" ng-if="false">
+                <%- FORM.file("profileimage", scope, {
+                    show: 'image',
+                    image: 130,
+                    imagefloat: 'right',
+                    title: 'Ver imagen de perfil',
+                    truetext: 'Imagen de perfil',
+                    maxfiles: 1,
+                    columns: 1,
+                    remove: false,
+                    upload: false,
+                    // acceptedFiles: "image/*, video/*, audio/*, .pdf, .rar, .zip, .doc, .docx, .xls, .xlsx",
+                    // acceptedFiles_message: "Sólo se pueden subir archivos de tipo imagen, vídeo, audio, pdf, rar/zip, doc/docx y xls/xlsx",
+                }) %>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer dragonformfooter" dragonlanguage="" id="btnformfooter">
+     <span class="label label-white text-<%= COLOR.secundary %>-300 label-rounded label-icon">
+            <i class="position-right"></i>
+        </span>
+
+    <button
+
+            dragonlanguage="" title="Cerrar"
+            type="button" class="btn bg-<%= COLOR.secundary %> btn-labeled btn-xs pull-right"
+            ng-click="<%= scope %>.pages.form.close()">
+        <b><i class="icon-cross2"></i></b>
+        <language>Cerrar</language>
+    </button>
+</div>
+<script>
+
+</script>

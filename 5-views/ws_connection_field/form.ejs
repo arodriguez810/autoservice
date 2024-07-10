@@ -1,0 +1,37 @@
+<div class="tab-content">
+    <div class="tab-pane active" id="basic">
+        <div class="row">
+            <div class='col-sm-6 col-md-6'>
+                <%- FORM.input('name', scope, {}) %>
+            </div>
+            <div class='col-sm-6 col-md-6'>
+                <%- FORM.input('metodo', scope, {label: "Método"}) %>
+            </div>
+            <div class='col-sm-6 col-md-6'>
+                <%- FORM.select('ws_periods', scope, {
+                    text: "item.nombre",
+                    truelabel: "Frecuencia",
+                    table: 'ws_periods'
+                }) %>
+            </div>
+            <div class='col-sm-12 col-md-12'>
+                <%- FORM.textarea('resultPath', scope, {
+                    //maxlength: 200,
+                }) %>
+            </div>
+            <div class='col-sm-12 col-md-12'>
+                <%- FORM.textarea('calcs', scope, {
+                    //maxlength: 200,
+                }) %>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<%- FORM.footer(scope) %>
+
+
+
+
+

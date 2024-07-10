@@ -1,0 +1,1 @@
+ARRAY={removeLast:function(n){n.splice(-1,1)},last:function(n){return n[n.length-1]},first:function(n){return n[0]},penultimate:function(n){return n[n.length-2]},contains:function(n,t){return null!=n&&-1!==n.indexOf(t)},existIn:function(n,t){for(var e=0;e<t.length;e++)if(t[e]===n)return!0;return!1},deleteQuery:function(n,t){return n.splice(n.findIndex(t),1)}};

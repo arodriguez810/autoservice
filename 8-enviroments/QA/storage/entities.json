@@ -1,0 +1,39 @@
+{
+  "appEntities": {
+    "hint_entity": {
+      "key": "id",
+      "type": "one",
+      "fields": [
+        "id",
+        "name",
+        "description",
+        "company"
+      ]
+    },
+    "hint_fields": {
+      "key": "id",
+      "type": "one",
+      "fields": [
+        "hint_entity_id",
+        "tempid",
+        "company",
+        "entities",
+        "entities_name",
+        "field_names",
+        "field_show_names",
+        "text",
+        "cousin"
+      ]
+    },
+    "audit_action": {
+      "key": "id",
+      "type": "one",
+      "base": true,
+      "open": true,
+      "fields": [
+        "nombre",
+        "description"
+      ]
+    }
+  }
+}

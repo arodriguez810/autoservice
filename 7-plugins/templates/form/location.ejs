@@ -1,0 +1,144 @@
+<%
+if(DATA.name!==undefined){
+    var name, model, opts;
+    name = DATA.name;
+    model = DATA.model;
+    opts = DATA.opts;
+}
+var name  = name || "";
+var options = {
+    placeholder: params.capitalize(name),
+    model: 1,
+    icon: {
+        class: "location4",
+        position: "left",
+        color: COLOR.secundary + "-800"
+    },
+    helptext: '',
+    readonly: false,
+    disabled: false,
+    posttype: "location"
+
+};
+options = OBJECT.merge(options, opts); var nameclean = name.replace(/\./g, '_');
+var toclient = JSON.stringify(options);
+%>
+<script>
+    <%= model %>.triggers.table.before.control("<%= nameclean %>");
+    <%= model %>.locationselectedText = MESSAGE.i('mono.selectedLocation');
+    <%= model %>.form.schemas.select["<%= name %>"] = FORM.schemasType.location;
+    <%= model %>.form.registerField("<%= name %>", "<%= toclient %>");
+    <%= model %>.form.registerField("<%= name %>_DragonLat", "<%= toclient %>");
+    <%= model %>.form.registerField("<%= name %>_DragonLon", "<%= toclient %>");
+
+
+    if (MESSAGE.exist('columns.<%= nameclean %>')) {
+        <%= model %>.
+        form.options.<%= name %>.placeholder = MESSAGE.ic('columns.<%= nameclean %>');
+    }
+    var isReadProgram = <%= model %>.form.isReadOnly('<%= name %>');
+    if (isReadProgram !== false) {
+        <%= model %>.
+        form.options.<%= name %>.disabled = true;
+        if (isReadProgram !== undefined) {
+            var locationLoaded = isReadProgram.split(';');
+            if (locationLoaded.length === 3) {
+                <%= model %>.
+                <%= name %>_DragonLat = locationLoaded[0];
+                <%= model %>.
+                <%= name %>_DragonLon = locationLoaded[1];
+            }
+        }
+    }
+</script>
+<div class="form-group-material form-group has-feedback has-{{<%= model %>.validate['<%= name %>'].type || <%= model %>.defaultColor }}  has-feedback-<%= options.icon.position %>"
+     id="input<%= model %>_<%= nameclean %>">
+    <label
+            class="control-label is-visible animate" style="color:#000000 !important;">
+        {{::<%= model %>.form.options.<%= name %>.placeholder}}
+        <% if(options.popover){ %>
+            <i
+                    id="popover<%= model %>_<%= nameclean %>" class="icon-help">
+            </i>
+        <% } %>
+    </label>
+
+    <button name="<%= model %>_<%= nameclean %>"
+            type="button"
+            role="button"
+            class="btn bg-<%= options.color %>-600 btn-block legitRipple">
+        {{<%= model %>.<%= name %>_DragonLat!==null ? <%= model %>.locationselectedText :""}}
+        <i class="icon-<%= options.icon.class %> text-secundary"></i>
+        <div ng-show="<%= model %>.<%= name %>_DragonLat===null" dragonlanguage="">
+            <language>MESSAGE.i('mono.selectLocation')</language>
+        </div>
+
+    </button>
+
+
+    <input type="hidden" ng-model="<%= model + "." + name %>_DragonLat" name="<%= model %>_<%= nameclean %>_DragonLat">
+    <input type="hidden" ng-model="<%= model + "." + name %>_DragonLon" name="<%= model %>_<%= nameclean %>_DragonLon">
+
+    <span ng-if="<%= model %>.form.options.<%= name %>.helptext!=''"
+          class="help-block text-muted">
+        {{<%= model %>.form.options.<%= name %>.helptext}}
+    </span>
+
+    <span ng-show="<%= model %>.validate['<%= name %>'].messages.length>0" class="help-block">
+        <p class="text-{{validation.type}}" ng-show="validation.visible!==false || <%= model %>.form.intent===true"
+           ng-repeat="(key,validation) in <%= model %>.validate['<%= name %>'].messages track by key">
+               <i class="{{validation.icon}}"></i> {{validation.message}}
+        </p>
+    </span>
+</div>
+<script>
+    $(document).ready(function () {
+        <% if(options.popover){ %>
+        $('#popover<%= model %>_<%= nameclean %>').popover({
+            container: 'body',
+            title: eval("`" +<%= model %>.form.options.<%= name %>.placeholder + "`"),
+            content:eval("`" +<%= model %>.form.options.<%= name %>.popover.content + "`"),
+        trigger: 'manual'
+    });
+        // Obtén el elemento que deseas observar
+        const elemento = document.getElementById("popover<%= model %>_<%= nameclean %>");
+
+        // Agrega un event listener al objeto document
+        document.addEventListener("click", function(evento) {
+            // Verifica si el evento ocurrió fuera del elemento que estamos observando
+            if (elemento !== evento.target && !elemento.contains(evento.target)) {
+                // Se hizo clic fuera del elemento
+                $('#popover<%= model %>_<%= nameclean %>').popover('hide')
+
+            }
+        });
+        $('#popover<%= model %>_<%= nameclean %>').on('click', function(evento) {
+            evento.stopPropagation();
+            $(this).popover('show');
+        });
+        <% } %>
+
+        <%= model %>.triggers.table.after.control("<%= nameclean %>");
+        if (typeof google !== "undefined") {
+            var defaultLocation = {
+                lat: <%= model + "." + name + "_DragonLat" %>,
+                lon: <%= model + "." + name + "_DragonLon" %>
+            };
+        }
+        $('[name="<%= model %>_<%= nameclean %>"]').click(function () {
+            baseController.viewData = {
+                name: '<%= name %>'
+            }
+            var modal = {
+                width: ENUM.modal.width.large,
+                header: {
+                    title: <%= model %>.form.options.<%= name %>.placeholder,
+                    icon: <%= model %>.form.options.<%= name %>.icon.class
+                },
+                footer: {cancelButton: true},
+                content: {loadingContentText: MESSAGE.i('actions.Loading')}
+            };
+            <%= model %>.modal.modalView("templates/components/map", modal);
+        });
+    });
+</script>

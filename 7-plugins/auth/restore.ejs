@@ -1,0 +1,39 @@
+<style>
+    #listconfirmpassword,
+    #listnewpassword{
+        position: absolute;
+        right: 0;
+        top: 29px;
+    }
+</style>
+
+<form>
+    <div class="panel panel-body login-form">
+        <div class="text-center" dragonlanguage="">
+            <div class="icon-object border-<%= COLOR.primary %>-800 text-<%= COLOR.secundary %>">
+                <i class="icon-user-lock"></i>
+            </div>
+            <h5 class="content-group">
+                {{auth.restoreUser.fullName()}}.<br>
+                <language>MESSAGE.ic('login.resetpasswordmsg')</language>
+            </h5>
+        </div>
+
+        <div class="form-group has-feedback">
+            <%- FORM.password("newpassword", scope, {icon: {class: "lock"}}) %>
+            <%- FORM.password("confirmpassword", scope, {icon: {class: "lock"}}) %>
+        </div>
+        <br>
+        <div class="col-sm-3 col-md-3">
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <button ng-click="auth.restorePassword();" type="button" id="idsend" role="button"
+                    class="btn bg-<%= COLOR.success %> btn-block legitRipple" dragonlanguage="">
+                <language>MESSAGE.ic('login.resetpassword')</language>
+                <i id="spinersend" class="icon-arrow-right14 position-right"></i>
+            </button>
+        </div>
+        <div class="col-sm-3 col-md-3">
+        </div>
+    </div>
+</form>

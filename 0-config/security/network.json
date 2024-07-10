@@ -1,0 +1,14 @@
+{
+  "domain": "localhost",
+  "subdomain": "",
+  "folder": "AUTOSERVICE",
+  "ssl": false,
+  "port": 9090,
+  "proxy": {
+    "domain": "localhost",
+    "subdomain": "",
+    "folder": "AUTOSERVICE",
+    "ssl": false,
+    "port": 9090
+  }
+}

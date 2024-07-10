@@ -1,0 +1,110 @@
+<script>
+    auth;
+    var input = document.getElementsByName("auth_username")[0];
+    var alert_container_1 = document.getElementById("alert_container_1");
+    var password = document.getElementsByName("auth_password")[0];
+    var alert_container_2 = document.getElementById("alert_container_2");
+    input.addEventListener("keyup", function(event) {
+        if (event.getModifierState("CapsLock")) {
+            alert_container_1.style.display = "block";
+        } else {
+            alert_container_1.style.display = "none";
+            alert_container_2.style.display = "none";
+        }
+    });
+    password.addEventListener("keyup", function(event) {
+        if (event.getModifierState("CapsLock")) {
+            alert_container_2.style.display = "block";
+        } else {
+            alert_container_1.style.display = "none";
+            alert_container_2.style.display = "none";
+        }
+    });
+</script>
+<div id="<%= scope %>" ng-controller="<%= scope %> as <%= scope %>">
+    <div class="row" style="overflow: hidden">
+        <div class="col-lg-9 hidden-xs hidden-sm">
+            <img id="coverlogin" style="border:0px !important;width: 113%" src="files/configuration/splash/splash_private.png">
+        </div>
+        <div class="col-lg-3 col-xs-12">
+            <div class="panel panel-body" id="logincontent">
+                <div class="form-group has-feedback has-feedback-left text-center">
+                    <div class="icon-object text-slate-300" style="padding: 10px; border-style: none;">
+                        <img style="float: left !important;width: 150px;" src="files/configuration/logo/logo.webp" alt="">
+                    </div>
+                    <h5 class="content-group" dragonlanguage>
+                        Iniciar Sesión
+                        <small class="display-block">
+                            <language>MESSAGE.i('login.Enteryourcredentialsbelow')</language>
+                        </small>
+                    </h5>
+                </div>
+
+                <%- FORM.input("username", scope, {text: "Remember", icon: {class: "user"}}) %>
+                <span id="alert_container_1" class="help-block"><p class="text-error" style="color: #ff751a ;"><i class="icon-spam"></i> Advertencia! están activadas las mayúsculas</p></span>
+                <%- FORM.normalpassword("password", scope, {
+                    text: "Remember",
+                    type: "password",
+                    icon: {class: "unlocked2"}
+                }) %>
+                <span id="alert_container_2" class="help-block"><p class="text-error" style="color: #ff751a ;"><i class="icon-spam"></i> Advertencia! están activadas las mayúsculas</p></span>
+                <%- FORM.button("login", scope, {text: "SING IN", type: "form", icon: {class: "circle-right2"}}) %>
+                <div class="text-center" dragonlanguage>
+                    <a ng-click="<%= scope %>.forgotPassword()">
+                        <language>MESSAGE.ic('login.forgotpassword')</language>
+                        ?
+                    </a>
+                </div>
+                <% for(var i = 1;i < 10;i++){ %>
+                    <br>
+                <% } %>
+
+                <div style="text-align: center">
+                    <!--<div style="float: left;margin-right: 5px;">-->
+
+                    <!--</div>-->
+
+                    <label style="opacity: 0.7;"><img width="30" src="../../../assets/images/logoeis.png"> Diseñado y desarrollado por <a href="https://eisdr.com/" target="_blank">Excellent Integrity Solutions</a>
+                    </label>
+                </div>
+
+            </div>
+            <!-- /simple login form -->
+        </div>
+    </div>
+</div><!--end-->
+<style>
+    .footer {
+        display: none;
+    }
+
+    .upButtom {
+        display: none !important;
+    }
+
+    .panel {
+        margin-bottom: 0px !important;
+    }
+
+    #alert_container_1 {
+        display:none;
+    }
+
+    #alert_container_2 {
+        display:none;
+    }
+</style>
+<script>
+    loginresize();
+    window.onresize = function (event) {
+        loginresize();
+    };
+
+    function loginresize() {
+        var heightLogin = document.getElementById('coverlogin').clientHeight;
+        if (heightLogin != 0)
+            document.getElementById("logincontent").style.height = `${heightLogin}px`;
+        else
+            document.getElementById("logincontent").style.height = `114vh`;
+    }
+</script>

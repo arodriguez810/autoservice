@@ -1,0 +1,699 @@
+<%
+if (DATA.name !== undefined) {
+    var name, model, opts;
+    name = DATA.name;
+    model = DATA.model;
+    opts = DATA.opts;
+}
+var name = name || "";
+var options = {
+    label: params.capitalize(name),
+    default: 'Select ' + params.capitalize(name),
+    icon: {
+        class: "none",
+        position: "left",
+        color: COLOR.secundary + "-800"
+    },
+    max: 99999999,
+    height: false,
+    allownull: true,
+    allownew: true,
+    allowedit: true,
+    allowview: true,
+    allowlist: true,
+    refresh: true,
+    multiple: true,
+    disabled: false,
+    custom_class: '',
+    helptext: '',
+    value: "id",
+    text: "item.name",
+    grandchild_group: null,
+    grandchild_group_title: null,
+    child_group: null,
+    child_group_title: null,
+    parent_group: null,
+    parent_group_title: null,
+    storage_child: null,
+    storage_child_group:null,
+    storage_child_condition: null,
+    storage_child_group_title: null,
+    //table: "",
+    get: {
+        table: '',
+        field: ''
+    },
+    parent: false,
+    childs: false,
+    query: {
+        limit: 0,
+        page: 1,
+        where: [],
+        orderby: "id",
+        order: "asc",
+        distinct: false
+        // join: [
+        //     {
+        //         table: "ms_category",
+        //         base: "category",
+        //         field: "id",
+        //         columns: ["id", "name"]
+        //     },
+        //     {
+        //         table: "otratable",
+        //         base: "ms_category_id",
+        //         field: "id",
+        //         columns: ["id", "name"]
+        //     }
+        // ]
+    },
+    groupby: "",
+    data: [],
+    posttype: "select"
+};
+options = OBJECT.merge(options, opts);
+var nameclean = name.replace(/\./g, '_');
+options.model = options.model ? options.model : false;
+options.controller = options.controller||options.table;
+options.permission = options.permission || "CRUD_" + options.table;
+popopme = function(entity, field){
+    var prueba = HINTS.filter(d => {
+        return ( d.trueEntity || d.entities ) === entity && d.field_names === field
+    })
+    function sortArray() {
+        options.mess = prueba.sort(function(a, b){return b.id - a.id});
+    }
+    sortArray();
+}
+popopme(model, nameclean);
+var toclient = JSON.stringify(options);
+%>
+<script>
+    <%= model %> .viewmoremessage = MESSAGE.ic('mono.completetext');
+    <%= model %> .listmessage = MESSAGE.ic('mono.viewmore');
+    <%= model %>.triggers.table.before.control("<%= nameclean %>");
+    if (DSON.oseaX(<%= model + "." + name %>))
+            <%= model + "." + nameclean %> = "[NULL]";
+
+    <% if(options.multiple){ %>
+    <%= model %>.<%= nameclean %> = [];
+    <%= model %>.form.schemas.insert["<%= name %>"] = FORM.schemasType.selectMultiple;
+    <%= model %>.form.schemas.select["<%= name %>"] = `{
+                    toTable: "<%= options.table %>",
+                    text: MESSAGE.i('actions.Loading'),
+                    fields: {
+                        <%= options.get.fieldTo %>: "$id",
+                    },
+                }`;
+    <% } %>
+
+    <%= model %>.form.registerField("<%= name %>", "<%= toclient %>", "'[NULL]'");
+    <%= model %>.form.options.<%= name %>.default = `${MESSAGE.ic('mono.select')} <%= name %>`;
+    if (MESSAGE.exist('columns.<%= nameclean %>')) {
+        <%= model %>.
+        form.options.<%= name %>.label = MESSAGE.ic('columns.<%= nameclean %>');
+        <%= model %>.
+        form.options.<%= name %>.default = `${MESSAGE.ic('mono.select')} ` + MESSAGE.ic('columns.<%= nameclean %>');
+    }
+    if(new SESSION().isLogged()) {
+        <%= model %>.form.options.<%= name %>.mess = <%= model %>.form.options.<%= name %>.mess.filter(d => {
+            return d.company == new SESSION().current().compania_id;
+        })
+        if(<%= model %>.form.options.<%= name %>.mess.length == 0){
+            delete <%= model %>.form.options.<%= name %>.mess
+        }
+        if (<%= model %>.form.options.<%= name %>.mess){
+            <%= model %>.form.options.<%= name %>.popover = {
+                title: <%= model %>.form.options.<%= name %>.mess[0].field_names.replace('_',' '),
+                content: <%= model %>.form.options.<%= name %>.mess[0].text,
+                label: MESSAGE.exist('columns.<%= nameclean %>') ? MESSAGE.i('columns.<%= nameclean %>') : <%= model %>.form.options.<%= name %>.trueplaceholder || <%= model %>.form.options.<%= name %>.placeholder
+            }
+        }
+    }
+    if (<%= model %>.form.options.<%= name %>.storage_child) {
+        get_storage_child = async function () {
+            <%= model %>.form.options.<%= name %>.storage_child_list = await BASEAPI.listp( <%= model %>.form.options.<%= name %>.storage_child, {});
+        }
+        get_storage_child();
+    }
+    var isReadProgram = <%= model %>.form.isReadOnly('<%= name %>');
+    if (isReadProgram !== false) {
+        <%= model %>.
+        form.options.<%= name %>.disabled = true;
+        if (isReadProgram !== undefined) {
+            <%= model %>.<%= name %> = isReadProgram;
+        }
+    }
+    <%= model %>.form.loadDropDown("<%= name %>", false);
+
+    var permissions = eval('<%= options.permission %>');
+    if (!permissions.table.allow.edit)
+            <%= model %>.
+    form.options.<%= name %>.allowedit = false;
+    if (!permissions.table.allow.view)
+            <%= model %>.
+    form.options.<%= name %>.allowview = false;
+    if (!permissions.table.allow.add)
+            <%= model %>.
+    form.options.<%= name %>.allownew = false;
+</script>
+<% if (model !== options.controller){ %>
+<div id="<%= options.controller %>" ng-controller="<%= options.controller %> as <%= options.controller %>">
+    <% } %>
+    <div class="form-group-material form-group has-feedback  has-feedback-<%= options.icon.position %>"
+         id="input<%= model %>_<%= nameclean %>">
+        <label
+                class="control-label is-visible animate" style="color:#000000 !important;">
+            {{::<%= model %>.form.options.<%= name %>.placeholder}}
+
+            <i ng-show="<%= model %>.form.options.<%= name %>.mess.length>0"
+               id="popover<%= model %>_<%= nameclean %>" class="icon-help">
+            </i>
+
+        </label>
+        <div
+                <%= options.multiple ? "multiple='multiple'" : "" %>
+                ng-model="<%= model + "." + name %>"
+                name="<%= model %>_<%= nameclean %>"
+                ng-disabled="<%= model %>.form.options.<%= name %>.disabled"
+                class="panel "
+                style="<%= options.height !== false ? ('min-height: ' + options.height + 'px;') : '' %>">
+
+            <div class="panel-heading  bg-<%= COLOR.secundary %>  border-bottom-<%= COLOR.primary %> "
+                 style="padding-top: 3px;padding-bottom: 3px">
+                <h6 class="panel-title">
+                    {{<%= model %>.form.options.<%= name %>.truelabel || <%= model %>.form.options.<%= name %>.label}}
+                </h6>
+                <div class="heading-elements" style="height: 0px;">
+                    <div class="form-group has-feedback has-feedback-left">
+                        <% if(options.allownew || options.allowedit || options.allowview || options.allowlist || options.refresh){ %>
+                            <li class="dropdown" style="float: right;list-style: none;margin-top: 8px;">
+                                <i dragonlanguage="" title="MESSAGE.i('mono.options')"
+                                   class="icon-list-unordered"></i>
+                                <a href="#" class="dropdown-toggle legitRipple " data-toggle="dropdown"
+                                   aria-expanded="false">
+
+                                    <span class="caret"></span>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-right">
+
+                                    <% if(options.refresh){ %>
+                                        <li>
+                                            <a dragonlanguage="" title="MESSAGE.i('mono.refresh')"
+                                               id="reload<%= model %>_<%= nameclean %>"
+                                            >
+                                                <i class="icon-reload-alt"></i>
+                                                <language>MESSAGE.ic('mono.refresh')</language>
+                                            </a>
+                                        </li>
+                                    <% } %>
+                                    <% if(options.allowlist){ %>
+                                        <li>
+                                            <a dragonlanguage="" title="MESSAGE.ic('mono.list')"
+                                               id="list<%= model %>_<%= nameclean %>">
+                                                <i class="icon-pencil7"></i>
+                                                <language>MESSAGE.ic('mono.list')</language>
+                                            </a>
+                                        </li>
+                                    <% } %>
+                                    <li ng-show="<%= model %>.form.options.<%= name %>.allownew">
+                                        <a dragonlanguage="" title="MESSAGE.i('mono.Additem')"
+                                           id="new<%= model %>_<%= nameclean %>"
+                                        >
+                                            <i class="icon-plus-circle2"></i>
+                                            <language>MESSAGE.ic('mono.Additem')</language>
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+                        <% } %>
+                    </div>
+                </div>
+
+            </div>
+            <% if(options.multiple){ %>
+                <div style="margin-top: 8px;">
+                    <% if(options.groupby){ %>
+                        <ul style="padding-right: 25px;padding-top: 10px;padding-bottom: 10px;"
+                            ng-repeat="(key,categories) in <%= model %>.form.options.<%= name %>.groupbydata track by
+                            key"
+                            label="{{key}}">
+                            <li
+                                    data-object="{{item}}" ng-repeat="(i,item) in categories"
+                                    value="item.{{<%= options.value %>}} track by i">
+                                {{<%= options.text %>.substring(0,<%= options.max %>)}}
+
+                                <a ng-show="<%= options.text %>.length><%= options.max %>"
+                                   ng-click="<%= options.table %>.viewmore(<%= options.text %>,<%= options.max %>);">
+                                    ...{{<%= model %>.viewmoremessage}}
+                                </a>
+                            </li>
+                            <li ng-show="<%= model %>.form.options.<%= name %>.info.totalPage>1">
+                                <a id="list<%= model %>_<%= nameclean %>2">
+                                    {{<%= model %> .listmessage}}
+                                </a>
+                            </li>
+                        </ul>
+                    <% } else{ %>
+                        <ul style="padding-right: 25px;padding-top: 10px;padding-bottom: 10px;">
+                            <li style="list-style: none"
+                                data-object="{{item}}"
+                                ng-repeat="(key,item) in <%= model %>.form.options.<%= name %>.data track by key"
+                                value="{{item.<%= options.value %>}}">
+                                    <span>{{<%= options.text %>.substring(0,<%= options.max %>)}}
+                                        <span style="color: dodgerblue;"
+                                              class="parent_popup"
+                                              onclick="parent_function(this)"
+                                              ng-show="<%= options.parent_group %>" title="<%= options.parent_group_click_title %>">
+                                            <i class="icon-arrow-up7" style="font-size: x-small; margin-right: -5px; "></i> ({{<%= options.parent_group_count %>}})
+                                            <div class="parent_popuptext parent_Popup" title="<%= options.parent_group_title %>">
+                                                <span ng-show="<%= options.parent_group %>" title="<%= options.parent_group_title %>">
+                                                    <span title="Cerrar" style=" float: right; margin-right: 10px">x</span>
+                                                    <br>
+                                                    <div>
+                                                        <strong style="display: block; text-align: left; margin-left: 10px"><%= options.parent_group_title %></strong>
+                                                        <ul>
+                                                            <li class="<%= options.custom_class %>">
+                                                                <span>{{<%= options.parent_group %>}}</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </span>
+                                    </span>
+                                    <span style="color: dodgerblue; margin-right: -5px;"
+                                          class="child_popup"
+                                          onclick="child_function(this)"
+                                          ng-show="<%= options.child_group %>" title="<%= options.child_group_click_title %>">
+                                          <i class="icon-arrow-down7" style="font-size: x-small; margin-right: -5px;"></i> ({{<%= options.child_group_count %>}})
+                                          <div class="child_popuptext child_Popup" title="<%= options.child_group_title %>">
+                                              <span title="Cerrar" style="float: right; margin-right: 10px">x</span>
+                                              <br>
+                                              <div>
+                                                  <strong style="display: block; text-align: left; margin-left: 10px"><%= options.storage_child_group_title %></strong>
+                                                  <ul title="<%= options.storage_child_group_title %>" ng-repeat="(storage_key,storage_item) in <%= model %>.form.options.<%= name %>.storage_child_list.data track by storage_key">
+                                                        <li class="<%= options.custom_class %>" ng-if="<%= options.storage_child_condition %>">{{<%= options.storage_child_group %>}}</li>
+                                                  </ul>
+                                                  <br>
+                                              </div>
+                                              <div ng-show="<%= options.child_group %>">
+                                                  <strong style="display: block; text-align: left; margin-left: 10px"><%= options.child_group_title %></strong>
+                                                  <span title="<%= options.child_group_title %>"
+                                                       ng-bind-html="<%= model %>.falseArrayToUALILA(<%= options.child_group %>, '<%= options.custom_class %>' )">
+                                                  </span>
+                                              </div>
+                                          </div>
+                                    </span>
+                                    <span   style="color: dodgerblue; margin-left: 5px;"
+                                            class="one_popup"
+                                            onclick="one_function(this)"
+                                            ng-show="<%= options.one_group %>" title="<%= options.one_group_click_title %>">
+                                        <%= options.one_group_click_name %>
+                                        <div class="one_popuptext one_Popup" title="<%= options.one_group_title %>">
+                                            <span ng-show="<%= options.one_group %>" title="<%= options.one_group_title %>">
+                                                <span onclick="close_me()" title="Cerrar" style=" float: right; margin-right: 10px; width: 15px">x</span>
+                                                <br>
+                                                <div>
+                                                    <strong style="display: block; text-align: left; margin-left: 10px"><%= options.one_group_title %></strong>
+                                                    <span title="<%= options.one_group_title%>"
+                                                          ng-bind-html="<%= model %>.falseArrayToUALILA(<%= options.one_group %>, '<%= options.custom_class %>' )">
+                                                    </span>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </span>
+                                    <span   style="color: dodgerblue; margin-left: 5px;"
+                                            class="two_popup"
+                                            onclick="two_function(this)"
+                                            ng-show="<%= options.two_group %>" title="<%= options.two_group_click_title %>">
+                                            <%= options.two_group_click_name %>
+                                            <div class="two_popuptext two_Popup" title="<%= options.two_group_title %>">
+                                                <span ng-show="<%= options.two_group %>" title="<%= options.two_group_title %>">
+                                                    <span onclick="close_me()" title="Cerrar" style=" float: right; margin-right: 10px; width: 15px">x</span>
+                                                    <br>
+                                                    <div>
+                                                        <strong style="display: block; text-align: left; margin-left: 10px"><%= options.two_group_title %></strong>
+                                                        <span title="<%= options.two_group_title %>"
+                                                              ng-bind-html="<%= model %>.falseArrayToUALILA(<%= options.two_group %>, '<%= options.custom_class %>' )">
+                                                        </span>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </span>
+                                    <span   style="color: dodgerblue; margin-left: 5px;"
+                                            class="three_popup"
+                                            onclick="three_function(this)"
+                                            ng-show="<%= options.three_group %>" title="<%= options.three_group_click_title %>">
+                                            <%= options.three_group_click_name %>
+                                            <div class="three_popuptext one_Popup" title="<%= options.three_group_title %>">
+                                                <span ng-show="<%= options.three_group %>" title="<%= options.three_group_title %>">
+                                                    <span onclick="close_me()" title="Cerrar" style=" float: right; margin-right: 10px; width: 15px">x</span>
+                                                    <br>
+                                                    <div>
+                                                        <strong style="display: block; text-align: left; margin-left: 10px"><%= options.three_group_title %></strong>
+                                                        <span title="<%= options.three_group_title %>"
+                                                              ng-bind-html="<%= model %>.falseArrayToUALILA(<%= options.three_group %>, '<%= options.custom_class %>' )">
+                                                        </span>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </span>
+                                    <span style="color: dodgerblue; margin-left: 5px;"
+                                          class="second_child_popup"
+                                          onclick="second_child_function(this)"
+                                          ng-show="<%= options.second_child_group %>" title="<%= options.second_child_group_click_title %>">
+                                             <%= options.second_child_group_name %>
+                                              <div class="second_child_popuptext second_child_Popup" title="<%= options.second_child_group_title %>">
+                                                  <span title="Cerrar" style="float: right; margin-right: 10px">x</span>
+                                                  <br>
+                                                  <div>
+                                                      <strong style="display: block; text-align: left; margin-left: 10px"><%= options.storage_child_group_title %></strong>
+                                                      <ul title="<%= options.storage_child_group_title %>" ng-repeat="(storage_key,storage_item) in <%= model %>.form.options.<%= name %>.storage_child_list.data track by storage_key">
+                                                            <li class="<%= options.custom_class %>" ng-if="<%= options.storage_child_condition %>">{{<%= options.storage_child_group %>}}</li>
+                                                      </ul>
+                                                      <br>
+                                                  </div>
+                                                  <div ng-show="<%= options.second_child_group %>">
+                                                      <strong style="display: block; text-align: left; margin-left: 10px"><%= options.second_child_group_title %></strong>
+                                                      <span title="<%= options.second_child_group_title %>"
+                                                            ng-bind-html="<%= model %>.falseArrayToUALILA(<%= options.second_child_group %>, '<%= options.custom_class %>' )">
+                                                      </span>
+                                                  </div>
+                                              </div>
+                                        </span>
+                                    <a style="margin-left: 5px" ng-show="<%= options.custom_window /*!= null*/ %>" ng-click="<%= model %>.custom_window(item.id,'foda')" title="<%= options.custom_window_title %>">(F)</a>
+                                    <a ng-show="<%= options.custom_window2 /*!= null */%>" ng-click="<%= model %>.custom_window(item.id,'pesta')" title="<%= options.custom_window2_title %>">(P)</a>
+                                    <a ng-show="<%= options.text %>.length><%= options.max %>"
+                                   ng-click="<%= options.table %>.viewmore(<%= options.text %>,<%= options.max %>);">
+                                    ...{{<%= model %>.viewmoremessage}}
+                                </a>
+                            </li>
+                            <li ng-show="<%= model %>.form.options.<%= name %>.info.totalPage>1">
+                                <a id="list<%= model %>_<%= nameclean %>2">
+                                    {{<%= model %> .listmessage}}
+                                </a>
+                            </li>
+                        </ul>
+                    <% } %>
+                </div>
+            <% }else{ %>
+                <div style="margin-top: 8px;">
+                    <ul style="padding-right: 25px;padding-top: 10px;padding-bottom: 10px;">
+                        <li data-object="{{item}}" style="list-style: none"
+                            ng-repeat="(key,item) in <%= model %>.form.options.<%= name %>.data track by key"
+                            value="{{item.<%= options.value %>}}">
+                            <p>
+                                {{<%= options.text %>.substring(0,<%= options.max %>)}}
+
+                                <a ng-show="<%= options.text %>.length><%= options.max %>"
+                                   ng-click="<%= options.table %>.viewmore(<%= options.text %>,<%= options.max %>);">
+                                    ...{{<%= model %>.viewmoremessage}}
+                                </a>
+
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            <% } %>
+        </div>
+
+
+        <div class="form-control-feedback">
+            <i  id="icon<%= name %>"
+                class="icon-<%= options.icon.class %> text-secundary">
+            </i>
+        </div>
+        <span ng-if="<%= model %>.form.options.<%= name %>.helptext!=''"
+              class="help-block text-muted">
+        {{<%= model %>.form.options.<%= name %>.helptext}}
+    </span>
+    </div>
+    <% if (model !== options.controller){ %>
+</div>
+<% } %>
+<script>
+    function reloadMe<%= model %>_<%= nameclean %>() {
+
+        <%= model %>.
+        form.loadDropDown("<%= name %>", false);
+    }
+    $(document).ready(function () {
+        <%= model %>.form.beginFunctions.push(`reloadMe<%= model %>_<%= nameclean %>();`);
+        var new_innerHTML = "";
+        var dont_showMe = false;
+        parent_function = function (item) {
+            console.log( $(item));
+            var old_innerHTML = new_innerHTML;
+            new_innerHTML = item.querySelector('.parent_popuptext').innerHTML;
+            if(new_innerHTML == old_innerHTML) {
+                $('.child_popuptext').removeClass("show").hide();
+                $('.parent_popuptext').removeClass("show").hide();
+                $('.one_popuptext').removeClass("show").hide();
+                $('.two_popuptext').removeClass("show").hide();
+                $('.three_popuptext').removeClass("show").hide();
+                $('.second_child_popuptext').removeClass("show").hide();
+                new_innerHTML = "";
+            }else {
+                $('.child_popuptext').removeClass("show").hide();
+                $('.parent_popuptext').removeClass("show").hide();
+                $('.one_popuptext').removeClass("show").hide();
+                $('.two_popuptext').removeClass("show").hide();
+                $('.three_popuptext').removeClass("show").hide();
+                $('.second_child_popuptext').removeClass("show").hide();
+                $(item).find('.parent_popuptext').addClass("show").show();
+            }
+            //  var parent_popup = item.querySelector('.parent_Popup');
+            // parent_popup.classList.toggle("show");
+        }
+        child_function = function (item) {
+            console.log( $(item).find('.child_popuptext'));
+            var old_innerHTML = new_innerHTML;
+            new_innerHTML = item.querySelector('.child_popuptext').innerHTML;
+            if(old_innerHTML == new_innerHTML) {
+                $('.child_popuptext').removeClass("show").hide();
+                $('.parent_popuptext').removeClass("show").hide();
+                $('.one_popuptext').removeClass("show").hide();
+                $('.two_popuptext').removeClass("show").hide();
+                $('.three_popuptext').removeClass("show").hide();
+                $('.second_child_popuptext').removeClass("show").hide();
+                new_innerHTML = "";
+            }else {
+                $('.child_popuptext').removeClass("show").hide();
+                $('.parent_popuptext').removeClass("show").hide();
+                $('.one_popuptext').removeClass("show").hide();
+                $('.two_popuptext').removeClass("show").hide();
+                $('.three_popuptext').removeClass("show").hide();
+                $('.second_child_popuptext').removeClass("show").hide();
+                $(item).find('.child_popuptext').addClass("show").show();
+            }
+            //  var parent_popup = item.querySelector('.child_Popup');
+            //child_popup.classList.toggle("show");
+        }
+        one_function = function (item) {
+            console.log( $(item));
+            // var old_innerHTML = new_innerHTML;
+            // new_innerHTML = item.querySelector('.one_popuptext').innerHTML;
+            if(dont_showMe) {
+                $('.child_popuptext').removeClass("show").hide();
+                $('.parent_popuptext').removeClass("show").hide();
+                $('.one_popuptext').removeClass("show").hide();
+                $('.two_popuptext').removeClass("show").hide();
+                $('.three_popuptext').removeClass("show").hide();
+                $('.second_child_popuptext').removeClass("show").hide();
+                dont_showMe = false;
+            }else {
+                $('.child_popuptext').removeClass("show").hide();
+                $('.parent_popuptext').removeClass("show").hide();
+                $('.one_popuptext').removeClass("show").hide();
+                $('.two_popuptext').removeClass("show").hide();
+                $('.three_popuptext').removeClass("show").hide();
+                $('.second_child_popuptext').removeClass("show").hide();
+                $(item).find('.one_popuptext').addClass("show").show();
+            }
+            //  var parent_popup = item.querySelector('.parent_Popup');
+            // parent_popup.classList.toggle("show");
+        }
+        two_function = function (item) {
+            console.log( $(item));
+            // var old_innerHTML = new_innerHTML;
+            // new_innerHTML = item.querySelector('.two_popuptext').innerHTML;
+             if(dont_showMe) {
+                $('.child_popuptext').removeClass("show").hide();
+                $('.parent_popuptext').removeClass("show").hide();
+                $('.one_popuptext').removeClass("show").hide();
+                $('.two_popuptext').removeClass("show").hide();
+                $('.three_popuptext').removeClass("show").hide();
+                $('.second_child_popuptext').removeClass("show").hide();
+                 dont_showMe = false;
+             }else {
+                $('.child_popuptext').removeClass("show").hide();
+                $('.parent_popuptext').removeClass("show").hide();
+                $('.one_popuptext').removeClass("show").hide();
+                $('.two_popuptext').removeClass("show").hide();
+                $('.three_popuptext').removeClass("show").hide();
+                $('.second_child_popuptext').removeClass("show").hide();
+                $(item).find('.two_popuptext').addClass("show").show();
+             }
+            //  var parent_popup = item.querySelector('.parent_Popup');
+            // parent_popup.classList.toggle("show");
+        }
+        three_function = function (item) {
+            console.log( $(item));
+            // var old_innerHTML = new_innerHTML;
+            // new_innerHTML = item.querySelector('.two_popuptext').innerHTML;
+            if(dont_showMe) {
+                $('.child_popuptext').removeClass("show").hide();
+                $('.parent_popuptext').removeClass("show").hide();
+                $('.one_popuptext').removeClass("show").hide();
+                $('.two_popuptext').removeClass("show").hide();
+                $('.three_popuptext').removeClass("show").hide();
+                $('.second_child_popuptext').removeClass("show").hide();
+                dont_showMe = false;
+            }else {
+                $('.child_popuptext').removeClass("show").hide();
+                $('.parent_popuptext').removeClass("show").hide();
+                $('.one_popuptext').removeClass("show").hide();
+                $('.two_popuptext').removeClass("show").hide();
+                $('.three_popuptext').removeClass("show").hide();
+                $('.second_child_popuptext').removeClass("show").hide();
+                $(item).find('.three_popuptext').addClass("show").show();
+            }
+            //  var parent_popup = item.querySelector('.parent_Popup');
+            // parent_popup.classList.toggle("show");
+        }
+        second_child_function = function (item) {
+            console.log( $(item).find('.child_popuptext'));
+            var old_innerHTML = new_innerHTML;
+            new_innerHTML = item.querySelector('.second_child_popuptext').innerHTML;
+            if(old_innerHTML == new_innerHTML) {
+                $('.child_popuptext').removeClass("show").hide();
+                $('.parent_popuptext').removeClass("show").hide();
+                $('.one_popuptext').removeClass("show").hide();
+                $('.two_popuptext').removeClass("show").hide();
+                $('.three_popuptext').removeClass("show").hide();
+                $('.second_child_popuptext').removeClass("show").hide();
+                new_innerHTML = "";
+            }else {
+                $('.child_popuptext').removeClass("show").hide();
+                $('.parent_popuptext').removeClass("show").hide();
+                $('.one_popuptext').removeClass("show").hide();
+                $('.two_popuptext').removeClass("show").hide();
+                $('.three_popuptext').removeClass("show").hide();
+                $('.second_child_popuptext').removeClass("show").hide();
+                $(item).find('.second_child_popuptext').addClass("show").show();
+            }
+            //  var parent_popup = item.querySelector('.child_Popup');
+            //child_popup.classList.toggle("show");
+        }
+        close_me = function () {
+            dont_showMe = true;
+        }
+        if(new SESSION().isLogged()) {
+            if (<%= model %>.form.options.<%= name %>.mess){
+                $('#popover<%= model %>_<%= nameclean %>').popover({
+                    container: 'body',
+                    title: eval("`" +<%= model %>.form.options.<%= name %>.popover.label + "`"),
+                    content:eval("`" +<%= model %>.form.options.<%= name %>.popover.content + "`"),
+                trigger: 'manual'
+            });
+                // Obtén el elemento que deseas observar
+                const elemento = document.getElementById("popover<%= model %>_<%= nameclean %>");
+
+                // Agrega un event listener al objeto document
+                document.addEventListener("click", function(evento) {
+                    // Verifica si el evento ocurrió fuera del elemento que estamos observando
+                    if (elemento !== evento.target && !elemento.contains(evento.target)) {
+                        // Se hizo clic fuera del elemento
+                        $('#popover<%= model %>_<%= nameclean %>').popover('hide')
+
+                    }
+                });
+                $('#popover<%= model %>_<%= nameclean %>').on('click', function(evento) {
+                    evento.stopPropagation();
+                    $(this).popover('show');
+                });
+            }
+        }
+
+        <%= model %>.
+        <%= name %>_object = {};
+        $('[name="<%= model %>_<%= nameclean %>"]').change(function () {
+            var selectedss = $(this).children("option:selected").data('object');
+
+            <%= model %>.
+            <%= nameclean %>_object = selectedss;
+
+
+
+
+        });
+
+        $('#reload<%= model %>_<%= nameclean %>').click(function () {
+            <%= model %>.
+            form.loadDropDown("<%= name %>", false);
+            return false;
+        });
+        $('#new<%= model %>_<%= nameclean %>').click(function () {
+            <%= options.controller %>.
+            formulary(null, 'new');
+            return false;
+        });
+
+        $('#list<%= model %>_<%= nameclean %>2').click(function () {
+            $('#list<%= model %>_<%= nameclean %>').trigger('click');
+        });
+        $('#list<%= model %>_<%= nameclean %>').click(function () {
+            baseController.viewData = {};
+            var modal = {
+                header: {
+                    title: MESSAGE.i('mono.Listof') + " " + (<%= options.controller %>.headertitle || <%= options.controller %>.plural),
+            icon: "list"
+        },
+            width: ENUM.modal.width.full,
+                footer: {
+                cancelButton: true
+            },
+            content: {
+                loadingContentText: MESSAGE.i('actions.Loading'),
+            }
+        }
+            <%= options.controller %>.
+            modal.modalView(String.format("{0}", "<%= options.controller %>"), modal);
+            return false;
+        });
+
+        $('#edit<%= model %>_<%= nameclean %>').click(function () {
+            <%= options.controller %>.
+            formulary({
+                where: [{
+                    field: <%= 'CRUD_' + options.controller %>.table.key,
+                    value
+        : <%= model %>.<%= name %>}]
+        },
+            FORM.modes.edit, {}
+        )
+            ;
+            return false;
+        });
+        $('#view<%= model %>_<%= nameclean %>').click(function () {
+            <%= model %>.
+
+            cell.openLink({
+                table: "<%= options.controller %>",
+                column: "<%= options.column %>",
+                value: <%= model %>.<%= name %>, field
+        :
+            "<%= name %>"
+        })
+            ;
+
+
+            return false;
+        });
+    });
+    MESSAGE.run();
+</script>

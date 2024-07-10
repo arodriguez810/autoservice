@@ -1,0 +1,208 @@
+<%
+if (DATA.name !== undefined) {
+    var name, model, opts;
+    name = DATA.name;
+    model = DATA.model;
+    opts = DATA.opts;
+}
+var name = name || "";
+var options = {
+    placeholder: params.capitalize(name),
+    type: "text",
+    icon: {
+        class: "none",
+        position: "left",
+        color: COLOR.secundary + "-800"
+    },
+    pin: '80',
+    helptext: '',
+    format: '',
+    readonly: false,
+    disabled: false,
+    autocomplete: '',
+    posttype: "text",
+    maxlength: -1,
+    label_custom: false
+
+};
+options = OBJECT.merge(options, opts); var nameclean = name.replace(/\./g, '_');
+options.autocomplete = options.autocomplete ? "autocomplete='Off'" : '';
+options.icon.spyce = options.icon.class === "none" ? "remove-input-space" : "";
+options.format = options.format ? options.format : false;
+options.model = options.model ? options.model : false;
+
+popopme = function(entity, field){
+    var prueba = HINTS.filter(d => {
+        return ( d.trueEntity || d.entities ) === entity && d.field_names === field
+    })
+    function sortArray() {
+        options.mess = prueba.sort(function(a, b){return b.id - a.id});
+    }
+    sortArray();
+    //console.log("Hola", options.mess);
+}
+popopme(model, nameclean);
+if (options.label_custom){
+    options.placeholder = options.label;
+}
+var toclient = JSON.stringify(options);
+%>
+<script>
+    <%= model %>.triggers.table.before.control("<%= nameclean %>");
+    <%= model %>.form.registerField("<%= name %>", "<%= toclient %>");
+    if (MESSAGE.exist('columns.<%= nameclean %>')) {
+        <%= model %>.form.options.<%= name %>.placeholder = MESSAGE.i('columns.<%= nameclean %>');
+    }
+    <% if (options.label_custom){%>
+    <%= model %>.form.options.<%= name %>.placeholder = "<%=options.label%>";
+    <%}%>
+    if(new SESSION().isLogged()) {
+        <%= model %>.form.options.<%= name %>.mess = <%= model %>.form.options.<%= name %>.mess.filter(d => {
+            return d.company == new SESSION().current().compania_id;
+        })
+        if(<%= model %>.form.options.<%= name %>.mess.length == 0){
+            delete <%= model %>.form.options.<%= name %>.mess
+        }
+        if (<%= model %>.form.options.<%= name %>.mess){
+            <%= model %>.form.options.<%= name %>.popover = {
+                title: <%= model %>.form.options.<%= name %>.trueplaceholder || <%= model %>.form.options.<%= name %>.placeholder,
+                content: <%= model %>.form.options.<%= name %>.mess[0].text,
+                label: MESSAGE.exist('columns.<%= nameclean %>') ? MESSAGE.i('columns.<%= nameclean %>') : <%= model %>.form.options.<%= name %>.trueplaceholder || <%= model %>.form.options.<%= name %>.placeholder
+            }
+        }
+    }
+</script>
+<div class="<%= options.icon.spyce %> form-group-material form-group has-feedback has-{{<%= model %>.validate['<%= name %>'].type || <%= model %>.defaultColor }}  has-feedback-<%= options.icon.position %>"
+     id="input<%= model %>_<%= nameclean %>">
+    <label
+            id="label<%= model %>_<%= nameclean %>"
+            class="control-label is-visible animate" style="color:#000000 !important;">
+        {{::<%= model %>.form.options.<%= name %>.trueplaceholder || <%= model %>.form.options.<%= name %>.placeholder}}
+            <i ng-show="<%= model %>.form.options.<%= name %>.mess.length>0"
+                    id="popover<%= model %>_<%= nameclean %>" class="icon-help">
+            </i>
+    </label>
+    <a  ng-show="<%= model %>.form.options.<%= name %>.link"
+        title="{{<%= model %>.form.options.<%= name %>.link_title}}"
+        ng-click="<%= model %>.link_function()"
+        style="margin-left: 50%">
+        {{::<%= model %>.form.options.<%= name %>.link}}
+    </a>
+    <textarea rows="{{<%= model %>.form.options.<%= name %>.rows ? <%= model %>.form.options.<%= name %>.rows : 1}}"
+              ng-model="<%= model + "." + name %>" name="<%= model %>_<%= nameclean %>"
+              id="<%= model %>_<%= nameclean %>"
+              ng-readonly="<%= model %>.form.options.<%= name %>.readonly"
+              ng-disabled="<%= model %>.form.options.<%= name %>.disabled"
+              maxlength="{{<%= model %>.form.options.<%= name %>.maxlength}}"
+              ng-model-onblur
+              type="{{<%= model %>.form.options.<%= name %>.type}}"
+            <%= options.model ? "value='{{" + options.model + "}}'" : "" %>
+              class="form-control"
+              placeholder="{{::<%= model %>.form.options.<%= name %>.inputPlaceholder}}"></textarea>
+
+    <div class="form-control-feedback">
+        <i class="icon-<%= options.icon.class %> text-secundary">
+
+        </i>
+    </div>
+    <span ng-if="<%= model %>.form.options.<%= name %>.helptext!=''"
+          class="help-block text-muted">
+        {{<%= model %>.form.options.<%= name %>.helptext}}
+    </span>
+
+    <span ng-show="<%= model %>.validate['<%= name %>'].messages.length>0" class="help-block">
+       <p class="text-{{validation.type}}" ng-show="validation.visible!==false || <%= model %>.form.intent===true"
+          ng-repeat="(key,validation) in <%= model %>.validate['<%= name %>'].messages track by key">
+               <i class="{{validation.icon}}"></i> {{validation.message}}
+        </p>
+    </span>
+</div>
+<script>
+    $(document).ready(function () {
+        if(new SESSION().isLogged()) {
+            if (<%= model %>.form.options.<%= name %>.mess){
+                $('#popover<%= model %>_<%= nameclean %>').popover({
+                    container: 'body',
+                    title: eval("`" + <%= model %>.form.options.<%= name %>.popover.title + "`"),
+                    content: eval("`" +<%= model %>.form.options.<%= name %>.popover.content + "`"),
+                    trigger: 'manual'
+                });
+                // Obtén el elemento que deseas observar
+                const elemento = document.getElementById("popover<%= model %>_<%= nameclean %>");
+
+                // Agrega un event listener al objeto document
+                document.addEventListener("click", function(evento) {
+                    // Verifica si el evento ocurrió fuera del elemento que estamos observando
+                    if (elemento !== evento.target && !elemento.contains(evento.target)) {
+                        // Se hizo clic fuera del elemento
+                        $('#popover<%= model %>_<%= nameclean %>').popover('hide')
+
+                    }
+                });
+                $('#popover<%= model %>_<%= nameclean %>').on('click', function(evento) {
+                    evento.stopPropagation();
+                    $(this).popover('show');
+                });
+            }
+        }
+        <%= model %>.form.options.<%= name %>.autosize = false;
+        <%= model %>.triggers.table.after.control("<%= nameclean %>");
+        <% if(options.format){ %>
+        $('[name="<%= model %>_<%= nameclean %>"]').formatter({
+            pattern: '<%= options.format %>'
+        });
+        <% } %>
+        <% if(options.maxlength){ %>
+        //$('[name="<%= model %>_<%= nameclean %>"]').maxlength();
+        <% } %>
+        function resizeme<%= model %>_<%= nameclean %>() {
+            if (!DSON.oseaX($('[name="<%= model %>_<%= nameclean %>"]').val().lines().length > 1)) {
+                if (<%= model %>.form.options.<%= name %>.autosize === false){
+                    <%= model %>.form.options.<%= name %>.autosize = true;
+                    $('[name="<%= model %>_<%= nameclean %>"]').css('max-height', "");
+                    $('[name="<%= model %>_<%= nameclean %>"]').focus();
+                    autosize(document.querySelectorAll('textarea'));
+                }
+            } else {
+                if ($('[name="<%= model %>_<%= nameclean %>"]').val().length ><%= options.pin %>) {
+                    if (<%= model %>.form.options.<%= name %>.autosize === false){
+                        <%= model %>.form.options.<%= name %>.autosize = true;
+                        $('[name="<%= model %>_<%= nameclean %>"]').css('max-height', "");
+                        autosize(document.querySelectorAll('textarea'));
+                    }
+                    return;
+                }
+                <%= model %>.form.options.<%= name %>.autosize = false;
+                $('[name="<%= model %>_<%= nameclean %>"]').css('max-height', 38);
+
+            }
+        }
+        <%= model %>.form.options.<%= name %>.resizeme = function () {
+            resizeme<%= model %>_<%= nameclean %>();
+        }
+        $('[name="<%= model %>_<%= nameclean %>"]').keyup(function () {
+
+            resizeme<%= model %>_<%= nameclean %>();
+            $(this).trigger("change");
+
+        });
+        $('[name="<%= model %>_<%= nameclean %>"]').trigger("change");
+        resizeme<%= model %>_<%= nameclean %>();
+        $('[name="<%= model %>_<%= nameclean %>"]').blur(function () {
+
+
+        });
+        var isReadProgram = <%= model %>.
+        form.isReadOnly('<%= name %>');
+        if (isReadProgram !== false) {
+            <%= model %>.
+            form.options.<%= name %>.disabled = true;
+            if (isReadProgram !== undefined) {
+                <%= model %>.<%= name %> = isReadProgram;
+                $('[name="<%= model %>_<%= nameclean %>"]').html(isReadProgram)
+            }
+        }
+
+
+    });
+</script>

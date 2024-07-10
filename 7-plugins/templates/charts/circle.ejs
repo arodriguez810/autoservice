@@ -1,0 +1,77 @@
+<%
+if(DATA.name!==undefined){
+    var name, model, opts;
+    name = DATA.name;
+    model = DATA.model;
+    opts = DATA.opts;
+}
+var name  = name || "";
+var options = {
+    title: params.capitalize(name),
+    type: "text",
+    icon: {
+        class: "none",
+        position: "left",
+        color: COLOR.secundary + "-800"
+    },
+    items: ['n/a']
+};
+
+options = OBJECT.merge(options, opts); var nameclean = name.replace(/\./g, '_');
+options.model = options.model ? options.model : false;
+var toclient = JSON.stringify(options);
+%>
+<script>
+    <%= model %>.triggers.table.before.control("<%= name %>");
+    if (!<%= model %>.
+    charts
+    )<%= model %>.charts = {};
+    eval(`<%= model %>.charts.<%= name %> = ${"<%= toclient %>".replaceAll("&#34;", '"').replaceAll("&#39", "'")}`);
+</script>
+
+<script>
+
+    <%= model + "." %>charts<%= "." + name %>_chart = echarts.init(document.getElementById('<%= name %>'));
+
+    <%= model + "." %>charts<%= "." + name %>.refresh = function () {
+                    <%= model %>.
+                    charts.<%= name %>_chart_options = {
+                        title: {text: "<%= options.label || "" %>", textStyle: {fontSize: 12}},
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: "{b}:<br/> {c} ({d}%)"
+                        },
+                        toolbox: {
+                            show: true,
+                            orient: 'horizontal',
+                            x: 'left',
+                            feature: {
+                                restore: {
+                                    show: true,
+                                    title: MESSAGE.ic('mono.restore')
+                                },
+                                saveAsImage: {
+                                    show: true,
+                                    title: MESSAGE.ic('mono.Sameasimage'),
+                                    lang: ['Save']
+                                }
+                            }
+                        },
+                        calculable: true,
+                        series: [{
+                            type: 'pie',
+                            radius: ['40%', '60%'],
+                            center: ['50%', '53.5%'],
+                            data: <%= model %>.<%= name %>_data||[]
+                    }
+                ]
+                }
+
+        if (<%= model + "." %>charts<%= "." + name %>_chart) {
+            <%= model + "." %>charts<%= "." + name %>_chart.setOption(<%= model + "." %>charts<%= "." + name %>_chart_options, true, true);
+        }
+    }
+    if (<%= model + "." %>charts<%= "." + name %>)
+        <%= model + "." %>charts<%= "." + name %>.refresh();
+
+</script>

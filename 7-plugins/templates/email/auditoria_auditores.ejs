@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<%
+    rowspanme = function (field, value, list) {
+        var r = 0;
+        r = list.filter(d => {
+            if (value != ' ')
+                return eval(`d.${field} == value`)
+        }).length;
+        return r ? r : 1;
+    };
+    seeme = function (field, value, key, list) {
+        if (list[key - 1])
+            if (value != ' ')
+                return list[key - 1][field] != value;
+        return true;
+    };
+%>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <%- include('css.ejs') %>
+    <style>
+        <%- include('../../../files/configuration/themes/primary.css') %>
+    </style>
+    <style>
+        <%- include('../../../files/configuration/themes/secundary.css') %>
+    </style>
+    <style>
+        <%- include('../../../files/configuration/themes/extra.css') %>
+    </style>
+</head>
+<body>
+<table class="body-wrap">
+    <tr>
+        <td class="container">
+            <table>
+                <tr>
+                    <td align="center" style="background-color: #002e4d;padding-top: 8px;padding-bottom: 8px;" class="masthead bg-<%= COLOR.primary %>-800">
+                        <!--<h1 style="color: #ffffff;"><%= CONFIG.logo %></h1>-->
+                        <img src="https://www.dgcp.gob.do/wp-content/themes/dgcp/img/logo-dgcp-extendido.svg" alt="Logo" title="Logo" style="display:block" width="82" height="auto" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="content">
+                        <pre style="font-size: 14px"><%= DATA.message %></pre>
+                        <table id="resumen_poaTableIndex" class="table table-bordered"
+                               style="margin-top: 15px;">
+                            <thead class="">
+                            <tr class="centralizarth"
+                                style="background-color:<%= CONFIG.ui.theme.primary.indexOf("rgb") > -1 ? CONFIG.ui.theme.primary : '#' + CONFIG.ui.theme.primary %>; color: white">
+                                <th>Proceso</th>
+                                <th>Código</th>
+                                <th>Documento</th>
+                                <th>Responsable</th>
+                            </tr>
+                            </thead>
+                            <tbody class="">
+                            <% if (DATA.tabla_data != undefined) {%>
+                                <% for(var i=0; i< DATA.tabla_data.length; i++){%>
+                                    <tr class="centralizartd">
+                                        <%if (seeme('proceso_nombre',DATA.tabla_data[i].proceso_nombre, i, DATA.tabla_data)){ %>
+                                            <td rowspan="<%= rowspanme('proceso_nombre', DATA.tabla_data[i].proceso_nombre, DATA.tabla_data)%>">
+                                                <%= DATA.tabla_data[i].proceso_nombre %>
+                                            </td>
+                                        <%}%>
+                                        <%if (seeme('codigo',DATA.tabla_data[i].codigo, i, DATA.tabla_data)){ %>
+                                            <td rowspan="<%= rowspanme('codigo', DATA.tabla_data[i].codigo, DATA.tabla_data)%>">
+                                                <%= DATA.tabla_data[i].codigo %>
+                                            </td>
+                                        <%}%>
+                                        <%if (seeme('nombre',DATA.tabla_data[i].nombre, i, DATA.tabla_data)){ %>
+                                            <td rowspan="<%= rowspanme('nombre', DATA.tabla_data[i].nombre, DATA.tabla_data)%>">
+                                                <%= DATA.tabla_data[i].nombre %>
+                                            </td>
+                                        <%}%>
+                                        <td><%= DATA.tabla_data[i].responsable %></td>
+                                    </tr>
+                                <%}%>
+                            <%}%>
+                            </tbody>
+                        </table>
+                        <pre style="font-size: 14px"><%= DATA.message_body %></pre>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="background-color: #002e4d;"  class="container bg-<%= COLOR.primary %>-300">
+            <table>
+                <tr>
+                    <td class="content footer" align="center" style="padding-top: 5px;padding-bottom: 5px;">
+                        <p style="color: #FFFFFF;" dragonlanguage>
+                            Sent by <a style="color: #FFFFFF;" href="http://www.eisdr.com"><%= CONFIG.appName %></a>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td class="container">
+            <table>
+                <tr>
+                    <td class="content footer" align="center">
+                        <p style="font-size: 15px;" dragonlanguage>
+                            <a href="<%= CONFIG.developerBy.site %>"><%= CONFIG.developerBy.name %></a> © <language>All rights reserved</language> <%= new Date().getFullYear() %>.
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

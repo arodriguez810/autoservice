@@ -1,0 +1,143 @@
+<%
+if (DATA.name !== undefined) {
+    var name, model, opts;
+    name = DATA.name;
+    model = DATA.model;
+    opts = DATA.opts;
+}
+var name = name || "";
+var options = {
+    text: params.capitalize(name),
+    icon: {
+        class: "upload",
+        position: "left",
+        color: COLOR.primary
+    },
+    type: "normal",
+    tempId: new Date().getTime(),
+    width: "modal-full",
+    posttype: "relations",
+    title: "Add Multiple",
+    master: null,
+    forceedit: false,
+    originalField: "id",
+    modal: false,
+    readonly: false,
+    cbs: false
+    //table:""
+};
+
+options = OBJECT.merge(options, opts); var nameclean = name.replace(/\./g, '_');
+options.color = options.type === "form" ? "{{" + model + ".validation.stateDefault()}}" : COLOR.primary;
+var toclient = JSON.stringify(options);
+
+options.originalField = options.field;
+if (options.master === null) {
+    options.field = "tempid";
+} else {
+    options.tempId = options.master;
+}
+%>
+<script>
+    <%= model %>.triggers.table.before.control("<%= nameclean %>");
+    var keyColumn = eval(`CRUD_<%= model %>`).table.key;
+    <%= model %>.form.registerField("<%= name %>", "<%= toclient %>");
+    <%= model %>.form.schemas.insert["<%= name %>"] = FORM.schemasType.relation;
+    if (MESSAGE.exist('columns.<%= nameclean %>')) {
+        <%= model %>.
+        form.options.<%= name %>.text = MESSAGE.ic('columns.<%= nameclean %>');
+    }
+    <%= model %>.<%= name %> = '<%= model %><%= options.tempId %>';
+    var thisID = eval(`<%= model %>.${keyColumn}`);
+    console.log('relation', thisID, `<%= model %>.${keyColumn}`);
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        <%= model %>.
+        triggers.table.after.control("<%= nameclean %>");
+        var <%= model %>_<%= nameclean %>Load = (function () {
+
+            var id<%= name %> = '<%= model %><%= options.tempId %>';
+            var field<%= name %> = "<%= options.field %>";
+            if (!DSON.oseaX(thisID) && <%= model %>.
+            form.mode === FORM.modes.edit || <%= options.forceedit %>
+        )
+            {
+                id<%= name %> = thisID;
+                var field<%= name %> = '<%= options.originalField %>';
+            }
+            RELATIONS.anonymous["<%= options.table %>"] =
+                {
+                    readonly: eval(`({${field<%= name %>}:'${id<%= name %>}'})`),
+                    fieldKey: field<%= name %>,
+                    where: [
+                        {
+                            field: field<%= name %>,
+                            value: id<%= name %>
+                        }
+                    ]
+                }
+            if (<%= model %>.
+            form.options.<%= name %>.modal
+        )
+            {
+                <%= model %>.
+                modal.modalView("<%= options.table %>", {
+                    header: {
+                        title: "<%= options.title %>",
+                        icon: "<%= options.icon.class %>"
+                    },
+                    footer: {
+                        cancelButton: true
+                    },
+                    content: {
+                        loadingContentText: MESSAGE.i('actions.Loading')
+                    },
+                });
+            }
+        else
+            {
+
+            }
+
+
+        });
+        <%= model %>_<%= nameclean %>Load();
+    });
+</script>
+
+<script>
+    if (<%= options.readonly %>===
+    true
+    )
+    {
+        <%= options.table %>.
+        setPermission("actions", false);
+        <%= options.table %>.
+        setPermission("add", false);
+
+    }
+    else
+    {
+        <%= options.table %>.
+        setPermission("actions", true);
+        <%= options.table %>.
+        setPermission("add", true);
+
+    }
+</script>
+<div id="<%= options.table %>" ng-controller="<%= options.table %> as <%= options.table %>">
+    <div class="panel panel-flat">
+        <%- include('../table/header',{scope:options.table}); %>
+        <div class="subcontent">
+            <%- include(options.custombase? '../../../5-views/'+options.custombase+'/base':'../table/base',{scope:options.table}); %>
+        </div>
+    </div>
+
+</div><!--end-->
+
+<script>
+    <%= model %>.refreshAngular();
+</script>

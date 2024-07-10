@@ -1,0 +1,68 @@
+<div class="tab-content">
+    <div class="tab-pane active" id="basic">
+        <div class="row">
+            <div class="col-sm-12 col-md-4 remove-input-space">
+                <%- FORM.input("nombre", scope, {maxlength: 64}) %>
+            </div>
+            <div class="col-sm-12 col-md-4 remove-input-space">
+                <%- FORM.input("apellido", scope, {maxlength: 64}) %>
+            </div>
+            <div class="col-sm-12 col-md-4 remove-input-space">
+                <%- FORM.input("correo", scope, {maxlength: 64}) %>
+            </div>
+        </div>
+        <div class="row">
+            <!--<div class="row">-->
+            <!--</div>-->
+            <div class="col-sm-12 col-md-4">
+                <%- FORM.select("profile", scope, {
+                    allownew: false,
+                    allowlist: false,
+                    refresh: false,
+                    allowedit: false,
+                    allowview: false,
+                    column: "name",
+                    table: "group",
+                    label: 'Grupo',
+                    traduce: false,
+                    placeholder: "Seleccione un Grupo",
+                    icon: {class: "users4"}
+                }) %>
+            </div>
+            <div class="col-sm-12 col-md-4 set-password-btn">
+                <%- FORM.password("password", scope, {placeholder: "Contraseña", maxlength: 64}) %>
+            </div>
+            <div class="col-sm-12 col-md-4 set-password-btn">
+                <%- FORM.password("repeatPassword", scope, {
+                    label: "Repetir contraseña",
+                    placeholder: "Repetir contraseña",
+                    maxlength: 64
+                }) %>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4 col-md-4 custom-upload">
+                <%- FORM.file("profileimage", scope, {
+                    show: 'image',
+                    image: 130,
+                    imagefloat: 'right',
+                    title: 'Subir imagen de perfil',
+                    truetext: 'Imagen de perfil',
+                    maxfiles: 1,
+                    columns: 1,
+                    // acceptedFiles: "image/*, video/*, audio/*, .pdf, .rar, .zip, .doc, .docx, .xls, .xlsx",
+                    // acceptedFiles_message: "Sólo se pueden subir archivos de tipo imagen, vídeo, audio, pdf, rar/zip, doc/docx y xls/xlsx",
+                }) %>
+            </div>
+            <div style="text-align: center;" class="col-sm-2 col-md-2" id="checkDinamic"
+                 ng-show="usuario.form.mode == 'edit'">
+                <%- FORM.checkbox("usuario_activo", scope, {truetext: '¿Usuario activo?', disabled: true}) %>
+            </div>
+        </div>
+    </div>
+</div>
+<%- FORM.footer(scope) %>
+<script>
+
+</script>

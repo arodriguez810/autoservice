@@ -1,0 +1,411 @@
+
+
+table tr th i.icon-eye-blocked {
+    font-size: 16px !important;
+    margin-top: 2px;
+}
+
+table .icon-file-download2,
+table .icon-cog2 {
+    /*color: #333333c7;*/
+    opacity: 0.7;
+}
+
+table .icons-list > li > a:hover,
+table .icon-cog2:hover,
+table .icon-file-download2:hover {
+    opacity: 1 !important;
+}
+
+.page-header-default {
+    margin-bottom: 15px;
+}
+
+.style-none {
+    background: none;
+    border: none;
+}
+
+.style-none i {
+    font-size: 22px;
+    margin-bottom: -18px;
+    opacity: 0.7;
+}
+
+.style-none:hover i {
+    opacity: 1 !important;
+}
+
+.width-custom1 {
+    width: 4%;
+}
+
+.form-control-custom,
+    /*.select2-selection,*/
+select,
+textarea,
+input {
+    padding-bottom: 0 !important;
+    padding-top: 16px !important;
+    /*padding-top: 3px!important;*/
+    color: #888888 !important;
+}
+
+.select2-selection {
+    color: #888888 !important;
+}
+
+.has-feedback label ~ .form-control-feedback {
+    top: 39px;
+    /*top: 27px;*/
+}
+
+.nav-primary.nav-tabs {
+    margin-bottom: 20px;
+}
+
+.page-container {
+    height: 100%;
+}
+
+body {
+    background: #ffffff;
+}
+
+#btnformfooter {
+    padding-right: 0;
+    float: left;
+    width: 100%;
+}
+
+.modal-body > .modal-footer:first-of-type {
+
+}
+
+.alpha-secundary-2 {
+    background-color: #f2f2f2;
+    border-color: #f2f2f2;
+}
+
+.draganddroghandler {
+    font-size: 15px;
+}
+
+/*.select2-selection,*/
+/*.form-control{*/
+/*height: 28px!important;*/
+/*}*/
+
+/*.select2-selection{*/
+/*margin-top: 0!important;*/
+/*}*/
+
+.panel-dashboard {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+.modal-title {
+    font-size: 18px !important;
+    width: 75%;
+    text-align: justify;
+}
+
+.botf {
+    /* float: right; */
+    margin: 0 auto;
+    width: 178px;
+}
+
+/* Popup container */
+.parent_popup {
+    position: relative;
+    cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.parent_popup .parent_popuptext {
+    /**/
+    visibility: hidden;
+    width: 300px;
+    background-color: #e6e6e6;
+    color: #000;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    margin-left: -80px;
+}
+
+/* Popup arrow */
+.parent_popup .parent_popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #e6e6e6 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.parent_popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+}
+
+/* Popup container */
+.child_popup {
+    position: relative;
+    cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.child_popup .child_popuptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: #e6e6e6;
+    color: #000;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    margin-left: -80px;
+}
+
+/* Popup arrow */
+.child_popup .child_popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #e6e6e6 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.child_popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+}
+
+/* Popup container */
+.one_popup {
+    position: relative;
+    cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.one_popup .one_popuptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: #e6e6e6;
+    color: #000;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    margin-left: -80px;
+}
+
+/* Popup arrow */
+.one_popup .one_popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #e6e6e6 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.one_popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+}
+
+/* Popup container */
+.two_popup {
+    position: relative;
+    cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.two_popup .two_popuptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: #e6e6e6;
+    color: #000;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    margin-left: -80px;
+}
+
+/* Popup arrow */
+.two_popup .two_popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #e6e6e6 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.two_popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+}
+
+.three_popup {
+    position: relative;
+    cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.three_popup .three_popuptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: #e6e6e6;
+    color: #000;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    margin-left: -80px;
+}
+
+/* Popup arrow */
+.three_popup .three_popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #e6e6e6 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.three_popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+}
+
+/* Popup container */
+.second_child_popup {
+    position: relative;
+    cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.second_child_popup .second_child_popuptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: #e6e6e6;
+    color: #000;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    margin-left: -80px;
+}
+
+/* Popup arrow */
+.second_child_popup .second_child_popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #e6e6e6 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.second_child_popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+    border-color: #666 !important;
+    background-color: #ededed !important;
+}
+
+.nav-tabs {
+    border: 1px solid #aaa !important;
+}
+
+.nav-tabs.nav-justified > li > a {
+    border: 1px solid #d4d4d4;
+    border-bottom: transparent !important;
+}
+
+.nav-tabs {
+    display: flex;
+}
+
+.nav-tabs li {
+    display: flex;
+    flex: 1;
+}
+
+.nav-tabs li a {
+    flex: 12;
+}
+
+/*.modal-header .close {*/
+/*   font-size: 15px !important;*/
+/*}*/
+.modal {
+    overflow-y: auto !important;
+}

@@ -1,0 +1,55 @@
+{
+  "llaveappcomp": true,
+  "appName": "AUTOSERVICE",
+  "appFullName": "AUTOMATIZACIÓN DE LOS PROCESOS DE LOS SERVICIOS DEL MINISTERIO DE HACIENDA",
+  "site": "http://localhost:81/gamesmpt",
+  "logo": "AUTOSERVICE",
+  "filePath": "files",
+  "appKey": "p1An1F1ka610n",
+  "mode": "developer",
+  "language": "es",
+  "home": "usuario",
+  "diasdegracia": "3",
+  "horanotificacion": "15:30",
+  "support": {
+    "email": "angel.rodriguez810@gmail.com",
+    "phone": "809-316-1989"
+  },
+  "features": {
+    "fileManager": false,
+    "stepManager": true,
+    "token": true,
+    "multilanguage": false,
+    "configuration": true,
+    "onesignal": false,
+    "migrations": false,
+    "customfields": false
+  },
+  "developerBy": {
+    "name": "Excellent Integrity Solutions",
+    "profile": "https://eisdr.com",
+    "site": "https://eisdr.com",
+    "about": {
+      "en": "Juegos MPT",
+      "es": "Juegos MPT"
+    }
+  },
+  "black_list": [
+    "created_at",
+    "created",
+    "created_by",
+    "updated_at",
+    "updated",
+    "updated_by",
+    "deleted_at",
+    "deleted",
+    "deleted_by"
+  ],
+  "entities": [
+    {
+      "id": "34",
+      "controllerName": "notificacion",
+      "displayName": "(Dashboard) Dashboard de Inicio"
+    }
+  ]
+}

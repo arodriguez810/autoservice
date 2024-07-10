@@ -1,0 +1,43 @@
+<script>
+
+</script>
+<div class="dragon-panel" id="TablePanel" style="overflow-x: scroll;overflow-y: visible">
+    <table class="table thistable table-togglable table-framed datatable">
+
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        if (baseController.viewData.staticdata.length > 0) {
+            var columns = [];
+            for (var i in baseController.viewData.staticdata[0]) {
+                columns.push({title: capitalize(i)});
+            }
+            var table = $('.thistable').DataTable({
+                data: DSON.jsonToArray(baseController.viewData.staticdata),
+                columns: columns,
+                responsive: true,
+                language: {
+                    emptyTable: MESSAGE.i('table.emptyTable'),
+                    info: MESSAGE.i('table.info'),
+                    infoEmpty: MESSAGE.i('table.infoEmpty'),
+                    infoFiltered: MESSAGE.i('table.infoFiltered'),
+                    infoPostFix: MESSAGE.i('table.infoPostFix'),
+                    thousands: MESSAGE.i('table.thousands'),
+                    lengthMenu: MESSAGE.i('table.lengthMenu'),
+                    loadingRecords: MESSAGE.i('table.loadingRecords'),
+                    processing: MESSAGE.i('table.processing'),
+                    search: MESSAGE.i('table.search'),
+                    zeroRecords: MESSAGE.i('table.zeroRecords'),
+                    paginate: {
+                        "first": MESSAGE.i('table.paginatefirst'),
+                        "last": MESSAGE.i('table.paginatelast'),
+                        "next": MESSAGE.i('table.paginatenext'),
+                        "previous": MESSAGE.i('table.paginateprevious'),
+                    }
+                }
+            });
+            $('.thistable thead th').addClass(`bg-${COLOR.secundary}`);
+        }
+    });
+</script>

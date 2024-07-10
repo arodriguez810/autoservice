@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <% include server %>
+    <% var root = '../../'; %>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description"
+          content="Juegos MPT">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=6">
+    <title><%= CONFIG.appName %> </title>
+    <link rel="shortcut icon" type="image/png" href="/files/configuration/logo/fav.png"/>
+
+</head>
+<body ng-app="app" style="background-color: white;">
+<div style="display: none" class="spinner222">
+    <div class="double-bounce1 bg-<%= COLOR.primary %>-600"></div>
+    <div class="double-bounce2 bg-<%= COLOR.secundary %>-600"></div>
+    <div class="double-bounce3 bg-<%= COLOR.extra %>-600"></div>
+</div>
+
+
+<div id="baseController" ng-controller="baseController as baseController" style="display: none">
+    <div id="modalpool">
+
+    </div>
+    <!-- Page container -->
+    <div class="page-container">
+        <!-- Page content -->
+        <div class="page-content">
+            <!-- Main content -->
+            <div class="content-wrapper">
+                <!-- Content area -->
+                <div class="content" id="content" style="overflow: hidden">
+                    <!-- Error title -->
+

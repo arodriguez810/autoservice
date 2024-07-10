@@ -1,0 +1,18 @@
+{
+  "mysqlactive": true,
+  "postgreactive": false,
+  "postgreschema": "public",
+  "users": {
+    "engine": "postgre"
+  },
+  "mysql": {
+    "host": "151.106.62.86",
+    "user": "arr",
+    "password": "%Luch@134679()^^()Mortero$CC",
+    "database": "CBS",
+    "multipleStatements": true,
+    "connectionLimit": 999,
+    "timezone": "UTC",
+    "dateStrings": true
+  }
+}

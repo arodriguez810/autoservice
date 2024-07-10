@@ -1,0 +1,1 @@
+COMPILE={run:function(n,u,S){n.build=function(n){CHILDSCOPES.push(u.$new()),$("#"+n).html(S($("#"+n).html())(ARRAY.last(CHILDSCOPES))),MESSAGE.run()},n.returnBuild=function(n){return CHILDSCOPES.push(u.$new()),S(n)(ARRAY.last(CHILDSCOPES))}}};

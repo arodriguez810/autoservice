@@ -1,0 +1,21 @@
+{
+  "Loginto": "Iniciar Sesión a",
+  "Enteryourcredentialsbelow": "Digite sus credenciales",
+  "Remember": "Recordar",
+  "invalid": "Credenciales invalidas, favor intente nueva vez",
+  "blocked": "Su cuenta ha sido bloqueada, por favor reintente entrar en los siguientes ${CONFIG.users.unlockTime} minutos",
+  "forgotpassword": "olvidó contraseña",
+  "passwordrecovery": "recuperar contraseña",
+  "willsendemail": "Estaremos enviando un correo con las instrucciones para el cambio de tu contraseña",
+  "resetpassword": "resetear contraseña",
+  "resetpasswordmsg": "favor completar los datos solicitados para proceder con el cambio de contraseña",
+  "youremail": "Tu correo",
+  "restoreemailsend": "Se ha enviado un mensaje a la dirección de correo electrónico especificado por usted con las instrucciones para restablecer su contraseña",
+  "expire": "Este link ha expirado, favor dar clic en olvidó contraseña para un link nuevo",
+  "button": "Recuperar mi contraseña",
+  "passwordrestored": "contraseña restaurada!",
+  "a": "recupera tu contraseña.",
+  "b": "Parece que has perdido tu contraseña?",
+  "c": "Estamos aquí para ayudar. Haga clic en el botón de abajo para cambiar su contraseña.",
+  "d": "Si no solicitó recuperar su contraseña, ignore este correo electrónico."
+}

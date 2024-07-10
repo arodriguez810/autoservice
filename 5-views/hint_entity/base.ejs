@@ -1,0 +1,78 @@
+<script>
+    RUNTABLE('<%= scope %>');
+</script>
+<div ng-show="<%= scope %>.table.loaded" class="dragon-panel" id="<%= scope %>TablePanel"
+     style="overflow-x: scroll;overflow-y: visible">
+    <!--Table List -->
+
+    <div dragonlanguage=""
+         ng-show="<%= scope %>.records.data.length<=0 || <%= scope %>.records.data == undefined"
+         class="alert alpha-<%= COLOR.secundary %> border-<%= COLOR.secundary %> alert-styled-left">
+        <language>MESSAGE.ic('table.nodata')</language>
+    </div>
+
+    <div class="visible-md visible-lg" style="display: inline;padding-left: 10px;"
+         ng-show="<%= scope %>.filters.lastFilter.length>0">
+        <div
+                ng-bind-html="<%= scope %>.filters.description()"
+                class="alert alpha-<%= COLOR.secundary %> border-<%= COLOR.secundary %> alert-styled-left">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 col-md-3">
+            <button ng-show="<%= scope %>.showMe"
+                    style="float: left !important"
+                    dragonlanguage="" title="Aplicar cambios y reiniciar el servidor"
+                    type="button" class="btn bg-<%= COLOR.info %> btn-labeled btn-xs pull-right"
+                    ng-click="<%= scope %>.reloadMe()">
+                <b><i class="icon-rotate-cw3"></i></b>
+                Aplicar cambios
+            </button>
+        </div>
+        <div class="col-sm-9 col-md-9">
+            <%- /**/ include('../../7-plugins/templates/table/paginator', {scope: scope}); %>
+        </div>
+    </div>
+
+    <table ng-show="<%= scope %>.records.data.length>0"
+           class="table-responsive table table-striped  table-togglable table-framed sindu-table dragon-table <%= scope %>-drag"
+           data-animation="bounceInUp"
+           id="<%= scope %>Table"
+           style="{{<%= scope %>.funcWidth}}margin-bottom: {{<%= scope %>.firstCountOption(false)*40}}px"
+           data-scope="<%= scope %>">
+        <thead class="bg-<%= COLOR.secundary %>" id="<%= scope %>head">
+        <!--Columns-->
+        <tr class="bg-<%= COLOR.secundary %> dragon-columns">
+            <th ng-if="<%= scope %>.characterist('batch')">
+                <span style="margin-top: 1px;" title="Seleccionar Todo" class="cursor-pointer "
+                      ng-bind-html="<%= scope %>.drawCheck(key)"
+                      ng-click="<%= scope %>.checkAll()">
+                </span>
+            </th>
+            <th ng-repeat="(key, value) in <%= scope %>.columns() track by key"
+                ng-show="<%= scope %>.columnVisible(value)"
+                data-column="{{key}}"
+                ng-dblclick="<%= scope %>.cell.dblColumnSelect($event)"
+                class="handle {{value.responsive}}"
+            >
+                <%- include('../../7-plugins/templates/table/columns',{scope:scope}); %>
+            </th>
+            <%- include('../../7-plugins/templates/table/columnOption',{scope:scope}); %>
+        </tr>
+        </thead>
+        <tbody id="<%= scope %>TableBody">
+        <!--Rows-->
+
+        <tr ng-repeat="(key, row) in <%= scope %>.records.data track by key" data-object="{{row}}"
+            style="{{<%= scope %>.rowStyle(row)}}"
+            class="dragon-rows {{<%= scope %>.rowClass(row)}}  {{<%= scope %>.rowDeleted(row)}} {{<%= scope %>.trCheck(row)}}">
+            <%- include('../../7-plugins/templates/table/rows',{scope:scope}); %>
+            <!--Options-->
+            <%- include('../../7-plugins/templates/table/rowOptions',{scope:scope}); %>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <!--Table List-->
+</div>

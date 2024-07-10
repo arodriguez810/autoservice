@@ -1,0 +1,16 @@
+{
+  "smtp": {
+    "host": "smtp.gmail.com",
+    "port": 465,
+    "secure": true,
+    "auth": {
+      "user": "tec@eisdr.com",
+      "pass": "TeCDe2s.c0m@2"
+    }
+  },
+  "smptOptions": {
+    "sender": "tec@eisdr.com",
+    "name": "TI"
+  }
+}
+

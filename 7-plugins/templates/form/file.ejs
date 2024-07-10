@@ -1,0 +1,672 @@
+<%
+if (DATA.name !== undefined) {
+    var name, model, opts, modelfolder;
+    name = DATA.name;
+    model = DATA.model;
+    if (DATA.opts !== "")
+        opts = eval("(" + DATA.opts + ")");
+    modelfolder = DATA.opts.modelfolder;
+
+}
+var name = name || "";
+modelfolder = "";
+if (!modelfolder) {
+    modelfolder = model;
+}
+
+var options = {
+    text: params.capitalize(name),
+    title: `${params.capitalize(name)}`,
+    showfiles: ` Ver tipos de archivos permitidos a ser cargados`,
+    showfiles_icon: "file-eye",
+    show: false,
+    image: 57,
+    imagefloat: 'left',
+    icon: {
+        class: "upload",
+        position: "left",
+        color: COLOR.secundary
+    },
+    type: "normal",
+    folder: `${modelfolder}/temp_files/${name}/` + new Date().getTime(),
+    read: '',
+    maxsize_mb: 10,
+    maxfiles: 1,
+    file: '',
+    trigger: false,
+    acceptedFiles: null,
+    acceptedFiles_message: null,
+    width: "modal-full",
+    columns: 1,
+    posttype: "file",
+    download: true,
+    preview: true,
+    remove: true,
+    upload: true,
+    alone: false,
+    inline: false,
+    alwaysnew: false,
+    simpleone: false,
+    estricto: false,
+    botonsubir: "Subir Archivo"
+};
+options = OBJECT.merge(options, opts); var nameclean = name.replace(/\./g, '_');
+options.color = options.type === "form" ? "{{" + model + ".validation.stateDefault()}}" : options.icon.color;
+popopme = function (entity, field) {
+    var prueba = HINTS.filter(d => {
+        return (d.trueEntity || d.entities) === entity && d.field_names === field
+    })
+
+    function sortArray() {
+        options.mess = prueba.sort(function (a, b) {
+            return b.id - a.id
+        });
+    }
+
+    sortArray();
+}
+popopme(model, nameclean);
+var toclient = JSON.stringify(options);
+%>
+<script>
+    <%= model %>.filesMessages = MESSAGE.ic("mono.files");
+    <%= model %>.triggers.table.before.control("<%= nameclean %>");
+    var keyColumn = eval(`CRUD_<%= model %>`).table.key;
+    <%= model %>.form.schemas.insert["<%= name %>"] = FORM.schemasType.upload;
+    <%= model %>.form.registerField("<%= name %>", "<%= toclient %>");
+    <%= model %>.form.registerField("<%= name %>_DragonCountFile", "<%= toclient %>");
+    if (MESSAGE.exist('columns.<%= nameclean %>') && !<%= model %>.
+    form.options.<%= name %>.truetext
+    )
+    {
+        <%= model %>.
+        form.options.<%= name %>.text = MESSAGE.ic('columns.<%= nameclean %>');
+    }
+    else
+    {
+        <%= model %>.
+        form.options.<%= name %>.text = <%= model %>.
+        form.options.<%= name %>.truetext
+    }
+    if (new SESSION().isLogged()) {
+        <%= model %>.
+        form.options.<%= name %>.mess = <%= model %>.
+        form.options.<%= name %>.mess.filter(d => {
+            return d.company == new SESSION().current().compania_id;
+        })
+        if (<%= model %>.
+        form.options.<%= name %>.mess.length == 0
+    )
+        {
+            delete <%= model %>.
+            form.options.<%= name %>.mess
+        }
+        if (<%= model %>.
+        form.options.<%= name %>.mess
+    )
+        {
+            <%= model %>.
+            form.options.<%= name %>.popover = {
+                title:
+                <%= model %>.form.options.<%= name %>.mess[0].field_names.replace('_', ' '),
+                content:
+                <%= model %>.form.options.<%= name %>.mess[0].text,
+                label: MESSAGE.exist('columns.<%= nameclean %>') ? MESSAGE.i('columns.<%= nameclean %>') :
+                <%= model %>.form.options.<%= name %>.trueplaceholder ||
+                <%= model %>.form.options.<%= name %>.placeholder
+            }
+        }
+    }
+    <%= model %>.<%= name %>_DragonCountFile = 0;
+    var thisID = <%= model %>.form.options.<%= name %>.alwaysnew ? undefined : eval(`<%= model %>.${keyColumn}`);
+
+    if (<%= model %>.
+    form.options.<%= name %>.file !== '' && !<%= model %>.form.options.<%= name %>.alwaysnew
+    )
+    {
+        thisID = <%= model %>.
+        form.options.<%= name %>.file;
+    }
+
+</script>
+<% if(!options.inline){ %>
+    <div class="form-group-material form-group has-feedback has-{{<%= model %>.validate['<%= name %>'].type || <%= model %>.defaultColor }}  has-feedback-<%= options.icon.position %>"
+         id="input<%= model %>_<%= nameclean %>">
+        <% if(options.show === 'image'){ %>
+            <img id="showImage<%= model %>_<%= nameclean %>"
+                 style="max-height: <%= options.image %>px;float: <%= options.imagefloat %>"
+                 src="assets/images/placeholder.jpg" alt="">
+        <% } %>
+        <button name="<%= model %>_<%= nameclean %>"
+                type="button"
+                title='{{<%= model %>.<%= name %>_DragonCountFile>0? (<%= model %>.filesMessages + " " + "(" + <%= model %>.<%= name %>_DragonCountFile+")") :""}}  {{<%= model %>.form.options.<%= name %>.text}}'
+                role="button"
+                count="{{<%= model %>.<%= name %>_DragonCountFile}}"
+                class="btn bg-<%= options.color %>-600 btn-block legitRipple filedragon">
+            <%= options.model ? "{{" + options.model + "}}" : "" %>
+
+            <i class="icon-<%= options.icon.class %> position-<%= options.icon.position %>"></i>
+            <span ng-show="<%= model %>.form.options.<%= name %>.maxfiles>0">
+            {{<%= model %>.<%= name %>_DragonCountFile>0 ? (<%= model %>.form.options.<%= name %>.truetext + " " + "(" + <%= model %>
+            .<%= name %>_DragonCountFile + ")" ) : <%= model %>.form.options.<%= name %>.truetext || (<%= model %>.form.options.<%= name %>.text + " " + "(" + <%= model %>
+            .<%= name %>_DragonCountFile+")") || <%= model %>.form.options.<%= name %>.text}}
+        </span>
+        </button>
+        <i ng-show="<%= model %>.form.options.<%= name %>.mess.length>0"
+           id="popover<%= model %>_<%= nameclean %>" class="icon-help">
+        </i>
+        <span ng-if="<%= model %>.form.options.<%= name %>.helptext!=''"
+              class="help-block text-muted">
+        {{<%= model %>.form.options.<%= name %>.helptext}}
+    </span>
+
+        <span ng-show="<%= model %>.validate['<%= name %>'].messages.length>0" class="help-block">
+
+        <p class="text-{{validation.type}}" ng-show="validation.visible!==false || <%= model %>.form.intent===true"
+           ng-repeat="(key,validation) in <%= model %>.validate['<%= name %>'].messages track by key">
+               <i class="{{validation.icon}}"></i> {{validation.message}}
+        </p>
+    </span>
+    </div>
+<% } %>
+<script>
+    if (!<%= model %>.
+    filesToMove
+    )
+    <%= model %>.filesToMove = [];
+    <%= model %>.filesToMove.push("<%= nameclean %>");
+    <%= model %>.saveAllFiles = (id, folder, file) => new Promise(async (resolve, reject) => {
+        for (var save of <%= model %>.
+        filesToMove
+    )
+        {
+            var pass = true;
+            if (file) {
+                if (file != save) {
+                    console.log('file debug false', file);
+                    pass = false;
+                }
+            }
+            if (pass) {
+                console.log('file debug', save);
+                var fromClean = eval(`<%= model %>.${save}.replace('upload:', '')`);
+                var from = `${FOLDERS.files}/${fromClean}`;
+                var toClean = eval(`"<%= modelfolder %>/${save}/${id}"`);
+                if (folder)
+                    toClean = eval(`"${folder}/${save}/${id}"`);
+                console.log('file debug', toClean);
+                var to = `${FOLDERS.files}/${toClean}`;
+                await BASEAPI.ajax.postp(new HTTP().path(["files", "api", "move"]), {moves: [{from: from, to: to}]});
+            }
+        }
+        $(".filedragon span").each(function () {
+            let title = $(this).parent().attr('title');
+            let count = $(this).parent().attr('count');
+            if (title.split(')').length > 1) {
+                let component = title.split(')');
+                title = component[1] + (count ? `(${count})` : '');
+            }
+            console.log($(this).html(title));
+        });
+        resolve(true);
+    });
+
+    <%= model %>.triggers.table.after.control("<%= nameclean %>");
+    var amLoad<%= name %> = false;
+    if (new SESSION().isLogged()) {
+        if (<%= model %>.form.options.<%= name %>.mess) {
+            $('#popover<%= model %>_<%= nameclean %>').popover({
+                container: 'body',
+                title: eval("`" +<%= model %>.form.options.<%= name %>.popover.label + "`"),
+                content: eval("`" +<%= model %>.form.options.<%= name %>.popover.content + "`"),
+            trigger: 'manual'
+        });
+            // Obtén el elemento que deseas observar
+            const elemento = document.getElementById("popover<%= model %>_<%= nameclean %>");
+
+            // Agrega un event listener al objeto document
+            document.addEventListener("click", function(evento) {
+                // Verifica si el evento ocurrió fuera del elemento que estamos observando
+                if (elemento !== evento.target && !elemento.contains(evento.target)) {
+                    // Se hizo clic fuera del elemento
+                    $('#popover<%= model %>_<%= nameclean %>').popover('hide')
+
+                }
+            });
+            $('#popover<%= model %>_<%= nameclean %>').on('click', function(evento) {
+                evento.stopPropagation();
+                $(this).popover('show');
+            });
+        }
+    }
+
+    function ShowCount<%= name %>(direct) {
+        <% if(options.show === 'image'){ %>
+
+        $("[amclone='true']").remove();
+        FILE.server(<%= model %>.form.options.<%= name %>.folder, function (files) {
+            if (files.length > 0) {
+                files.forEach((file) => {
+                    if ($("#showImage<%= model %>_<%= nameclean %>[amclone='true']").length === 0) {
+                        var theClone = $("#showImage<%= model %>_<%= nameclean %>").clone();
+                        theClone.attr('amclone', true);
+                        FILE.addSourceToElement(theClone, encodelast(file.url));
+                        console.log(file.url);
+                        theClone.show();
+                        $("#showImage<%= model %>_<%= nameclean %>").after(theClone);
+                    }
+                });
+            } else {
+                if ($("#showImage<%= model %>_<%= nameclean %>[src='assets/images/placeholder.jpg']").length === 0) {
+                    var theClone = $("#showImage<%= model %>_<%= nameclean %>").clone();
+                    theClone.attr('amclone', true);
+                    FILE.addSourceToElement(theClone, "assets/images/placeholder.jpg");
+                    theClone.show();
+                    $("#showImage<%= model %>_<%= nameclean %>").after(theClone);
+                }
+            }
+            $("#showImage<%= model %>_<%= nameclean %>").hide();
+        }
+    )
+        ;
+        <% } %>
+        if (amLoad<%= name %> || direct === true) {
+            BASEAPI.ajax.get(new HTTP().path(["files", "api"]), {
+                    folder: <%= model %>.form.options.<%= name %>.folder
+                },
+
+                function (data) {
+                    <%= model %>.
+                    <%= name %>_DragonCountFile = data.data.files.length;
+                    <%= model %>.
+                    $scope.$digest();
+                }, 'notLoad'
+            )
+            ;
+            amLoad<%= name %> = false;
+        }
+    }
+    <%= model %>.showfiletypes = function () {
+        var modal = {
+            width: <%= model %>.form.options.<%= name %>.width,
+            header: {
+                title: <%= model %>.form.options.<%= name %>.showfiles,
+                icon: <%= model %>.form.options.<%= name %>.showfiles_icon
+            },
+            footer: {
+                cancelButton: false,
+                buttons: [
+                    {
+                        color: "btn bg-<%= COLOR.info %> btn-labeled btn-xs pull-rightm",
+                        title: "<b><i class='icon-arrow-right8'></i></b>Continuar",
+                        action: function () {
+                            MODAL.close();
+                            $(".filedragon span").each(function () {
+                                let title = $(this).parent().attr('title');
+                                let count = $(this).parent().attr('count');
+                                if (title.split(')').length > 1) {
+                                    let component = title.split(')');
+                                    title = component[1] + (count ? `(${count})` : '');
+                                }
+                                console.log($(this).html(title));
+                            });
+
+                            if (typeof indicador_producto_poa !== "undefined")
+                                for (var j = 1; j <= 5; j++) {
+                                    setTimeout(function () {
+                                        MESSAGE.run();
+                                        for (var i = 0; i < indicador_producto_poa.idsss.length; i++) {
+                                            eval(`if(typeof ShowCountIndicadorPOA${indicador_producto_poa.idsss[i]}  !== 'undefined')
+                ShowCountIndicadorPOA${indicador_producto_poa.idsss[i]}(true);
+            `);
+
+                                        }
+                                        $(".filedragon span").each(function () {
+                                            let title = $(this).parent().attr('title');
+                                            let count = $(this).parent().attr('count');
+                                            if (title.split(')').length > 1) {
+                                                let component = title.split(')');
+                                                title = component[1] + (count ? `(${count})` : '');
+                                            }
+                                            console.log($(this).html(title));
+                                        });
+                                    }, 1000 * j);
+                                }
+
+                            if (typeof indicador_producto_poa_actividad !== "undefined")
+                                setTimeout(function () {
+                                    for (var i = 0; i < indicador_producto_poa_actividad.idssss.length; i++) {
+                                        eval(`
+            if(typeof ShowCountIndicadorPOA${indicador_producto_poa_actividad.idssss[i]}  !== 'undefined')
+                ShowCountIndicadorPOA${indicador_producto_poa_actividad.idssss[i]}(true);
+            `);
+                                    }
+                                    MESSAGE.run();
+                                    $(".filedragon span").each(function () {
+                                        let title = $(this).parent().attr('title');
+                                        let count = $(this).parent().attr('count');
+                                        if (title.split(')').length > 1) {
+                                            let component = title.split(')');
+                                            title = component[1] + (count ? `(${count})` : '');
+                                        }
+                                        console.log($(this).html(title));
+                                    });
+                                }, 1000);
+
+                            if (typeof indicador_resultado_pei !== "undefined")
+                                setTimeout(function () {
+                                    for (var i = 0; i < indicador_resultado_pei.idss.length; i++) {
+                                        eval(`
+            if(typeof ShowCountIndicadorPEI${indicador_resultado_pei.idss[i]}  !== 'undefined')
+                ShowCountIndicadorPEI${indicador_resultado_pei.idss[i]}(true);
+            `);
+
+                                    }
+                                    MESSAGE.run();
+                                    $(".filedragon span").each(function () {
+                                        let title = $(this).parent().attr('title');
+                                        let count = $(this).parent().attr('count');
+                                        if (title.split(')').length > 1) {
+                                            let component = title.split(')');
+                                            title = component[1] + (count ? `(${count})` : '');
+                                        }
+                                        console.log($(this).html(title));
+                                    });
+                                }, 1000);
+                        }
+                    }
+                ]
+            },
+            content: {
+                loadingContentText: MESSAGE.i('actions.Loading')
+            },
+            event: {
+                show: {
+                    begin: function (data) {
+                        data.permitted_files = [];
+                        for (var i in CONFIG.fileType_general) {
+                            for (var j in CONFIG.fileType_general[i]) {
+                                if (typeof data.permitted_files[j] == "undefined") {
+                                    data.permitted_files[j] = {};
+                                }
+                                data.permitted_files[j][i] = CONFIG.fileType_general[i][j];
+                            }
+                        }
+                    }
+                },
+                hide: {
+                    begin: function (data) {
+
+                    }
+                }
+            }
+        };
+        <%= model %>.
+        modal.modalView("templates/components/filetype", modal);
+    }
+    if (!DSON.oseaX(thisID)) {
+        if (<%= model %>.
+        form.options.<%= name %>.file === ''
+    )
+        {
+            if ( <%= model %>.
+            form.options.<%= name %>.alone === true
+        )
+            <%= model %>.
+            form.options.<%= name %>.folder = `<%= options.folder %>`;
+
+        else
+            <%= model %>.
+            form.options.<%= name %>.folder = <%= model %>.
+            form.options.<%= name %>.tempfolder ? (`<%= modelfolder %>/temp_files/<%= name %>/` + new Date().getTime()) : `<%= modelfolder %>/<%= name %>/${thisID}`;
+        }
+        ShowCount<%= name %>(true);
+
+    }
+
+    <%= model %>.form.beginFunctions.push("ShowCount<%= name %>()");
+
+    $(document).ready(function () {
+
+        <%= model %>.<%= name %> = "upload:" + <%= model %>.
+        form.options.<%= name %>.folder;
+
+
+        $('[name="<%= model %>_<%= nameclean %>"]').click(function () {
+
+            amLoad<%= name %> = true;
+            var root = <%= model %>.
+            form.options.<%= name %>.folder;
+            baseController.viewData = {
+                root: root,
+                botonsubir: "<%= options.botonsubir %>",
+                file:
+                <%= model %>.form.options.<%= name %>.file,
+                scope: <%= model %>,
+                nameclean: "<%= model %>_<%= nameclean %>",
+                options: <%= model %>.form.options.<%= nameclean %>,
+                maxsize:
+                <%= model %>.
+                form.options.<%= name %>.maxsize_mb,
+                maxfiles:
+                <%= model %>.
+                form.options.<%= name %>.maxfiles,
+                acceptedFiles:
+                <%= model %>.
+                form.options.<%= name %>.acceptedFiles,
+                columns:
+                <%= model %>.
+                form.options.<%= name %>.columns,
+                showMymessage:
+                <%= model %>.form.options.<%= name %>.acceptedFiles !== null ? true : false,
+                Mymessage:
+                <%= model %>.form.options.<%= name %>.acceptedFiles_message !== null ?
+                <%= model %>.form.options.<%= name %>.acceptedFiles_message
+        :
+            ""
+        }
+            ;
+
+            var modal = {
+                width: <%= model %>.form.options.<%= name %>.width,
+                header: {
+                    title: <%= model %>.form.options.<%= name %>.title,
+                    icon: <%= model %>.form.options.<%= name %>.icon.class
+                },
+                footer: {
+                    cancelButton: false,
+                    buttons: [
+                        {
+                            color: "btn bg-<%= COLOR.info %> btn-labeled btn-xs pull-rightm",
+                            title: "<b><i class='icon-arrow-right8'></i></b>Continuar",
+                            action: function () {
+                                MODAL.close();
+                                $(".filedragon span").each(function () {
+                                    let title = $(this).parent().attr('title');
+                                    let count = $(this).parent().attr('count');
+                                    if (title.split(')').length > 1) {
+                                        let component = title.split(')');
+                                        title = component[1] + (count ? `(${count})` : '');
+                                    }
+                                    console.log($(this).html(title));
+                                });
+
+                                if (typeof indicador_producto_poa !== "undefined")
+                                    for (var j = 1; j <= 5; j++) {
+                                        setTimeout(function () {
+                                            MESSAGE.run();
+                                            for (var i = 0; i < indicador_producto_poa.idsss.length; i++) {
+                                                eval(`if(typeof ShowCountIndicadorPOA${indicador_producto_poa.idsss[i]}  !== 'undefined')
+                ShowCountIndicadorPOA${indicador_producto_poa.idsss[i]}(true);
+            `);
+
+                                            }
+                                            $(".filedragon span").each(function () {
+                                                let title = $(this).parent().attr('title');
+                                                let count = $(this).parent().attr('count');
+                                                if (title.split(')').length > 1) {
+                                                    let component = title.split(')');
+                                                    title = component[1] + (count ? `(${count})` : '');
+                                                }
+                                                console.log($(this).html(title));
+                                            });
+                                        }, 1000 * j);
+                                    }
+
+                                if (typeof indicador_producto_poa_actividad !== "undefined")
+                                    setTimeout(function () {
+                                        for (var i = 0; i < indicador_producto_poa_actividad.idssss.length; i++) {
+                                            eval(`
+            if(typeof ShowCountIndicadorPOA${indicador_producto_poa_actividad.idssss[i]}  !== 'undefined')
+                ShowCountIndicadorPOA${indicador_producto_poa_actividad.idssss[i]}(true);
+            `);
+                                        }
+                                        MESSAGE.run();
+                                        $(".filedragon span").each(function () {
+                                            let title = $(this).parent().attr('title');
+                                            let count = $(this).parent().attr('count');
+                                            if (title.split(')').length > 1) {
+                                                let component = title.split(')');
+                                                title = component[1] + (count ? `(${count})` : '');
+                                            }
+                                            console.log($(this).html(title));
+                                        });
+                                    }, 1000);
+
+                                if (typeof indicador_resultado_pei !== "undefined")
+                                    setTimeout(function () {
+                                        for (var i = 0; i < indicador_resultado_pei.idss.length; i++) {
+                                            eval(`
+            if(typeof ShowCountIndicadorPEI${indicador_resultado_pei.idss[i]}  !== 'undefined')
+                ShowCountIndicadorPEI${indicador_resultado_pei.idss[i]}(true);
+            `);
+
+                                        }
+                                        MESSAGE.run();
+                                        $(".filedragon span").each(function () {
+                                            let title = $(this).parent().attr('title');
+                                            let count = $(this).parent().attr('count');
+                                            if (title.split(')').length > 1) {
+                                                let component = title.split(')');
+                                                title = component[1] + (count ? `(${count})` : '');
+                                            }
+                                            console.log($(this).html(title));
+                                        });
+                                    }, 1000);
+                            }
+                        }
+                    ]
+                },
+                content: {
+                    loadingContentText: MESSAGE.i('actions.Loading')
+                },
+                event: {
+                    hide: {
+                        begin: function (data) {
+                            for (var functionName of <%= model %>.
+                            form.beginFunctions
+                        )
+                            {
+                                if (functionName.indexOf('ShowCountprofileimage') == -1) {
+                                    eval(functionName);
+
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            };
+            <%= model %>.
+            modal.modalView("templates/components/filemanagerlite", modal);
+        });
+    });
+    <%= model %>.refreshAngular();
+
+</script>
+<div>
+    <% if(options.inline && !options.simpleone){ %>
+        <script>
+            amLoad<%= name %> = true;
+            var root = <%= model %>.form.options.<%= name %>.folder;
+            baseController.viewDataToto = {
+                estricto:
+                <%= model %>.form.options.<%= name %>.estricto,
+                root: root,
+                botonsubir: "<%= options.botonsubir %>",
+                file:
+                <%= model %>.form.options.<%= name %>.file,
+                scope: <%= model %>,
+                nameclean: "<%= model %>_<%= nameclean %>",
+                options:
+                <%= model %>.form.options.<%= nameclean %>,
+                maxsize:
+                <%= model %>.
+                form
+                .options.<%= name %>.maxsize_mb,
+                maxfiles:
+                <%= model %>.
+                form
+                .options.<%= name %>.maxfiles,
+                acceptedFiles:
+                <%= model %>.
+                form
+                .options.<%= name %>.acceptedFiles,
+                columns:
+                <%= model %>.
+                form
+                .options.<%= name %>.columns,
+                showMymessage:
+                <%= model %>.form.options.<%= name %>.acceptedFiles !== null ? true : false,
+                Mymessage:
+                <%= model %>.form.options.<%= name %>.acceptedFiles_message !== null?<%= model %>.form.options.<%= name %>.acceptedFiles_message
+            :
+            ""
+            }
+            ;
+        </script>
+        <%- include('../components/filemanagerinline',{scope:model}); %>
+    <% } else if(options.inline && options.simpleone){ %>
+        <script>
+            amLoad<%= name %> = true;
+            var root = <%= model %>.form.options.<%= name %>.folder;
+            baseController.viewDataToto = {
+                estricto:
+                <%= model %>.form.options.<%= name %>.estricto,
+                root: root,
+                botonsubir: "<%= options.botonsubir %>",
+                file:
+                <%= model %>.form.options.<%= name %>.file,
+                scope: <%= model %>,
+                nameclean: "<%= model %>_<%= nameclean %>",
+                options:
+                <%= model %>.form.options.<%= nameclean %>,
+                maxsize:
+                <%= model %>.
+                form
+                .options.<%= name %>.maxsize_mb,
+                maxfiles:
+                <%= model %>.
+                form
+                .options.<%= name %>.maxfiles,
+                acceptedFiles:
+                <%= model %>.
+                form
+                .options.<%= name %>.acceptedFiles,
+                columns:
+                <%= model %>.
+                form
+                .options.<%= name %>.columns,
+                showMymessage:
+                <%= model %>.form.options.<%= name %>.acceptedFiles !== null ? true : false,
+                Mymessage:
+                <%= model %>.form.options.<%= name %>.acceptedFiles_message !== null?<%= model %>.form.options.<%= name %>.acceptedFiles_message
+            :
+            ""
+            }
+            ;
+        </script>
+        <%- include('../components/filemanagerinlineone',{scope:model}); %>
+    <% } %>
+</div>

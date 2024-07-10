@@ -1,0 +1,16 @@
+<div style="overflow: auto">
+    <table class="table-responsive table table-striped  table-togglable table-framed sindu-table dragon-table dragon_audit-drag sindu_origin_table">
+        <thead>
+        <tr class="text-white bg-<%= COLOR.secundary %>">
+            <th ng-repeat="(key, value) in dragon_audit.data[0]">{{dragon_audit.setName(key)}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="(key, value) in dragon_audit.data">
+            <td ng-repeat="(keycolum, item) in value" ng-bind-html="dragon_audit.oldNew(keycolum, value)"></td>
+            <!--<td ng-repeat="(keycolum, item) in value">{{dragon_audit.oldNew(keycolum, value)}}</td>-->
+        </tr>
+        </tbody>
+    </table>
+</div>
+

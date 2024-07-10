@@ -1,0 +1,304 @@
+.indicador-padding {
+    padding: 14px !important;
+}
+
+.mid-check,
+.mid-text {
+    text-align: left;
+    height: 41px;
+    display: table;
+}
+
+/*Centrar texto horizontalmente*/
+.mid-text {
+    width: 100%;
+}
+
+.mid-check span,
+.mid-text span {
+    vertical-align: middle;
+    display: table-cell;
+}
+
+/**/
+
+/*Centrar icon en inputs*/
+.center-icon .form-control-feedback {
+    top: 33px !important;
+}
+
+
+.center-icon a {
+    position: relative;
+    top: 29px !important;
+}
+
+
+/*Estilos para swutch en navbar*/
+.mega-dropdown {
+    padding: 10px 20px;
+}
+
+/**/
+.border-medium {
+    border-color: #5e5e9a !important;
+    color: #5e5e9a !important;
+}
+
+/*Indicador*/
+.inidcador {
+    padding-left: 12px;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 0;
+}
+
+.inidcador li {
+    float: left;
+    list-style: none;
+    margin-right: 28px;
+}
+
+.inidcador li span {
+    padding: 5px !important;
+}
+
+.inidcador li span i {
+    font-size: 15px;
+}
+
+.mega-dropdown2 {
+    min-width: 366px !important;
+}
+
+.fieldset-t {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.pl-0 {
+    padding-left: 0 !important;
+}
+
+.pr-0 {
+    padding-right: 0 !important;
+}
+
+.mr-0 {
+    margin-right: 0 !important;
+}
+
+.ml-0 {
+    margin-left: 0 !important;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.fl {
+    float: left;
+}
+
+.sub-permission {
+    list-style: none;
+}
+
+.sub-permission a {
+    padding: 8px 16px;
+    float: left;
+    color: #333333;
+}
+
+.sub-title {
+    font-size: 16px;
+}
+
+.breadcrumb a {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.set-password-btn {
+    position: relative;
+}
+
+.set-password-btn #listpassword,
+.set-password-btn #listrepeatPassword {
+    position: relative;
+    right: 0;
+    top: 26px;
+}
+
+/*.has-feedback label~.form-control-feedback {*/
+/*top: 36px!important;*/
+/*}*/
+
+.list-style-resumen ul {
+    padding-left: 10px;
+}
+
+.list-style-resumen ul li {
+    list-style-position: inside;
+}
+
+.list-style-resumen ul li:last-child {
+    list-style: none;
+    margin-top: 11px;
+}
+
+.riptide {
+    color: #ffffff !important;
+}
+
+.foda-0 {
+    min-height: 314px;
+    max-height: 500px;
+}
+
+.round-label {
+    margin-bottom: 10px;
+}
+
+.ul-pesta {
+    padding: 0;
+}
+
+.ul-pesta li {
+    list-style: none;
+    overflow: auto;
+    height: 270px;
+    text-align: justify;
+}
+
+.table > thead > tr > th {
+    font-size: 15px;
+}
+
+.icon-files-empty {
+    color: #333333;
+}
+
+.nav-tabs.nav-justified {
+    margin-bottom: 0;
+}
+
+.page-header-default {
+    margin-bottom: 9px;
+}
+
+.big-header {
+    float: left;
+    width: 100%;
+    text-align: center;
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.label-t {
+    font-size: 16px;
+}
+
+.tabla-reporte tbody tr td:first-child {
+    border-right: 0;
+}
+
+.tabla-reporte tbody tr td:nth-child(2) {
+    border-left: 0;
+}
+
+.list-custom-header {
+
+}
+
+.list-custom {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 7px;
+    list-style: none;
+}
+
+.set-label {
+
+}
+
+.over-table {
+    overflow: auto;
+    min-height: 1000px;
+}
+
+.no-border-readonly:read-only {
+    border: 0 !important;
+}
+
+.no-border-readonly {
+    min-height: 41px !important;
+    padding-top: 0 !important;
+}
+
+.acomodar input {
+    height: 47px !important;
+}
+
+.acomodar .percent {
+    top: 25px !important;
+}
+
+.custom-upload button {
+    width: auto !important;
+    height: auto !important;
+}
+
+.custom-upload img {
+    max-height: 85px !important;
+}
+
+.select2-selection--multiple .select2-selection__rendered {
+    border-bottom: 1px solid #ddd !important;
+}
+
+.custom_list {
+    list-style: inside !important;
+    text-align: left !important;
+}
+
+.table .dragon-columns {
+    font-size: 13px !important;
+}
+
+.table .dragon-columns {
+    border-bottom: 1px solid #bbb !important;
+}
+
+
+.shape_element {
+    border-radius:100%;
+    height:25px;
+    width:25px;
+    text-align:center !important;
+    margin: auto;
+}
+
+.shape_element_left {
+    border-radius:100%;
+    height:25px;
+    width:25px;
+    text-align:left !important;
+}
+
+.ponerRedondo {
+    border-radius: 100%;
+    height: 25px;
+    width: 25px;
+    text-align: center;
+    margin-right: 7px;
+    margin-left: 20px;
+    margin-top: -10px;
+    float: left;
+}
+
+.labelRedondo {
+    float: left;
+    margin-top: -7px;
+    margin-left: -3px;
+}

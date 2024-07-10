@@ -1,0 +1,34 @@
+{
+  "routes": {
+    "notoken": [
+      "/",
+      "/${CONFIG.folder}/",
+      "/${CONFIG.folder}/error/error",
+      "/${CONFIG.folder}/error/base",
+      "/${CONFIG.folder}/auth/login",
+      "/${CONFIG.folder}/auth/formulario",
+      "/${CONFIG.folder}/modulo_formulario_registro/index",
+      "/${CONFIG.folder}/auth/forgot",
+      "/${CONFIG.folder}/auth/createaccount",
+      "/${CONFIG.folder}/auth/restore",
+      "/api/my_user/list",
+      "/api/modulo_formulario/list",
+      "/api/modulo_formulario_registro/list",
+      "/api/modulo_formulario_registro/insertID",
+      "/api/cargo/insertID",
+      "/api/departamento/insertID",
+      "/api/usuario/insertID",
+      "/api/usuario/insert",
+      "/email/send",
+      "/service/base_auth/md5",
+      "/service/base_auth/changePassword",
+      "/service/base_auth/matchtoken",
+      "/service/base_auth/login",
+      "/post/templates/pdf/table",
+      "/post/templates/pdf/table",
+      "/api/vw_usuario/list",
+      "/api/usuario/list",
+      "/api/permission/list"
+    ]
+  }
+}

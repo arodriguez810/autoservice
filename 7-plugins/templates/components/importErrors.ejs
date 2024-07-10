@@ -1,0 +1,90 @@
+<div class="panel panel-flat" id="miContainer" style="display: none">
+    <div class="page-header-lg page-header-sm page-header page-header-default border-bottom-lg border-bottom-<%= COLOR.secundary %>">
+        <!--Breadcrumb and Table Options-->
+        <div class="breadcrumb-line">
+            <ul class="breadcrumb-elements visible-elements">
+                <li dragonlanguage="">
+                    <a ng-click="<%= scope %>.exportErrorXLS('importErrorTable');"><i class="icon-file-excel"></i></a>
+                </li>
+                <li dragonlanguage="">
+                    <a ng-click="<%= scope %>.exportErrorPDF('importErrorTable');"><i class="icon-printer2"></i></a>
+                </li>
+            </ul>
+        </div>
+        <!--Breadcrumb and Table Options-->
+    </div>
+    <div class="subcontent">
+        <table id="importErrorTable" class="table-print table-togglable table-framed sindu-table" style="width: 100%; border: none !important">
+            <thead class="">
+                <tr style="border: none !important">
+                    <th style="border: none !important">
+                        Fecha de Ejecución del Import:
+                    </th>
+                    <th style="border: none !important">
+                        {{<%= scope %>.LAN.datetime()}}
+                    </th>
+                </tr>
+                <tr style="border: none !important">
+                    <th style="border: none !important">
+                        Entidad:
+                    </th>
+                    <th style="border: none !important">
+                        {{<%= scope %>.headertitle}}
+                    </th>
+                </tr>
+                <tr style="border: none !important">
+                    <th style="border: none !important">
+                        Cantidad de Registros Fuentes:
+                    </th>
+                    <th style="border: none !important">
+                        {{<%= scope %>.importedFiles}}
+                    </th>
+                </tr>
+                <tr style="border: none !important">
+                    <th style="border: none !important">
+                        Cantidad de Registros Migrados:
+                    </th>
+                    <th style="border: none !important">
+                        {{<%= scope %>.importedFiles - <%= scope %>.invalids.length}}
+                    </th>
+                </tr>
+                <tr style="border: none !important">
+                    <th style="border: none !important">
+                        <br>
+                    </th>
+                </tr>
+                <tr style="font-family: 'Arial Narrow'; font-size: 18px;">
+                    <th style="border-right: none !important;">
+                        Registros no migrados:
+                    </th>
+                    <th style="border-left: none !important; border-right: none !important;">
+                        {{<%= scope %>.invalids.length}}
+                    </th>
+                    <th colspan="{{<%= scope %>.export.getTableHeaders().length - 2}}" style="border-left: none !important;">
+
+                    </th>
+                </tr>
+                <tr class="bg-secundary" style="font-family: 'Arial Narrow';">
+                    <th ng-repeat="(key, value) in <%= scope %>.export.getTableHeaders()" width="150px" style="padding: 10px; font-size: 18px !important">
+                        {{value.columnNameLabel}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(key, value) in <%= scope %>.invalids" style="font-family: 'Arial Narrow';">
+                    <td ng-repeat="(key2, value2) in value" style="font-size: 16px !important"  width="150px" ng-if="<%= scope %>.checkHeaders(<%= scope %>.export.getTableHeaders(), key2)">
+                        {{value2}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div><!--end-->
+<script>
+    new ANIMATION().stoploading(`#loading`, "", ``, '200', undefined, true);
+    $(function(){
+        setTimeout(function(){
+            $('#miContainer').show();
+        },500);
+    })
+</script>

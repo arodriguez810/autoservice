@@ -1,0 +1,232 @@
+<div id="information" ng-controller="information as information" style="text-align: center">
+    <div class="row" id="filemanager">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading panel-dashboard" style="text-align: left">
+                    <h6 class="panel-title">{{information.navegacion()}}</h6>
+                    <button ng-if="information.currentLevel>1" type="button" class="close "
+                            ng-click="information.backLevel()"
+                            style="margin-top: -23px !important;color: white;opacity: 1;cursor: pointer">
+                        <i class='icon-arrow-left8'>Atrás</i>
+                    </button>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class='col-sm-5 col-md-5' style="margin-bottom: 15px;text-align: left">
+                            <label style="font-weight: bold">Filtrar por {{information.currentData.plural||'Registros'}}
+                                que contengan:</label>
+                            <input ng-model="information.filtro[information.currentLevel]" type="text"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th style="font-weight: bold">{{information.currentData.plural||'Lista'}}</th>
+                                <th style="font-weight: bold">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="(i,row) in information.currentList"
+                                ng-if="!information.currentData.isparent"
+                                ng-show="information.fitrar(row[information.currentData.dtext])">
+                                <td style="vertical-align: middle; max-width: 900px !important;">
+                                    {{row[information.currentData.dtext]}}
+                                </td>
+                                <td>
+                                    <button style="cursor: pointer; font-size: 12px !important;" class="btn btn-info"
+                                            ng-click="information.nextLevel(row)">
+                                        {{information.currentData.goleveltext}}
+
+                                        <label ng-if="row.filecount"
+                                               style="font-weight:bold ;margin-left: 3px;color: black;padding: 3;background-color: white;    border-radius: 100%;    height: 25px;    width: 25px;    text-align: center;">{{row.filecount}}</label>
+
+                                    </button>
+
+                                    <button ng-if="information.currentData.alternativeLevel"
+                                            style="cursor: pointer; font-size: 12px !important;"
+                                            class="btn btn-primary"
+                                            ng-click="information.nextLevelAlt(row)">
+                                        {{information.currentData.alternativeLevelText}}
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr ng-repeat="(i,row) in information.currentList"
+                                ng-show="information.fitrar(row.title)"
+                                ng-if="information.currentData.isparent && !row.isparent">
+                                <td style="vertical-align: middle; max-width: 900px !important;">{{row.title}}</td>
+                                <td>
+                                    <button style="cursor: pointer; font-size: 12px !important;" class="btn btn-info"
+                                            ng-click="information.nextLevel(row,row.golevel)">
+                                        Ver Detalle
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    information.refreshAngular();
+    information.filtro = [];
+    information.cacheList = [];
+    information.ffilter = {};
+    information.currentLevel = 1;
+    information.backLevelx = [];
+    information.refreshFiles = async function () {
+        var animation = new ANIMATION();
+        animation.loading(`#filemanager`, "Cargando Archivos", ``, '30');
+        information.managers = await BASEAPI.listp("filemanager", {limit: 0});
+        information.managers = information.managers.data;
+        await information.selectLevel();
+    };
+
+    information.fitrar = function (value) {
+        if (!information.filtro[information.currentLevel])
+            return true;
+        if (value) {
+            return value.toLowerCase().indexOf(information.filtro[information.currentLevel].toLocaleLowerCase()) !== -1;
+        }
+        return true;
+    };
+    information.selectLevel = async function () {
+        var animation = new ANIMATION();
+        animation.loading(`#filemanager`, "Cargando Archivos", ``, '30');
+        information.currentData = information.managers.filter(d => {
+            return d.level == information.currentLevel
+        })[0];
+
+        $('.modal-title').html(`Repositorio de Archivos - ${information.currentData.plural}`);
+        $('#closeModal').html(`<i class="icon-cross2"></i>`);
+        if (!information.currentData.isparent) {
+            var where = {limit: 0};
+            if (information.currentData.where_filters) {
+                where.where = eval(information.currentData.where_filters);
+            }
+            information.currentList = await BASEAPI.listp(information.currentData.entity, where);
+            information.currentList = information.currentList.data;
+            information.cacheList[information.currentLevel] = information.currentList;
+        } else {
+            information.currentList = await BASEAPI.listp("filemanager", {
+                limit: 0,
+                where: [{field: 'level', value: information.currentLevel}]
+            });
+            information.currentList = information.currentList.data;
+            information.cacheList[information.currentLevel] = information.currentList;
+        }
+        if (information.currentData.folder !== "") {
+            if (information.currentData.name === "Meta"){
+                information.currentList.map(e => {
+                    FILE.server(`${information.currentData.folder}${e.id}`, function (files) {
+                        if (files.length)
+                            e.filecount = files.length;
+                        information.refreshAngular();
+                    });
+                });
+            }else {
+                information.currentList.map(e => {
+                    FILE.server(`${information.currentData.folder}/${e.id}`, function (files) {
+                        if (files.length)
+                            e.filecount = files.length;
+                        information.refreshAngular();
+                    });
+                });
+            }
+        }
+        information.refreshAngular();
+        animation.stoploading(`#filemanager`, ``);
+    }
+    information.nextLevel = function (row, level) {
+
+        if (information.currentData.isfolder) {
+            var root = DSON.template(information.currentData.folder + row[information.currentData.dkey], row);
+            baseController.viewData = {
+                root: root,
+                scope: 'information',
+                maxsize: 20,
+                maxfiles: 0,
+                acceptedFiles: null,
+                columns: row.cantidad || 4,
+            };
+            CINTILLO = information.navegacion() + " / " + `${row[information.currentData.dtext]}`;
+            information.modal.modalView("templates/components/gallery", {
+                width: 'modal-full',
+                header: {
+                    title: `Archivos de ${information.currentData.name}: ${row[information.currentData.dtext]}`,
+                    icon: "file-eye"
+                },
+                footer: {
+                    cancelButton: false
+                },
+                content: {
+                    loadingContentText: MESSAGE.i('actions.Loading')
+                },
+            })
+        } else {
+            var backLevelx = information.currentLevel;
+            if (level)
+                information.currentLevel = level;
+            else
+                information.currentLevel = information.currentData.golevel;
+            information.backLevelx[information.currentLevel] = backLevelx;
+
+            information.ffilter[information.currentData.govar] = row[information.currentData.dkey];
+            information.filtro[information.currentLevel] = "";
+            information.selectLevel();
+        }
+    }
+
+    information.nextLevelAlt = function (row, level) {
+        var backLevelx = information.currentLevel;
+        if (level)
+            information.currentLevel = level;
+        else
+            information.currentLevel = information.currentData.alternativeLevel;
+        information.backLevelx[information.currentLevel] = backLevelx;
+        information.ffilter[information.currentData.govar] = row[information.currentData.dkey];
+        information.filtro[information.currentLevel] = "";
+        information.selectLevel();
+    }
+
+    information.backLevel = function () {
+        information.currentLevel = information.backLevelx[information.currentLevel];
+        information.selectLevel();
+    }
+    information.navegacion = function () {
+        var naveg = [];
+        for (var i = information.currentLevel; i >= 1; i--) {
+            var thisdata = information.managers.filter(d => {
+                return d.level == i
+            })[0];
+            if (i == information.currentLevel) {
+                if (thisdata.title)
+                    naveg.push(thisdata.title);
+            } else {
+                if (information.cacheList[i]) {
+                    if (information.cacheList[i].filter(d => {
+                        return d[thisdata.dkey] == information.ffilter[thisdata.govar]
+                    })[0]) {
+                        if (information.cacheList[i].filter(d => {
+                            return d[thisdata.dkey] == information.ffilter[thisdata.govar]
+                        })[0][thisdata.dtext]) {
+                            naveg.push(information.cacheList[i].filter(d => {
+                                return d[thisdata.dkey] == information.ffilter[thisdata.govar]
+                            })[0][thisdata.dtext]);
+                        } else {
+                            naveg.push(thisdata.title);
+                        }
+                    }
+                }
+            }
+        }
+        return naveg.reverse().join(' / ');
+    };
+    information.refreshFiles();
+
+</script>

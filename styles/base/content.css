@@ -1,0 +1,59 @@
+.content:first-child {
+    padding-top: 0;
+}
+
+.content {
+    padding: 0 0 0 0;
+}
+
+.subcontent {
+    padding: 0 20px 0 20px;
+    min-height: 525px;
+}
+
+.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+body {
+    padding-right: 0 !important
+}
+
+.popover {
+    max-width: 50% !important; /* Max Width of the popover (depending on the container!) */
+}
+
+#dragonsecondmenu li a,
+#datacenteroptions li a {
+    color: #000 !important;
+}
+
+.dropdownwithoptions {
+    margin-top: -3px;
+}
+
+.checkbox.checkbox-switchery {
+    margin: 0 !important;
+    padding-left: 0;
+}
+
+.tumbimage {
+    max-width: 40px;
+}
+
+.text-red {
+    color: red;
+}
+
+.text-green {
+    color: forestgreen;
+}
+
+.elreverse {
+    filter: contrast(1.4);
+}
+
+#dragonmenu .active ul {
+    filter: contrast(1.3);
+}

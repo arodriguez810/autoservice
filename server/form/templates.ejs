@@ -1,0 +1,209 @@
+<%
+CHART = {
+    template: function (view, data) {
+        return include('../../7-plugins/templates/' + view, data);
+    },
+    pie: function (name, model, options) {
+        return CHART.template('charts/pie', {name: name, model: model, opts: options});
+    },
+    doughnut: function (name, model, options) {
+        return CHART.template('charts/doughnut', {name: name, model: model, opts: options});
+    },
+    gauge: function (name, model, options) {
+        return CHART.template('charts/gauge', {name: name, model: model, opts: options});
+    },
+    circle: function (name, model, options) {
+        return CHART.template('charts/circle', {name: name, model: model, opts: options});
+    },
+    rose: function (name, model, options) {
+        return CHART.template('charts/rose', {name: name, model: model, opts: options});
+    },
+    donuts: function (name, model, options) {
+        return CHART.template('charts/donuts', {name: name, model: model, opts: options});
+    },
+    line: function (name, model, options) {
+        return CHART.template('charts/line', {name: name, model: model, opts: options});
+    },
+    columns: function (name, model, options) {
+        return CHART.template('charts/columns', {name: name, model: model, opts: options});
+    },
+    bar: function (name, model, options) {
+        return CHART.template('charts/bar', {name: name, model: model, opts: options});
+    },
+    radar: function (name, model, options) {
+        return CHART.template('charts/radar', {name: name, model: model, opts: options});
+    }
+
+}
+FORM = {
+    template: function (view, data) {
+        return include('../../7-plugins/templates/' + view, data);
+    },
+    checkbox: function (name, model, options, label) {
+        var loque = {name: name, model: model, opts: options};
+        if (label)
+            loque.opts.truetext = label;
+        return FORM.template('form/checkbox', loque);
+    },
+    checkboxlist: function (name, model, options) {
+        return FORM.template('form/checkboxlist', {name: name, model: model, opts: options});
+    },
+    date: function (name, model, options) {
+        options.singleDatePicker = true;
+        options.from = name;
+        return FORM.template('form/range', {name: name + "_label", model: model, opts: options});
+    },
+    datetime: function (name, model, options) {
+        options.singleDatePicker = true;
+        options.timepicker = true;
+        options.from = name;
+        return FORM.template('form/range', {name: name + "_label", model: model, opts: options});
+    },
+    daterange: function (name, model, options) {
+        return FORM.template('form/range', {name: name, model: model, opts: options});
+    },
+    datetimerange: function (name, model, options) {
+        options.timepicker = true;
+        return FORM.template('form/range', {name: name, model: model, opts: options});
+    },
+    timerange: function (name, model, options) {
+        options.timepicker = true;
+        options.isTime = true;
+        return FORM.template('form/range', {name: name, model: model, opts: options});
+    },
+    time: function (name, model, options) {
+        options.singleDatePicker = true;
+        options.timepicker = true;
+        options.isTime = true;
+        options.from = name;
+        return FORM.template('form/range', {name: name + "_label", model: model, opts: options});
+    },
+    input: function (name, model, options) {
+        return FORM.template('form/input', {name: name, model: model, opts: options});
+    },
+    format: function (name, model, options) {
+        return FORM.template('form/inputformat', {name: name, model: model, opts: options});
+    },
+    integer: function (name, model, options) {
+        return FORM.template('form/integer', {name: name, model: model, opts: options});
+    },
+    decimal: function (name, model, options) {
+        return FORM.template('form/decimal', {name: name, model: model, opts: options});
+    },
+    hour: function (name, model, options) {
+        options.isNumber = false;
+        options.icon = {class: "alarm", position: "left"};
+        options.mask = "99:59";
+        options.restrict = "reject";
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    year: function (name, model, options) {
+        options.isNumber = false;
+        options.icon = {class: "calendar3", position: "left"};
+        options.mask = "9999";
+        options.restrict = "reject";
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    percentage: function (name, model, options) {
+        return FORM.template('form/percentage', {name: name, model: model, opts: options});
+    },
+    phone: function (name, model, options) {
+        options.isNumber = false;
+        options.icon = {class: "phone", position: "left"};
+        options.mask = "(999) 999-9999";
+        options.restrict = "reject";
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    creditcard: function (name, model, options) {
+        options.isNumber = false;
+        options.icon = {class: "credit-card2", position: "left"};
+        options.mask = "9999-9999-9999-9999";
+        options.restrict = "reject";
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    identification: function (name, model, options) {
+        options.isNumber = false;
+        options.icon = {class: "vcard", position: "left"};
+        options.mask = "999-9999999-9";
+        options.restrict = "reject";
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    cellphone: function (name, model, options) {
+        options.isNumber = false;
+        options.icon = {class: "iphone", position: "left"};
+        options.mask = "(999) 999-9999";
+        options.restrict = "reject";
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    money: function (name, model, options) {
+        return FORM.template('form/money', {name: name, model: model, opts: options});
+    },
+    valor_absoluto: function (name, model, options) {
+        return FORM.template('form/valor_absoluto', {name: name, model: model, opts: options});
+    },
+    indice: function (name, model, options) {
+        return FORM.template('form/indice', {name: name, model: model, opts: options});
+    },
+    mask: function (name, model, options) {
+        return FORM.template('form/inputmask', {name: name, model: model, opts: options});
+    },
+    ngmask: function (name, model, options) {
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    normalpassword: function (name, model, options) {
+        return FORM.template('form/normalpassword', {name: name, model: model, opts: options});
+    },
+    password: function (name, model, options) {
+        return FORM.template('form/password', {name: name, model: model, opts: options});
+    },
+    color: function (name, model, options) {
+        options.icon = {class: "brush"};
+        return FORM.template('form/color', {name: name, model: model, opts: options});
+    },
+    textarea: function (name, model, options) {
+        return FORM.template('form/textarea', {name: name, model: model, opts: options});
+    },
+    html: function (name, model, options) {
+        return FORM.template('form/html', {name: name, model: model, opts: options});
+    },
+    box: function (name, model, options) {
+        return FORM.template('form/box', {name: name, model: model, opts: options});
+    },
+    custom_box: function (name, model, options) {
+        return FORM.template('form/custom_box', {name: name, model: model, opts: options});
+    },
+    select: function (name, model, options) {
+        return FORM.template('form/select', {name: name, model: model, opts: options});
+    },
+    selectsimple: function (name, model, options) {
+        return FORM.template('form/selectsimple', {name: name, model: model, opts: options});
+    },
+    relation: function (name, model, options) {
+        return FORM.template('form/relation', {name: name, model: model, opts: options});
+    },
+    tags: function (name, model, options) {
+        return FORM.template('form/tags', {name: name, model: model, opts: options});
+    },
+    file: function (name, model, options) {
+        return FORM.template('form/file', {name: name, model: model, opts: options});
+    },
+    inputview: function (name, model, options) {
+        return FORM.template('form/inputview', {name: name, model: model, opts: options});
+    },
+    inputviewvalue: function (name, model, options) {
+        return FORM.template('form/inputviewvalue', {name: name, model: model, opts: options});
+    },
+    location: function (name, model, options) {
+        return FORM.template('form/location', {name: name, model: model, opts: options});
+    },
+    button: function (name, model, options) {
+        return FORM.template('form/button', {name: name, model: model, opts: options});
+    },
+    footer: function (model) {
+        return FORM.template('form/footer', {model: model});
+    },
+    tabs: function (model, tabs) {
+        return FORM.template('form/tabs', {model: model, tabs: tabs});
+    }
+};
+%>

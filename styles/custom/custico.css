@@ -1,0 +1,44 @@
+.focus-field-group {
+    box-shadow: 0px -1px 15px;
+    border-radius: 5px;
+    max-height: 65px;
+}
+
+@media print {
+    #eluniquex {
+        display: block !important;
+    }
+
+
+    .dividerprint::after {
+        content: '';
+        display: block;
+        width: 100%;
+        border-top: 3px solid black;
+    }
+}
+
+.dividerprint::after {
+    content: '';
+    display: block;
+    width: 100%;
+    border-top: 3px solid black;
+}
+
+#eluniquex:before {
+    content: attr(data-before);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    color: #0d745e;
+    font-size: 150px;
+    font-weight: 500px;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    opacity: 0.2;
+    transform: rotate(-45deg);
+}

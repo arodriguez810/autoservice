@@ -1,0 +1,128 @@
+<%
+if (DATA.name !== undefined) {
+    var name, model, opts;
+    name = DATA.name;
+    model = DATA.model;
+    opts = DATA.opts;
+}
+var name = name || "";
+var options = {
+    title: params.capitalize(name),
+    type: "text",
+    icon: {
+        class: "none",
+        position: "left",
+        color: COLOR.secundary + "-800"
+    },
+    items: ['n/a']
+};
+
+options = OBJECT.merge(options, opts); var nameclean = name.replace(/\./g, '_');
+options.model = options.model ? options.model : false;
+var toclient = JSON.stringify(options);
+%>
+<script>
+    <%= model %>.triggers.table.before.control("<%= name %>");
+    if (!<%= model %>.
+    charts
+    )<%= model %>.charts = {};
+    eval(`<%= model %>.charts.<%= name %> = ${"<%= toclient %>".replaceAll("&#34;", '"').replaceAll("&#39", "'")}`);
+</script>
+
+<script>
+    <%= model + "." %>charts<%= "." + name %>_chart = echarts.init(document.getElementById('<%= name %>'));
+
+    <%= model + "." %>charts<%= "." + name %>.refresh = function () {
+        <%= model %>.charts.<%= name %>_chart_options = {
+            title: {text: "<%= options.label || "" %>", textStyle: {fontSize: 12}},
+            grid: {
+                x: 80,
+                x2: 80,
+                y: 90,
+                y2: 90
+            },
+            toolbox: {
+                show: true,
+                x: 'right',
+                feature: {
+                    magicType: {
+                        title: {
+                            line: "Cambiar a gráfico de líneas",
+                            bar: "Cambiar a gráfico de barras",
+                            stack: "Agrupar",
+                            tiled: "Cambiar a gráfico de tiles"
+                        }, show: true, type: ['line', 'bar', 'stack', 'tile']
+                    },
+                    restore: {
+                        show: true,
+                        title: MESSAGE.ic('mono.restore')
+                    },
+                    saveAsImage: {
+                        show: true,
+                        title: MESSAGE.ic('mono.Sameasimage'),
+                        lang: ['Save']
+                    }
+                }
+            },
+            tooltip: {
+                trigger: <%= model %>.<%= name %>_tooltip || 'axis'
+            },
+            dataZoom: [
+                {
+                    borderColor: "#000",
+                    textStyle: {color: "#000"},
+                    brushStyle: {color: "#1E88E5"},
+                    handleStyle: {color: "#f00", borderColor: "#f00"},
+                    moveHandleStyle: {color: "#B0B6C3", opacity: 1},
+                    fillerColor: "rgba(135,163,206,0.2)",
+                    emphasis: {
+                        handleStyle: {borderColor: "#91B7F2", color: "#4D587D"},
+                        moveHandleStyle: {color: "#636D9A", opacity: .7}
+                    },
+                    dataBackground: {lineStyle: {color: "#f00", width: 1}, areaStyle: {color: "#f00"}},
+                    selectedDataBackground: {lineStyle: {color: "#16528e"}, areaStyle: {color: "#1e5daa"}}
+                },
+                {
+                    show: true,
+                },
+                {
+                    type: 'inside',
+
+                },
+                {
+                    show: true,
+                    yAxisIndex: 0,
+                    filterMode: 'empty',
+                    width: 30,
+                    height: '60%',
+                    showDataShadow: false,
+                    left: '96%'
+                }
+            ],
+            legend: {
+                padding: 5,
+                data: <%= model + "." %><%= name %>_data ? <%= model %>.<%= name %>_data.legend : []
+            },
+            xAxis:[
+                {
+                    type: 'category',
+                    axisLabel: <%= model + "." %><%= name %>_data ? <%= model + "." %><%= name %>_data.axisLabel ? <%= model %>.<%= name %>_data.axisLabel : {interval: 'auto'} : {interval: 'auto'},
+                    data: <%= model + "." %><%= name %>_data ? <%= model %>.<%= name %>_data.down : [],
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            calculable: true,
+            series: <%= model + "." %><%= name %>_data ? <%= model %>.<%= name %>_data.data : [{}]
+        };
+        if (<%= model + "." %>charts<%= "." + name %>_chart) {
+            <%= model + "." %>charts<%= "." + name %>_chart.setOption(<%= model + "." %>charts<%= "." + name %>_chart_options, true, true);
+        }
+    }
+    if (<%= model + "." %>charts<%= "." + name %>)
+        <%= model + "." %>charts<%= "." + name %>.refresh();
+
+</script>

@@ -1,0 +1,268 @@
+<%
+if (DATA.name !== undefined) {
+    var name, model, opts;
+    name = DATA.name;
+    model = DATA.model;
+    opts = DATA.opts;
+}
+var name = name || "";
+var options = {
+    placeholder: params.capitalize(name),
+    icon: {
+        class: "calendar",
+        position: "left",
+        color: COLOR.secundary + "-800"
+    },
+    helptext: '',
+    format: 'd/m/Y h:i a',
+    callformat: 'DD/MM/YYYY hh:mm a',
+    posttype: "datetime",
+    timepicker: true,
+    datepicker: true,
+    lang: 'en',
+    inline: false,
+    allowTimes: [],
+    minTime: !1,
+    minDate: !1,
+    minDateTime: !1,
+    maxTime: !1,
+    maxDate: !1,
+    maxDateTime: !1,
+    mask: false,
+    disabled: false,
+    dynamic: false,
+    verify: []
+};
+if (options.timepicker === false)
+    options.posttype = 'date';
+if (options.datepicker === false)
+    options.posttype = 'time';
+options = OBJECT.merge(options, opts); var nameclean = name.replace(/\./g, '_');
+popopme = function(entity, field){
+    var prueba = HINTS.filter(d => {
+        return ( d.trueEntity || d.entities ) === entity && d.field_names === field
+    })
+    function sortArray() {
+        options.mess = prueba.sort(function(a, b){return b.id - a.id});
+    }
+    sortArray();
+}
+popopme(model, nameclean);
+var toclient = JSON.stringify(options);
+%>
+<script>
+    <%= model %>.triggers.table.before.control("<%= nameclean %>");
+    <%= model %>.form.schemas.select["<%= name %>"] = FORM.schemasType.datetime;
+    <%= model %>.form.registerField("<%= name %>", "<%= toclient %>");
+    <%= model %>.form.registerField("<%= name %>_DragonClean", "<%= toclient %>");
+
+
+    if (MESSAGE.exist('columns.<%= nameclean %>')) {
+        <%= model %>.
+        form.options.<%= name %>.placeholder = MESSAGE.ic('columns.<%= nameclean %>');
+    }
+    var isReadProgram = <%= model %>.form.isReadOnly('<%= name %>');
+    if (isReadProgram !== false) {
+        <%= model %>.
+        form.options.<%= name %>.disabled = true;
+        if (isReadProgram !== undefined) {
+            <%= model %>.
+            <%= name %>_DragonClean = isReadProgram;
+            if (<%= model %>.
+            form.options.<%= name %>.datepicker === false
+        )
+            {
+                <%= model %>.<%= name %> = moment(new Date(isReadProgram)).format("hh:mm a");
+            }
+        else
+            if (<%= model %>.
+            form.options.<%= name %>.timepicker === false
+        )
+            {
+                <%= model %>.<%= name %> = moment(new Date(isReadProgram)).format("DD/MM/YYYY");
+            }
+        else
+            {
+                <%= model %>.<%= name %> = moment(new Date(isReadProgram)).format("DD/MM/YYYY hh:mm a");
+            }
+        }
+    }
+    if(new SESSION().isLogged()) {
+        <%= model %>.form.options.<%= options.from %>.mess = <%= model %>.form.options.<%= options.from %>.mess.filter(d => {
+            return d.company == new SESSION().current().compania_id;
+        })
+        if(<%= model %>.form.options.<%= options.from %>.mess.length == 0){
+            delete <%= model %>.form.options.<%= options.from %>.mess
+        }
+        if (<%= model %>.form.options.<%= options.from %>.mess){
+            <%= model %>.form.options.<%= options.from %>.popover = {
+                title: <%= model %>.form.options.<%= options.from %>.mess[0].field_names.replace('_',' ').replace('_',' '),
+                content: <%= model %>.form.options.<%= options.from %>.mess[0].text,
+                label: MESSAGE.exist('columns.<%= nameclean %>') ? MESSAGE.i('columns.<%= nameclean %>') : <%= model %>.form.options.<%= name %>.trueplaceholder || <%= model %>.form.options.<%= name %>.placeholder
+            }
+        }
+    }
+</script>
+<div class="form-group-material form-group has-feedback has-{{<%= model %>.validate['<%= name %>'].type || <%= model %>.defaultColor }}  has-feedback-<%= options.icon.position %>"
+     id="input<%= model %>_<%= nameclean %>">
+    <label
+            id="label<%= model %>_<%= nameclean %>"
+            class="control-label is-visible animate" style="color:#000000 !important;">
+        {{::<%= model %>.form.options.<%= name %>.placeholder}}
+        <% if(options.popover){ %>
+            <i
+                    id="popover<%= model %>_<%= nameclean %>" class="icon-help">
+            </i>
+        <% } %>
+    </label>
+    <input autocomplete="off"
+           ng-model="<%= model + "." + name %>"
+           id="<%= model %>_<%= nameclean %>"
+           name="<%= model %>_<%= nameclean %>"
+           type="text"
+           ng-model-onblur
+           class="form-control"
+           ng-disabled="<%= model %>.form.options.<%= name %>.disabled"
+           placeholder="{{::<%= model %>.form.options.<%= name %>.inputPlaceholder}}"
+    >
+
+    <div style="margin: 10px;" class="form-control-feedback">
+        <i class="icon-<%= options.icon.class %> text-secundary">
+
+        </i>
+    </div>
+    <span ng-if="<%= model %>.form.options.<%= name %>.helptext!=''"
+          class="help-block text-muted">
+        {{<%= model %>.form.options.<%= name %>.helptext}}
+    </span>
+
+    <span ng-show="<%= model %>.validate['<%= name %>'].messages.length>0" class="help-block">
+        <p class="text-{{validation.type}}" ng-show="validation.visible!==false || <%= model %>.form.intent===true"
+           ng-repeat="(key,validation) in <%= model %>.validate['<%= name %>'].messages track by key">
+               <i class="{{validation.icon}}"></i> {{validation.message}}
+        </p>
+    </span>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        if(new SESSION().isLogged()) {
+            if (<%= model %>.form.options.<%= options.from %>.mess){
+                $('#popover<%= model %>_<%= nameclean %>').popover({
+                    container: 'body',
+                    title: eval("`" +<%= model %>.form.options.<%= options.from %>.popover.label + "`"),
+                    content: eval("`" +<%= model %>.form.options.<%= options.from %>.popover.content + "`"),
+                trigger: 'manual'
+            });
+                // Obtén el elemento que deseas observar
+                const elemento = document.getElementById("popover<%= model %>_<%= nameclean %>");
+
+                // Agrega un event listener al objeto document
+                document.addEventListener("click", function(evento) {
+                    // Verifica si el evento ocurrió fuera del elemento que estamos observando
+                    if (elemento !== evento.target && !elemento.contains(evento.target)) {
+                        // Se hizo clic fuera del elemento
+                        $('#popover<%= model %>_<%= nameclean %>').popover('hide')
+
+                    }
+                });
+                $('#popover<%= model %>_<%= nameclean %>').on('click', function(evento) {
+                    evento.stopPropagation();
+                    $(this).popover('show');
+                });
+            }
+        }
+
+        var jsOptions = <%= model %>.
+        form.options.<%= name %>;
+
+        $.datetimepicker.setLocale(MESSAGE.current().code);
+
+        $('#<%= model %>_<%= nameclean %>').keypress(function (e) {
+            e.preventDefault();
+            return false;
+        });
+        $('#<%= model %>_<%= nameclean %>').datetimepicker({
+            scrollMonth: false,
+            scrollTime: false,
+            scrollInput: false,
+            format: '<%= options.format %>',
+            timepicker: <%= options.timepicker %>,
+            datepicker: <%= options.datepicker %>,
+            inline: <%= options.inline %>,
+            validateOnBlur: false,
+            <%= options.allowTimes.length > 0 ? "allowTimes :" + JSON.stringify(options.allowTimes) + "," : "" %>
+            minTime: jsOptions.dynamic ? $('#<%= model %>_' + jsOptions.minTime).val() : jsOptions.minTime,
+            minDate: jsOptions.dynamic ? $('#<%= model %>_' + jsOptions.minDate).val() : jsOptions.minDate,
+            minDateTime: jsOptions.dynamic ? $('#<%= model %>_' + jsOptions.minDateTime).val() : jsOptions.minDateTime,
+            maxTime: jsOptions.dynamic ? $('#<%= model %>_' + jsOptions.maxTime).val() : jsOptions.maxTime,
+            maxDate: jsOptions.dynamic ? $('#<%= model %>_' + jsOptions.maxDate).val() : jsOptions.maxDate,
+            maxDateTime: jsOptions.dynamic ? $('#<%= model %>_' + jsOptions.maxDateTime).val() : jsOptions.maxDateTime,
+            mask: <%= options.mask %>,
+            onChangeDateTime: function (currentDateTime) {
+
+
+                if (<%= model %>.
+                form.options.<%= name %>.datepicker === false
+            )
+                {
+                    <%= model %>.
+                    <%= name %>_DragonClean = moment(currentDateTime).format("H:mm");
+                }
+            else
+                if (<%= model %>.
+                form.options.<%= name %>.timepicker === false
+            )
+                {
+                    <%= model %>.
+                    <%= name %>_DragonClean = moment(currentDateTime).format("YYYY-MM-DD");
+                }
+            else
+                {
+                    <%= model %>.
+                    <%= name %>_DragonClean = moment(currentDateTime).format("YYYY-MM-DD H:mm");
+                }
+
+
+
+
+            },
+            onShow: function (ct) {
+                console.log('ver antes de abrir');
+                if (jsOptions.dynamic) {
+                    if (jsOptions.minTime)
+                        this.setOptions({minTime: eval(`<%= model %>.${jsOptions.minTime}_DragonClean`)});
+                    if (jsOptions.minDate) {
+                        this.setOptions({minDate: eval(`<%= model %>.${jsOptions.minDate}_DragonClean`)});
+                        console.log(eval(`<%= model %>.${jsOptions.minDate}_DragonClean`));
+                    }
+                    if (jsOptions.minDateTime)
+                        this.setOptions({minDateTime: eval(`<%= model %>.${jsOptions.minDateTime}_DragonClean`)});
+
+                    if (jsOptions.maxTime)
+                        this.setOptions({maxTime: eval(`<%= model %>.${jsOptions.maxTime}_DragonClean`)});
+                    if (jsOptions.maxDate)
+                        this.setOptions({maxDate: eval(`<%= model %>.${jsOptions.maxDate}_DragonClean`)});
+                    if (jsOptions.maxDateTime)
+                        this.setOptions({maxDateTime: eval(`<%= model %>.${jsOptions.maxDateTime}_DragonClean`)});
+
+                } else {
+                    if (jsOptions.minTime)
+                        this.setOptions({minTime: jsOptions.minTime});
+                    if (jsOptions.minDate)
+                        this.setOptions({minDate: jsOptions.minDate});
+                    if (jsOptions.minDateTime)
+                        this.setOptions({minDateTime: jsOptions.minDateTime});
+
+                    if (jsOptions.maxTime)
+                        this.setOptions({maxTime: jsOptions.maxTime});
+                    if (jsOptions.maxDate)
+                        this.setOptions({maxDate: jsOptions.maxDate});
+                    if (jsOptions.maxDateTime)
+                        this.setOptions({maxDateTime: jsOptions.maxDateTime});
+                }
+            }
+        });
+        <%= model %>.triggers.table.after.control("<%= nameclean %>");
+    });
+</script>

@@ -1,0 +1,120 @@
+<div class="row"></div>
+<div class="tab-content">
+    <div class="tab-pane active" id="basic">
+        <div class="row">
+            <div class="row" style="margin: unset">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="padding-bottom: 0px;padding-top: 5px; background-color: #f4f4f4;">
+                        <h3 class="text-primary">Generales</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class='col-sm-3 col-md-3'>
+                            <%- FORM.checkbox('historial_acceso', scope, {}, 'Historial de Acceso') %>
+                        </div>
+                        <div class='col-sm-3 col-md-3'>
+                            <%- FORM.checkbox('mesa_ayuda', scope, {}, 'Mesa de Ayuda') %>
+                        </div>
+                        <div class='col-sm-3 col-md-3'>
+                            <%- FORM.checkbox('repositorio_archivos', scope, {}, 'Repositorio de Archivos') %>
+                        </div>
+                        <div class='col-sm-12 col-md-12'><br><br></div>
+                        <div class='col-sm-3 col-md-3'>
+                            <%- FORM.color('color_principal', scope, {trueplaceholder: "Color Principal"}) %>
+                        </div>
+                        <div class='col-sm-3 col-md-3'>
+                            <%- FORM.color('color_secundario', scope, {trueplaceholder: "Color Secundario"}) %>
+                        </div>
+                        <div class='col-sm-12 col-md-12'><br><br></div>
+                        <div class='col-sm-3 col-md-3'>
+                            <%- FORM.checkbox('notificaciones', scope, {}, 'Notificaciones') %>
+                        </div>
+                        <div style="margin: unset" ng-show="<%= scope %>.notificaciones">
+                            <div class='col-sm-3 col-md-3'>
+                                <%- FORM.integer('dias_de_gracia', scope, {
+                                    placeholder: "Días de gracia para Notificaciones de vencimiento"
+                                }) %>
+                            </div>
+                            <div class='col-sm-3 col-md-3'>
+                                <%- FORM.hour('hora_notificacion', scope, {truetext: "Hora de las Notificaciones de vencimiento"}) %>
+                            </div>
+                            <div class='col-sm-12 col-md-12'></div>
+                            <div class='col-sm-3 col-md-1'>
+                                <%- FORM.checkbox('notificaciones_correo', scope, {}, 'Por Correo') %>
+                            </div>
+                            <div class='col-sm-3 col-md-1' ng-show="compania_config.notificaciones_correo">
+                                <%- FORM.input('smtp_host', scope, {trueplaceholder: "Host SMTP"}) %>
+                            </div>
+                            <div class='col-sm-3 col-md-1' ng-show="compania_config.notificaciones_correo">
+                                <%- FORM.input('smtp_port', scope, {trueplaceholder: "Puerto SMTP"}) %>
+                            </div>
+                            <div class='col-sm-3 col-md-1' ng-show="compania_config.notificaciones_correo">
+                                <%- FORM.checkbox('smtp_ssl', scope, {}, 'SSL?') %>
+                            </div>
+                            <div class='col-sm-3 col-md-2' ng-show="compania_config.notificaciones_correo">
+                                <%- FORM.input('smtp_email', scope, {trueplaceholder: "Correo que envía"}) %>
+                            </div>
+                            <div class='col-sm-3 col-md-2' ng-show="compania_config.notificaciones_correo">
+                                <%- FORM.normalpassword('smtp_password', scope, {placeholder: "Contraseña del correo que envía"}) %>
+                            </div>
+                            <div class='col-sm-3 col-md-2' ng-show="compania_config.notificaciones_correo">
+                                <%- FORM.input('smtp_sender', scope, {trueplaceholder: "Correo que se muestra al recibir"}) %>
+                            </div>
+                            <div class='col-sm-3 col-md-2' ng-show="compania_config.notificaciones_correo">
+                                <%- FORM.input('smtp_sender_name', scope, {trueplaceholder: "Nombre que se muestra al recibir"}) %>
+                            </div>
+                            <div class='col-sm-12 col-md-12'></div>
+                            <div class='col-sm-3 col-md-1'>
+                                <%- FORM.checkbox('notificaciones_push', scope, {}, '(Push)') %>
+                            </div>
+                            <div class='col-sm-3 col-md-4' ng-show="compania_config.notificaciones_push">
+                                <%- FORM.input('onesignal_key', scope, {trueplaceholder: "Onesignal Key"}) %>
+                            </div>
+                            <div class='col-sm-3 col-md-4' ng-show="compania_config.notificaciones_push">
+                                <%- FORM.input('onesignal_appauth', scope, {trueplaceholder: "Onesignal Auth"}) %>
+                            </div>
+                            <div class='col-sm-3 col-md-3' ng-show="compania_config.notificaciones_push">
+                                <%- FORM.input('onesignal_appid', scope, {trueplaceholder: "Onesignal Appid"}) %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin: unset">
+
+
+
+                <div class="row" style="margin: unset">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"
+                             style="padding-bottom: 0px;padding-top: 5px; background-color: #f4f4f4;">
+                            <h3 class="text-primary">Opciones Individuales</h3>
+                        </div>
+                        <div class="panel-body">
+
+                            <div class='col-sm-3 col-md-3'>
+                                <%- FORM.checkbox('formularios', scope, {}, 'Formularios') %>
+                            </div>
+
+                            <div class='col-sm-3 col-md-3'>
+                                <%- FORM.checkbox('interfaces', scope, {}, 'Módulo de Interfaces Externas') %>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        setTimeout(() => {
+            compania_config.refreshAngular();
+        }, 500);
+    </script>
+    <%- FORM.footer(scope) %>
+
+
+
+
+

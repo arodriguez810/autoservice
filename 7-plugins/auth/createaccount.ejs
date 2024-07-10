@@ -1,0 +1,170 @@
+<form>
+    <div class="panel panel-body login-form">
+        <div class="text-center" dragonlanguage="">
+            <h1 class="content-group">
+                Detalles e Informaciones de su Institución o Empresa.
+                <h4 class="display-block">
+                    Estaremos enviando un correo con las instrucciones para activar tu cuenta seguido de su registro.
+                </h4>
+            </h1>
+        </div>
+
+        <div class="form-group has-feedback">
+
+            <div class="panel panel-primary ">
+                <div class="panel-heading  text-center">
+                    <h3 class="panel-title">Información de la Institución o Compañía</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+
+                        <div class="col-sm-3 col-md-3">
+                            <%- FORM.input("nombre", scope, {
+                                trueplaceholder: "Nombre de la Institución"
+                            }) %>
+                        </div>
+                        <div class="col-sm-3 col-md-3">
+                            <%- FORM.input("sigla", scope, {
+                                trueplaceholder: "Siglas"
+                            }) %>
+                        </div>
+                        <div class="col-sm-3 col-md-3">
+                            <%- FORM.input("correo", scope, {
+                                trueplaceholder: "Correo"
+                            }) %>
+                        </div>
+                        <div class="col-sm-3 col-md-3">
+                            <%- FORM.phone("telefono", scope, {
+                                placeholder: "Teléfono de la Institución o Responsable",
+                            }) %>
+                        </div>
+                        <div class="col-sm-12 col-md-12">
+                            <%- FORM.textarea("direccion", scope, {
+                                placeholder: "Dirección"
+                            }) %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-primary " style="margin-top: 20px">
+                <div class="panel-heading  text-center">
+                    <h3 class="panel-title">Seleccione el plan que más se ajuste a sus necesidades institucionales o
+                        empresariales.</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row" style="margin-top: 30px">
+                        <div class="col-sm-12 col-md-12 divider text-center">
+                            <table class="table table-hover table-striped table-bordered table-lg text-center">
+                                <thead>
+                                <tr>
+                                    <th class="text-left">
+                                        <h6 class="font-weight-semibold my-1">Características de los Planes</h6>
+                                    </th>
+                                    <th ng-repeat="(p,plan) in auth.plans.data"
+                                        ng-class="[auth.selected===plan.id?'planselected':'']">
+                                        <h6 class="font-weight-semibold my-1">{{plan.nombre}}</h6>
+                                        <h4 class="font-weight-semibold mb-0">
+                                            {{auth.lan.money(plan.precio).format(true)}}
+                                            <span class="font-size-base text-muted font-weight-normal">/ mes</span>
+                                        </h4>
+                                    </th>
+                                    <th ng-class="[auth.selected===-1?'planselected':'']">
+                                        <h6 class="font-weight-semibold my-1">Personalizado</h6>
+                                        <h4 class="font-weight-semibold mb-0">
+                                            {{auth.lan.money(auth.priceVar()).format(true)}}
+                                            <span class="font-size-base text-muted font-weight-normal">/ mes</span>
+                                        </h4>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="(i, module) in auth.reules.data">
+                                    <td class="text-left">{{module.nombre}}</td>
+                                    <td ng-repeat="(p,plan) in auth.plans.data" ng-if="!module.recibevalue"
+                                        ng-class="[auth.selected===plan.id?'planselected':'']">
+                                        <i ng-show="!plan[module.variable]" class="icon-cancel-square2 text-danger"></i>
+                                        <i ng-show="plan[module.variable]"
+                                           class="icon-checkbox-checked2 text-success"></i>
+                                    </td>
+                                    <td style="padding: 0;" ng-if="!module.recibevalue"
+                                        ng-class="[auth.selected===-1?'planselected':'']" class="text-center">
+                                        <input class="form-control" type="checkbox"
+                                               ng-disabled="auth.disableVar(module.variable)"
+                                               style="width: 18px;height: 18px;padding: 0;display: inherit;margin: 6px;"
+                                               ng-model="auth.personalizado[module.variable]">
+                                    </td>
+
+                                    <td ng-repeat="(p,plan) in auth.plans.data" ng-if="module.recibevalue"
+                                        ng-class="[auth.selected===plan.id?'planselected':'']">
+                                        {{plan[module.variable]}}
+                                    </td>
+                                    <td style="padding: 0;" ng-if="module.recibevalue"
+                                        ng-class="[auth.selected===-1?'planselected':'']" class="text-center">
+                                        <input class="form-control" type="number" min="0"
+                                               ng-disabled="auth.disableVar(module.variable)"
+                                               style="padding: 0;display: inline;margin: 6px;width: 60px"
+                                               ng-model="auth.personalizado[module.variable]">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">Asesoría</td>
+                                    <td ng-repeat="(p,plan) in auth.plans.data" style="padding: 5;"
+                                        class="text-center">
+                                        {{plan.nota}}
+                                        <i id="popover{{plan.id}}" class="icon-help" data-container="body"
+                                           data-toggle="popover" data-placement="top" data-content="{{plan.notadesc}}">
+                                        </i>
+                                    </td>
+                                    <td class="text-center">
+                                        Personalizado
+                                        <i id="popover{{plan.id}}" class="icon-help" data-container="body"
+                                           data-toggle="popover" data-placement="top"
+                                           data-content="Descripción para el personalizado">
+                                        </i>
+                                    </td>
+                                </tr>
+
+                                <tr class="table-border-solid ">
+                                    <td></td>
+                                    <td ng-repeat="(p,plan) in auth.plans.data"
+                                        ng-class="[auth.selected===plan.id?'planselected':'']">
+                                        <a ng-click="auth.selected=plan.id" class="btn btn-primary" href="#">
+                                            <i class="icon-cart mr-2"></i>{{auth.selected!==plan.id?'Seleccionar':'Seleccionado'}}
+                                        </a>
+                                    </td>
+                                    <td
+                                            ng-class="[auth.selected===-1?'planselected':'']">
+                                        <a ng-click="auth.selected=-1" class="btn btn-primary" href="#">
+                                            <i class="icon-cart mr-2"></i>{{auth.selected!==-1?'Seleccionar':'Seleccionado'}}
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button ng-click="auth.sendRegistration();" type="button" id="idregistration" role="button"
+                class="btn bg-<%= COLOR.primary %> btn-block legitRipple">
+            Registrarse
+        </button>
+    </div>
+</form>
+<script>
+    $(document).on("click", '[data-toggle="popover"]', function () {
+        $(`#${$(this).attr('id')}`).popover();
+        $('[data-toggle="popover"]').popover("hide");
+        setTimeout(() => {
+            $(`#${$(this).attr('id')}`).popover("show");
+        }, 200);
+    })
+</script>
+<style>
+    .planselected {
+        background-color: #c6eeff;
+    }
+</style>

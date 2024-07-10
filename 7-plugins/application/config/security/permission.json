@@ -1,0 +1,155 @@
+{
+  "permissions": {
+    "entities": [
+      "users"
+    ],
+    "terms": [
+      {
+        "name": "group",
+        "relation": "user_group"
+      }
+    ],
+    "types": {
+      "full": {
+        "menu": true,
+        "add": true,
+        "edit": true,
+        "view": true,
+        "remove": true,
+        "filter": true,
+        "import": false,
+        "audit": true,
+        "export": {
+          "Clipboard": true,
+          "PDF": true,
+          "CSV": true,
+          "XLS": true,
+          "DOC": true
+        },
+        "file": {
+          "download": true,
+          "remove": true,
+          "upload": true
+        },
+        "actions": true
+      },
+      "permission": {
+        "menu": true,
+        "permission": true,
+        "add": true,
+        "edit": true,
+        "view": true,
+        "remove": true,
+        "filter": true,
+        "import": false,
+        "copy": true,
+        "audit": true,
+        "export": {
+          "Clipboard": true,
+          "PDF": true,
+          "CSV": true,
+          "XLS": true,
+          "DOC": true
+        },
+        "file": {
+          "download": true,
+          "remove": true,
+          "upload": true
+        },
+        "actions": true
+      },
+      "permissionnomenu": {
+        "permission": true,
+        "add": true,
+        "edit": true,
+        "view": true,
+        "remove": true,
+        "filter": true,
+        "import": false,
+        "copy": true,
+        "audit": true,
+        "export": {
+          "Clipboard": true,
+          "PDF": true,
+          "CSV": true,
+          "XLS": true,
+          "DOC": true
+        },
+        "file": {
+          "download": true,
+          "remove": true,
+          "upload": true
+        },
+        "actions": true
+      },
+      "nomenu": {
+        "add": true,
+        "edit": true,
+        "view": true,
+        "remove": true,
+        "filter": true,
+        "import": false,
+        "copy": true,
+        "audit": true,
+        "export": {
+          "Clipboard": true,
+          "PDF": true,
+          "CSV": true,
+          "XLS": true,
+          "DOC": true
+        },
+        "file": {
+          "download": true,
+          "remove": true,
+          "upload": true
+        },
+        "actions": true
+      },
+      "report": {
+        "menu": true,
+        "view": true,
+        "filter": true,
+        "audit": true,
+        "export": {
+          "Clipboard": true,
+          "PDF": true,
+          "CSV": true,
+          "XLS": true,
+          "DOC": true
+        },
+        "file": {
+          "download": true,
+          "remove": true,
+          "upload": true
+        },
+        "actions": true
+      },
+      "empty": {
+        "export": {
+        },
+        "file": {
+        }
+      },
+      "emptymenu": {
+        "menu": true,
+        "export": {
+        },
+        "file": {
+          "download": true,
+          "remove": true,
+          "upload": true
+        }
+      }
+    },
+    "list": {
+      "group": {
+        "type": "full",
+        "allow": {}
+      }
+    },
+    "dragon_audit": {
+      "type": "report",
+      "allow": {}
+    }
+  }
+}

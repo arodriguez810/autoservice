@@ -1,0 +1,240 @@
+table tr th i {
+    font-size: 12px !important;
+}
+
+table tr th i.icon-checkbox-unchecked {
+    font-size: 11px !important;
+}
+
+table tr th i.icon-eye-blocked {
+    font-size: 16px !important;
+    margin-top: 2px;
+}
+
+table .icon-file-download2,
+table .icon-cog2 {
+    /*color: #333333c7;*/
+    opacity: 0.5;
+}
+
+table .icons-list > li > a:hover,
+table .icon-cog2:hover,
+table .icon-file-download2:hover {
+    opacity: 1 !important;
+}
+
+.page-header-default {
+    margin-bottom: 15px;
+    padding: 10px 20px 10px 20px;
+}
+
+.page-header-default .breadcrumb-line {
+    border-radius: 10px;
+}
+
+
+.style-none {
+    background: none;
+    border: none;
+}
+
+.style-none i {
+    font-size: 22px;
+    margin-bottom: -18px;
+    opacity: 0.7;
+}
+
+.style-none:hover i {
+    opacity: 1 !important;
+}
+
+.width-custom1 {
+    width: 4%;
+}
+
+.form-control-custom,
+    /*.select2-selection,*/
+select,
+textarea,
+input {
+    padding-bottom: 0 !important;
+    padding-top: 16px !important;
+    /*padding-top: 3px!important;*/
+    color: #888888 !important;
+}
+
+.select2-selection [title="Seleccione"] {
+    color: #ccc !important;
+}
+
+.has-feedback label ~ .form-control-feedback {
+    top: 39px;
+}
+
+.checkbox.checkbox-switchery {
+    margin: 10px !important;
+}
+
+.sp-replacer {
+    margin-top: 5px;
+}
+
+.select2-container {
+    margin-top: 3px !important;
+}
+
+.nav-primary.nav-tabs {
+    /*margin-bottom: 20px;*/
+}
+
+.page-container {
+    height: 100%;
+}
+
+body {
+    background: #ffffff;
+}
+
+#btnformfooter {
+    padding-right: 0;
+    float: left;
+    width: 100%;
+}
+
+.modal-body > .modal-footer:first-of-type {
+
+}
+
+.alpha-secundary-2 {
+    background-color: #f2f2f2;
+    border-color: #f2f2f2;
+}
+
+.draganddroghandler {
+    font-size: 15px;
+}
+
+/*.select2-selection,*/
+/*.form-control{*/
+/*height: 28px!important;*/
+/*}*/
+
+/*.select2-selection{*/
+/*margin-top: 0!important;*/
+/*}*/
+
+.panel-dashboard {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+.border-header-g {
+    width: 50%;
+    border: black 1px solid;
+}
+
+.padding-header-g {
+    margin: 0px;
+    padding: 1% 5% 1% 5%;
+    text-align: center;
+}
+
+.padding-subHeader-g {
+    margin: 0px;
+    padding: 2% 5% 2% 5%;
+    text-align: center;
+}
+
+.padding-subHeader-initial {
+    margin: 0px;
+    padding: 2% 5% 2% 5%;
+}
+
+.padding-subHeader-initial-s {
+    margin: 0px;
+    padding: 2% 2% 2% 2%;
+}
+
+.top-border {
+    border-top: black 1px solid;
+    border-left: black 1px solid;
+    border-right: black 1px solid;
+    border-bottom: lightgray 1px solid;
+}
+
+.mid-border {
+    border-top: lightgray 1px solid;
+    border-left: black 1px solid;
+    border-right: black 1px solid;
+    border-bottom: lightgray 1px solid;
+}
+
+.bot-border {
+    border-bottom: black 1px solid;
+    border-left: black 1px solid;
+    border-right: black 1px solid;
+    border-top: lightgray 1px solid;
+}
+
+.select2-selection--multiple:not([class*=bg-]) .select2-search--inline:first-child .select2-search__field {
+    margin-left: 20px;
+    padding: 0 !important;
+}
+
+.icon-help {
+    cursor: pointer;
+    margin-left: 12px;
+    color: #989f9369 !important;
+}
+
+.btn-group, .btn-group-vertical {
+    border-radius: 15px !important;
+}
+
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+    border-radius: 15px;
+}
+
+.modal-footer .btn-group .btn + .btn {
+    margin-left: 3px;
+    border-radius: 20px;
+}
+
+button.btn {
+    margin: 0 15px 0 0;
+    border-radius: 15px !important;
+}
+
+.btn-labeled > b {
+    background-color: transparent !important;
+}
+
+.resalted .control-label {
+    font-weight: bold;
+}
+
+.resalted i {
+    font-weight: bold;
+    color: black;
+}
+
+
+.btnformfooter {
+    padding-right: 0;
+    float: left;
+    width: 100%;
+}
+
+.btnformfooter {
+    padding-right: 0;
+    float: left;
+    width: 100%;
+}
+
+.alert {
+    color: white;
+}
+
+.bg-default:hover {
+    color: black !important;
+}

@@ -1,0 +1,344 @@
+<!-- Main sidebar -->
+<style>
+    .icon-size {
+        font-size: 12px !important;
+        margin-right: 0px !important;
+        padding: 0 !important;
+    }
+
+    .remove-content {
+        float: right !important;
+    }
+
+    .form-menu {
+        margin-left: 15px !important;
+        margin-right: 15px !important;
+    }
+
+    .form-menu input {
+        padding-top: 0px !important;
+    }
+
+    .form-menu .row {
+        margin-top: 5px !important;
+    }
+
+    .editar-menu .delete-hide {
+        display: none;
+    }
+
+    .editar-menu:hover .delete-hide {
+        display: block;
+    }
+
+    .btn-crud {
+        margin-right: 10px;
+        display: none;
+        color: white;
+    }
+</style>
+
+<div id="dragonmenu" class="sidebar sidebar-main  sidebar-expand-md  bg-<%= COLOR.extra %>-700"
+     ng-show="baseController.isLogged && !baseController.isClient">
+
+    <div class="sidebar-mobile-toggler text-center visible-xs bg-<%= COLOR.extra %>-700">
+        <a class="navbar-brand-mobile bg-<%= COLOR.extra %>-700 sidebar-mobile-main-toggle">
+            <img style="float: left !important;" src="files/configuration/logo/logo.webp" alt="">
+            <span class="navbar-brand-text" style="float: left;padding-left: 10px;"> <%= CONFIG.logo %></span>
+        </a>
+    </div>
+
+    <div class="sidebar-content">
+        <!-- Main navigation -->
+        <div class="card card-sidebar-mobile">
+            <div class="category-content no-padding">
+                <style>
+                    .dragon-menu a {
+                        color: <%= CONFIG.ui.theme.text3 %> !important;
+                    }
+                </style>
+
+                <ul id="dragonmenuSort" data-nivel="1"
+                    class="sort-menu navigation navigation-main navigation-accordion dragon-menu bg-<%= COLOR.extra %>-700 ">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle legitRipple" data-toggle="dropdown" aria-expanded="false">
+                            <i class="caret"></i>
+                            <span style="text-transform: uppercase;text-align: center">
+                            {{baseController.selectedSeparator.replaceAll("-","").trim()||'ADMINISTRACIÓN'}}
+                              </span>
+                        </a>
+                        <ul class="dropdown-menu " id="losseparator" style="color:#000 !important;">
+                            <li ng-repeat="(s,separator) in baseController.myMenuSeparators()">
+
+                                <a class="sidebar-control" ng-click="baseController.setSeparator(separator.text)"
+                                   title="{{separator.text.replaceAll('-','').trim()}}"
+
+                                   style="color: white !important;text-transform: uppercase;text-align: center"
+                                >
+                                    <h style="float: left;margin-top: -2px;">-</h>
+                                    {{separator.text.replaceAll("-","").trim()}}
+                                    <h style="float: right;margin-top: -2px;">-</h>
+                                </a>
+
+                            </li>
+                        </ul>
+                    </li>
+                    <li ng-show="{{menu.aire!==false}}"
+                        ng-if="!menu.disable" data-markmain="{{menu.mark}}"
+                        ng-repeat="(key, menu) in baseController.elelemenu" class="{{menu.class}} jsonData"
+                        data-text="{{menu.text}}" data-href="{{menu.href}}" data-icon="{{menu.icon}}"
+                        data-modal="{{menu.modal}}" data-menus="{{menu.menus}}" ng-class="">
+
+
+                        <a ng-if="menu.disable" href="javascript:void(0)" onclick="false" data-mark="{{menu.mark}}"
+                           title="{{baseController.menuLabel(menu)}}"
+
+                           style="cursor: auto;text-align: center !important;"
+                           class="bg-extra-500 {{menu.modal?'modalmenu':''}} edit-hide">
+                            <span style="text-transform: uppercase">
+                                {{baseController.menuLabel(menu)}}
+                            </span>
+                        </a>
+                        <a ng-if="!menu.disable" data-modal="{{menu.modal}}" href="{{menu.href}}"
+                           data-mark="{{menu.mark}}"
+                           title="{{baseController.menuLabel(menu)}}"
+                           class="bg-extra-700 {{menu.modal?'modalmenu':''}} edit-hide">
+                            <i class="icon-{{menu.icon}}"></i>
+                            <span style="width: 70% !important;">
+                                {{baseController.menuLabel(menu)}}
+                            </span>
+                        </a>
+
+
+                        <ul data-nivel="2" class="sort-menu" ng-if="menu.menus">
+                            <li ng-show="{{segundo.aire!==false}}"
+                                ng-repeat="(key2, segundo) in menu.menus"
+                                ng-init="innerIndex2=$parent.$index + '' + $index" class="{{segundo.class}}"
+                                data-text="{{segundo.text}}" data-href="{{segundo.href}}" data-icon="{{segundo.icon}}"
+                                data-modal="{{segundo.modal}}" data-menus="{{segundo.menus}}">
+                                <a data-modal="{{segundo.modal}}" href="{{segundo.href}}" data-mark="{{segundo.mark}}"
+                                   title="{{baseController.menuLabel(segundo)}}"
+                                   class="bg-extra-700 {{segundo.modal?'modalmenu':''}} edit-hide legitRipple">
+                                    <i class="icon-{{segundo.icon}}"></i>
+                                    <span style="width: 66% !important;">
+                                        {{baseController.menuLabel(segundo)}}
+                                     </span>
+                                </a>
+
+
+                                <ul data-nivel="3" class="sort-menu" ng-if="segundo.menus">
+                                    <li ng-show="{{tercero.aire!==false}}"
+                                        ng-repeat="(key3, tercero) in segundo.menus"
+                                        ng-init="innerIndex3= innerIndex2 + '' + $index"
+                                        class="{{tercero.class}}" data-text="{{tercero.text}}"
+                                        data-href="{{tercero.href}}" data-icon="{{tercero.icon}}"
+                                        data-modal="{{tercero.modal}}" data-menus="{{tercero.menus}}">
+                                        <a data-modal="{{tercero.modal}}" href="{{tercero.href}}"
+                                           title="{{baseController.menuLabel(tercero)}}"
+                                           data-mark="{{tercero.mark}}"
+                                           class="bg-extra-700 {{tercero.modal?'modalmenu':''}} edit-hide legitRipple">
+                                            <i class="icon-{{tercero.icon}}"></i>
+                                            <span style="width: 66% !important;">
+                                        {{baseController.menuLabel(tercero)}}
+                                     </span>
+                                        </a>
+
+
+                                        <ul class="sort-menu" ng-if="tercero.menus">
+                                            <li ng-repeat="(key4, cuarto) in tercero.menus"
+                                                ng-init="innerIndex4= innerIndex3 + '' + $index"
+                                                class="{{cuarto.class}}" data-text="{{cuarto.text}}"
+                                                data-href="{{cuarto.href}}" data-icon="{{cuarto.icon}}"
+                                                data-modal="{{cuarto.modal}}" data-menus="{{cuarto.menus}}">
+                                                <a data-modal="{{cuarto.modal}}" href="{{cuarto.href}}"
+                                                   data-mark="{{cuarto.mark}}"
+                                                   title="{{baseController.menuLabel(cuarto)}}"
+                                                   class="bg-extra-700 {{cuarto.modal?'modalmenu':''}} edit-hide">
+                                                    <i class="icon-{{cuarto.icon}}"></i>
+                                                    <span style="width: 50% !important;">
+                                                        {{baseController.menuLabel(cuarto)}}
+                                                    </span>
+                                                </a>
+
+
+                                                <div class="form-cuarto-edit{{innerIndex4}} form-menu show-form"
+                                                     style="display: none">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="remove-input-space form-group-material form-group has-feedback has-feedback-left">
+                                                                <label class="control-label is-visible animate ng-binding">Nombre</label>
+                                                                <input class="form-control" type="text"
+                                                                       value="{{baseController.menus[key].menus[key2].menus[key3].menus[key4].text}}"
+                                                                       name="text{{'form-cuarto-edit' + innerIndex4}}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="remove-input-space form-group-material form-group has-feedback has-feedback-left">
+                                                                <label class="control-label is-visible animate ng-binding">URL</label>
+                                                                <input class="form-control" type="text"
+                                                                       value="{{baseController.menus[key].menus[key2].menus[key3].menus[key4].href}}"
+                                                                       name="href{{'form-cuarto-edit' + innerIndex4}}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="remove-input-space form-group-material form-group has-feedback has-feedback-left">
+                                                                <label class="control-label is-visible">Iconos</label>
+                                                                <select id="icon{{'form-cuarto-edit' + innerIndex4}}"
+                                                                        name="icon{{'form-cuarto-edit' + innerIndex4}}">
+                                                                    <option value="">Seleccione un icono</option>
+                                                                    <option ng-repeat="icon in baseController.iconList"
+                                                                            ng-selected="{{icon == baseController.menus[key].menus[key2].menus[key3].menus[key4].icon}}"
+                                                                            data-icon="{{icon}}" value="{{icon}}">
+                                                                        {{icon}}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12" style="text-align: right;">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                   name="modal_full{{'form-cuarto-edit' + innerIndex4}}"
+                                                                   ng-checked="baseController.menus[key].menus[key2].menus[key3].menus[key4].modal">
+                                                            <label class="form-check-label" for="defaultCheck1">
+                                                                Abrir menú en un modal
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="text-align: center">
+                                                        <button type="button"
+                                                                ng-click="baseController.edit_menu('cuarto', 'form-cuarto-edit', innerIndex4, key, key2, key3, key4)"
+                                                                class="swal2-confirm btn btn-xs btn-success"
+                                                                aria-label="">Guardar
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <ul class="sort-menu" ng-if="cuarto.menus">
+                                                    <li ng-repeat="(key5, quinto) in cuarto.menus track by key5"
+                                                        ng-init="innerIndex5= innerIndex4 + '' + $index"
+                                                        class="{{quinto.class}}" data-text="{{quinto.text}}"
+                                                        data-href="{{quinto.href}}" data-icon="{{quinto.icon}}"
+                                                        data-modal="{{quinto.modal}}">
+                                                        <a data-modal="{{quinto.modal}}" href="{{quinto.href}}"
+                                                           class="bg-extra-700 {{quinto.modal?'modalmenu':''}} edit-hide">
+                                                            <i class="icon-{{quinto.icon}}"></i>
+                                                            <span>
+                                                                 {{baseController.menuLabel(quinto)}}
+                                                            </span>
+                                                        </a>
+
+
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+
+            </div>
+            <div class="text-muted developerby" dragonlanguage="">
+                <label style="text-align: center;width: 100%;">© <%= new Date().getFullYear() %>. <a target="_blank"
+                                                                                                     class="text-muted"
+                                                                                                     onclick="MODAL.rawModal(MESSAGE.ic('mono.about'), 'information/about', 'info3', 'modal-full', 'information')"><%= CONFIG.appName %></a>
+                    <language>MESSAGE.i('mono.developedby')</language>
+                </label>
+                <a class="text-muted" href="<%= CONFIG.developerBy.profile %>"
+                   target="_blank"><%= CONFIG.developerBy.name %></a>
+            </div>
+        </div>
+        <!-- /main navigation -->
+    </div>
+</div>
+<script>
+
+
+    $(document).ready(function () {
+        $(document).on('click', '.dragon-menu a:not(.has-ul)', function () {
+            $("body").removeClass("sidebar-mobile-main");
+        });
+        // $(document).on('click', 'body', function (e) {
+        //     if ($(e.target).prop("tagName") !== "I") {
+        //         $('.popover').popover('hide');
+        //     }
+        // });
+        MESSAGE.run();
+
+        MENU.setActive();
+        setTimeout(() => {
+            baseController.setSeparator(MENU.current.menu.mark);
+        }, 1000);
+        $(".remove-content").removeClass("has-ul");
+        createfalse();
+    });
+
+
+    setTimeout(function () {
+        if (new SESSION().current()) {
+            if (document.location.href.indexOf('#') === -1 && new SESSION().current().homePage) {
+                new HTTP().redirecttag(new SESSION().current().homePage.replace('#', ''));
+            } else if (document.location.href.indexOf('#') === -1) {
+                new HTTP().redirecttag(CONFIG.home.replace('#', ''));
+            }
+        } else {
+            new SESSION().ifLogoffRedirec();
+        }
+
+    }, 1000);
+
+
+</script>
+<!-- /main sidebar -->
+<style>
+    .collapser {
+        opacity: 0.4;
+        display: block;
+        color: #ccc !important;
+        z-index: 9999;
+        left: 248px;
+        top: 50%;
+        position: fixed;
+        width: 29px;
+        padding: 1px;
+        font-size: 11px !important;
+    }
+
+    .collapser .icon-arrow-left8 {
+        display: block;
+    }
+
+    .collapser .icon-arrow-right8 {
+        display: none;
+    }
+
+    .sidebar-xs .collapser {
+        opacity: 0.6;
+        display: block;
+        color: #ccc !important;
+        z-index: 9999;
+        left: 40px;
+        top: 50%;
+        position: fixed;
+        width: 33px;
+        padding: 1px;
+        font-size: 12px !important;
+    }
+
+    .sidebar-xs .collapser .icon-arrow-left8 {
+        display: none;
+    }
+
+    .sidebar-xs .collapser .icon-arrow-right8 {
+        display: block;
+    }
+
+</style>

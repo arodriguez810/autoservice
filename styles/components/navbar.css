@@ -1,0 +1,30 @@
+
+.navbar-brand > img {
+    margin: -5px 0px 0px 0px;
+    height: 37px;
+    float: left !important;
+}
+
+.navbar-brand > img {
+    display: inline;
+}
+
+a.navbar-brand {
+    /*width: 100%;*/
+    text-align: center;
+}
+
+.sidebar-xs .navbar-brand-text {
+    display: none;
+}
+
+.sidebar-xs .navbar-header  {
+    min-width: 0;
+}
+
+.sidebar-xs .navbar-brand  {
+    padding: 15px 12px;
+}
+
+
+

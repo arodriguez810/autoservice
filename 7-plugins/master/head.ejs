@@ -1,0 +1,162 @@
+<head>
+    <% include server %>
+    <% var root = '../../'; %>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">-->
+    <title><%= CONFIG.appName %>  </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,
+        maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="description" content="CBS">
+    <meta name="keywords"
+          content="CBS">
+    <meta name="author" content="Excellent Integrity Solutions(EIS)">
+
+    <% include css %>
+
+    <% include js %>
+
+    <% include functions %>
+    <script>
+        var Logged_user = "<%= JSON.stringify(DATA) %>";
+        Logged_user = eval("(" + Logged_user.replaceAll("&#34;", '"') + ")");
+        if (Logged_user.password && !STORAGE.get("APPSESSION")) {
+            setTimeout(function () {
+                SWEETALERT.loading("Validating credentials");
+                SERVICE.base_auth.login({
+                    username: Logged_user.correo,
+                    password: "abcd1234",
+                    playerID: ""
+                }, async function (data) {
+                    console.log("Hola");
+                    var response = data.data;
+                    if (response.count[0] > 0) {
+                        var user = response.data[0];
+                        if (user.active == 1) {
+                            let session = {
+                                current: () => {
+                                    return new SESSION().current(user);
+                                }
+                            };
+                            //inicio
+                            if (session.current().menus)
+                                user.currentMenu = session.current().menus();
+                            else
+                                user.currentMenu = "menus";
+
+                            var condition = false;
+
+                            user.userID = session.current().getID();
+                            if (session.current().path)
+                                user.path = session.current().path();
+                            else
+                                user.path = CONFIG.users.path;
+                            user.fullName = session.current().fullName();
+                            user.type = session.current().type;
+                            GROUPS = session.current().onlygroups;
+                            var entitiesPermission = [];
+                            for (var pers of CONFIG.permissions.entities) {
+                                entitiesPermission.push(`${pers}-${user.userID}`)
+                            }
+                            let result = await BASEAPI.listp('permission', {
+                                where: [
+                                    {
+                                        "field": "id",
+                                        "value": entitiesPermission,
+                                        "connector": "OR"
+                                    },
+                                    {
+                                        "field": "id+')'",
+                                        "value": GROUPS.map(d => {
+                                            return `${d})`
+                                        })
+                                    }
+                                ]
+                            });
+                            user.permissionData = result.data;
+                            user.GROUPS = GROUPS;
+                            user.azure = Logged_user;
+                            new SESSION().register(user);
+                            await BASEAPI.insertp('login_history', {
+                                usuario: user.id,
+                                date: '$now()',
+                                ip: "",
+                            });
+                            var http = new HTTP();
+                            http.folderredirect('');
+                        } else {
+                            SWEETALERT.show({
+                                type: 'error',
+                                message: MESSAGE.i('login.invalid'), //MESSAGE.i('login.disabled'),
+                                close: function () {
+
+                                }
+                            });
+                        }
+                    } else {
+                        SWEETALERT.show({
+                            type: 'error',
+                            message: MESSAGE.i('login.invalid'),
+                            close: function () {
+
+                            }
+                        });
+                    }
+                });
+            }, 500);
+        } else {
+            if (location.href.indexOf('/home') === -1 && location.href.indexOf(`/outlook`) === -1) {
+                if (!STORAGE.get("APPSESSION")) {
+                    var http = new HTTP();
+                    let YOERADELTIPO = STORAGE.get("YOERADELTIPO");
+                    if (YOERADELTIPO == 2)
+                        http.redirect(CONFIG.folder + '/home#auth/login?privada');
+                    http.redirect(CONFIG.folder + '/home#auth/login');
+                }
+            }
+        }
+    </script>
+
+    <% include js2 %>
+
+</head>
+<body ng-app="app">
+
+<% include splash %>
+
+<div id="baseController" ng-controller="baseController as baseController" style="display: none;padding: 10px">
+
+    <div id="modalpool">
+
+    </div>
+    <button style="opacity: 0.6" dragonlanguage="" class=" upButtom btn bg-<%= COLOR.primary %>"
+            title="MESSAGE.i('mono.GoToUp')">
+        <i style="font-size: 30px;" class="  icon-arrow-up8"></i></button>
+    <% include navbar %>
+    <!-- Page container -->
+    <div class="page-container">
+        <!-- Page content -->
+        <div class="page-content">
+            <% include menu %>
+            <!-- Main content -->
+            <div class="content-wrapper">
+                <!-- Content area -->
+                <div class="content" id="content" style="overflow: hidden">
+                    <!-- Error title -->
+
+                    <div class="text-center content-group"
+                         ng-show="<%= DATA?.correo ? false : true %>"
+                         style="background-color: #fff;min-height: 500px;margin-bottom: 0px !important;margin-top: -20px !important;">
+                        <div class="error-title dragon-welcome text-center">
+                            <img style="width: 237px;" src="files/configuration/logo/logo.webp" alt="">
+                        </div>
+
+
+                        <h5 style="text-align: justify;margin: 0;padding: 25px;"
+                            ng-bind-html="baseController.about"></h5>
+                    </div>
+                    <!-- /error title -->

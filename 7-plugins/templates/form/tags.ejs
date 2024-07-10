@@ -1,0 +1,151 @@
+<%
+if (DATA.name !== undefined) {
+    var name, model, opts;
+    name = DATA.name;
+    model = DATA.model;
+    opts = DATA.opts;
+}
+var name = name || "";
+var options = {
+    placeholder: params.capitalize(name),
+    helptext: '',
+    posttype: "text",
+    autocomplete: [
+        {value: 'angel'},
+    ],
+    maxtags: 100,
+    disabled: false,
+    allowDuplicates: false,
+    placeholderHolder:"Digite"
+
+};
+options = OBJECT.merge(options, opts); var nameclean = name.replace(/\./g, '_');
+
+popopme = function(entity, field){
+    var prueba = HINTS.filter(d => {
+        return ( d.trueEntity || d.entities ) === entity && d.field_names === field
+    })
+    function sortArray() {
+        options.mess = prueba.sort(function(a, b){return b.id - a.id});
+    }
+    sortArray();
+    //console.log("Hola", options.mess);
+}
+popopme(model, nameclean);
+var toclient = JSON.stringify(options);
+%>
+<script>
+    <%= model %>.triggers.table.before.control("<%= nameclean %>");
+    <%= model %>.form.registerField("<%= name %>", "<%= toclient %>");
+    if (MESSAGE.exist('columns.<%= nameclean %>')) {
+        <%= model %>.
+        form.options.<%= name %>.placeholder = MESSAGE.ic('columns.<%= nameclean %>');
+    }
+    if(new SESSION().isLogged()) {
+        <%= model %>.form.options.<%= name %>.mess = <%= model %>.form.options.<%= name %>.mess.filter(d => {
+            return d.company == new SESSION().current().compania_id;
+        })
+        if(<%= model %>.form.options.<%= name %>.mess.length == 0){
+            delete <%= model %>.form.options.<%= name %>.mess
+        }
+        if (<%= model %>.form.options.<%= name %>.mess){
+            <%= model %>.form.options.<%= name %>.popover = {
+                title: <%= model %>.form.options.<%= name %>.placeholder,
+                content: <%= model %>.form.options.<%= name %>.mess[0].text,
+                label: MESSAGE.exist('columns.<%= nameclean %>') ? MESSAGE.i('columns.<%= nameclean %>') : <%= model %>.form.options.<%= name %>.trueplaceholder || <%= model %>.form.options.<%= name %>.placeholder
+            }
+        }
+    }
+</script>
+<div class="form-group-material form-group has-feedback has-{{<%= model %>.validate['<%= name %>'].type || <%= model %>.defaultColor }}"
+     id="input<%= model %>_<%= nameclean %>">
+    <label
+            class="control-label is-visible animate" style="color:#000000 !important;">
+        {{::<%= model %>.form.options.<%= name %>.placeholder}}
+            <i ng-show="<%= model %>.form.options.<%= name %>.mess.length>0"
+                    id="popover<%= model %>_<%= nameclean %>" class="icon-help">
+            </i>
+    </label>
+    <input
+            ng-model="<%= model + "." + name %>"
+            name="<%= model %>_<%= nameclean %>"
+            type="text"
+
+            ng-disabled="<%= model %>.form.options.<%= name %>.disabled"
+            placeholder="<%= options.placeholderHolder %>"
+            class="form-control border-<%= COLOR.secundary %>">
+
+
+    <span ng-if="<%= model %>.form.options.<%= name %>.helptext!=''"
+          class="help-block text-muted">
+        {{<%= model %>.form.options.<%= name %>.helptext}}
+    </span>
+
+    <span ng-show="<%= model %>.validate['<%= name %>'].messages.length>0" class="help-block">
+        <p class="text-{{validation.type}}" ng-show="validation.visible!==false || <%= model %>.form.intent===true"
+           ng-repeat="(key,validation) in <%= model %>.validate['<%= name %>'].messages track by key">
+               <i class="{{validation.icon}}"></i> {{validation.message}}
+        </p>
+    </span>
+</div>
+<script>
+    $(document).ready(function () {
+        if(new SESSION().isLogged()) {
+            if (<%= model %>.form.options.<%= name %>.mess){
+                $('#popover<%= model %>_<%= nameclean %>').popover({
+                    container: 'body',
+                    title: eval("`" +<%= model %>.form.options.<%= name %>.popover.title + "`"),
+                    content: eval("`" +<%= model %>.form.options.<%= name %>.popover.content + "`"),
+                    trigger: 'manual'
+                });
+                // Obtén el elemento que deseas observar
+                const elemento = document.getElementById("popover<%= model %>_<%= nameclean %>");
+
+                // Agrega un event listener al objeto document
+                document.addEventListener("click", function(evento) {
+                    // Verifica si el evento ocurrió fuera del elemento que estamos observando
+                    if (elemento !== evento.target && !elemento.contains(evento.target)) {
+                        // Se hizo clic fuera del elemento
+                        $('#popover<%= model %>_<%= nameclean %>').popover('hide')
+
+                    }
+                });
+                $('#popover<%= model %>_<%= nameclean %>').on('click', function(evento) {
+                    evento.stopPropagation();
+                    $(this).popover('show');
+                });
+            }
+        }
+        var engine = new Bloodhound({local: <%= model %>.form.options.<%= name %>.autocomplete,
+            datumTokenizer: function (d) {
+            return Bloodhound.tokenizers.whitespace(d.value);
+        },
+        queryTokenizer: Bloodhound.tokenizers.whitespace
+        });
+        engine.initialize();
+        var isReadProgram = <%= model %>.
+        form.isReadOnly('<%= name %>');
+        if (isReadProgram !== false) {
+            <%= model %>.
+            form.options.<%= name %>.disabled = true;
+            if (isReadProgram !== undefined) {
+                <%= model %>.<%= name %> = isReadProgram;
+                $('[name="<%= model %>_<%= nameclean %>"]').val(isReadProgram);
+            }
+        }
+        $('[name="<%= model %>_<%= nameclean %>"]').tagsinput({
+            maxTags: <%= model %>.form.options.<%= name %>.maxtags,
+            allowDuplicates:<%= model %>.form.options.<%= name %>.allowDuplicates,
+            tagClass: function (item) {
+            return 'label bg-' + COLOR.secundary;
+        },
+        typeahead: [null, {
+            displayKey: 'value',
+            source: engine.ttAdapter()
+        }]
+        });
+
+        <%= model %>.triggers.table.after.control("<%= nameclean %>");
+        });
+
+</script>

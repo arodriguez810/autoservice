@@ -1,0 +1,10 @@
+{
+  "menus": [
+    {
+      "modal": "",
+      "icon": "home",
+      "href": "#hometwo",
+      "text": "Inicio"
+    }
+  ]
+}

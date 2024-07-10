@@ -1,0 +1,8 @@
+{
+  "oracleactive": true,
+  "oracle": {
+    "user": "user",
+    "password": "password",
+    "connectString": "database"
+  }
+}

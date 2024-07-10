@@ -1,0 +1,76 @@
+<div id="<%= scope %>" ng-controller="<%= scope %> as <%= scope %>">
+    <div class="subcontent">
+
+        <div class="panel-group level1 accordion col-md-12" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default" ng-repeat="(keyAbuelo, valueAbuelo) in <%= scope %>.LANGUAGE">
+                <div class="panel-heading heading{{keyAbuelo}}" role="tab">
+                    <h4 class="panel-title">
+                        <a class="btn bg-<%= COLOR.secundary %>" role="button" class="collapsed" data-toggle="collapse"
+                           data-parent=".accordion"
+                           href=".collapse{{keyAbuelo}}" aria-expanded="true" aria-controls="collapse{{keyAbuelo}}">
+                            {{keyAbuelo}}
+                        </a>
+                        <button class="btn bg-<%= COLOR.secundary %>" style="float: right"
+                                ng-click="<%= scope %>.openmodalSection(keyAbuelo)" dragonlanguage=""
+                        >
+                            <language>MESSAGE.i('mono.addsection')</language>
+                        </button>
+                    </h4>
+                </div>
+                <div class="panel-collapse collapse collapse{{keyAbuelo}}" role="tabpanel"
+                     aria-labelledby="heading{{keyAbuelo}}">
+                    <div class="panel-body">
+                        <div class="panel-group level2 accordion{{keyAbuelo}}" role="tablist"
+                             aria-multiselectable="true">
+                            <div class="panel panel-default"
+                                 ng-repeat="(keyPapa, valuePapa) in $eval('<%= scope %>.LANGUAGE.'+ keyAbuelo)">
+                                <div class="panel-heading heading{{keyAbuelo}}{{keyPapa}}" role="tab">
+                                    <h4 class="panel-title">
+                                        <a role="button" class="collapsed btn btn-secondary" data-toggle="collapse"
+                                           data-parent=".accordion{{keyAbuelo}}"
+                                           href=".collapse{{keyAbuelo}}{{keyPapa}}" aria-expanded="true"
+                                           aria-controls="collapse{{keyAbuelo}}{{keyPapa}}">
+                                            {{keyPapa}}
+                                        </a>
+                                        <button class="btn bg-<%= COLOR.secundary %>" style="float: right"
+                                                ng-click="<%= scope %>.openmodalField(keyAbuelo, keyPapa)"
+                                                dragonlanguage="">
+                                            <language>MESSAGE.i('mono.additem')</language>
+                                        </button>
+                                    </h4>
+                                </div>
+                                <div class="panel-collapse collapse collapse{{keyAbuelo}}{{keyPapa}}"
+                                     role="tabpanel"
+                                     aria-labelledby="heading{{keyAbuelo}}{{keyPapa}}">
+                                    <div class="panel-body" role="tab">
+                                        <div class="col-md-6"
+                                             ng-repeat="(key,value) in $eval('<%= scope %>.LANGUAGE.' + keyAbuelo + '.' + keyPapa)">
+                                            <br>
+                                            <label for="lang-text" style="font-weight: bold">{{key}}:</label>
+                                            <input ng-model-onblur name="lang-text"
+                                                      ng-model="<%= scope %>.LANGUAGE[keyAbuelo][keyPapa][key]"
+                                                      class="form-control">
+                                        </div>
+                                        <br>
+                                        <button ng-click="<%= scope %>.savelanguage()" class="btn bg-<%= COLOR.primary %>"
+                                                style="margin-top: 20px; " dragonlanguage="">
+                                            <language>MESSAGE.i('mono.save')</language>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <button ng-click="<%= scope %>.openmodalLanguage()" class="btn btnxs bg-<%= COLOR.primary %> col-md-4"
+                style="float: right; margin-bottom: 20px" dragonlanguage="">
+            <language>MESSAGE.i('mono.addnewlanguage')</language>
+        </button>
+    </div>
+    <script>
+        <%= scope %>.refreshAngular();
+    </script>
+</div><!--end-->

@@ -1,0 +1,388 @@
+<!-- Main navbar -->
+<div class="navbar navbar-inverse  bg-<%= COLOR.primary %>-700" ng-show="baseController.isLogged"
+     style="border-top-right-radius: 20px;    border-top-left-radius: 20px;">
+    <div class="navbar-header  bg-<%= COLOR.primary %>-700"
+         style="text-align: center;    border-top-left-radius: 20px;">
+        <a class="visible-lg visible-md visible-sm navbar-brand bg-<%= COLOR.primary %>-700 sidebar-mobile-main-toggle"
+           style="width: 100%;padding: 21px; border-top-left-radius: 20px;">
+
+            <span class="navbar-brand-text" ng-if="(baseController.selectedSeparator||'').indexOf('España')===-1"
+                  style="font-size: 50px !important;font-family: Microsoft Himalaya"><%= CONFIG.appName %></span>
+
+        </a>
+        <a class="visible-xs navbar-brand bg-<%= COLOR.primary %>-700 sidebar-mobile-main-toggle" style="width: 100%">
+            <span id="apptitle" class="navbar-brand-text" style="font-family: Microsoft Himalaya">
+                <%= CONFIG.appName %>
+            </span>
+        </a>
+        <ul class="nav navbar-nav visible-xs-block">
+            <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+            <li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
+        </ul>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar-mobile" ng-show="!baseController.isClient">
+        <ul ng-show="!baseController.isClient" class="nav navbar-nav">
+            <li>
+                <a id="HideMenu" class=" btn bg-primary legitRipple sidebar-control sidebar-main-toggle hidden-xs"
+                   data-popup="tooltip"
+                   data-placement="bottom" data-container="body"
+                   title="Colapsar o Extender el menú">
+                    <i class=" icon-equalizer2"></i>
+                </a>
+            </li>
+
+
+            <li>
+                <a id="HideMenu" class="sidebar-control sidebar-main-hide hidden-xs legitRipple" data-popup="tooltip"
+                   data-placement="bottom" data-container="body" dragonlanguage
+                   title="MESSAGE.i('navbar.HideMenu_toolkit')">
+                    <i class="icon-lan3"></i>
+                </a>
+            </li>
+            <li>
+                <a id="RestoreallConfiguration" class="sidebar-control" onclick="STORAGE.clearAll()"
+                   data-popup="tooltip"
+                   data-placement="bottom" data-container="body" dragonlanguage
+                   title="MESSAGE.i('navbar.RestoreallConfiguration_toolkit')">
+                    <i class="icon-loop"></i>
+                    <span class="hidden-lg"><language>MESSAGE.i('navbar.RestoreallConfiguration')</language></span>
+                </a>
+            </li>
+            <li id="helpOptions" ng-show="false">
+                <a onclick="showAccess()" class="dropdown-toggle legitRipple sidebar-control" aria-expanded="false">
+                    <i class="icon-accessibility2" title="Menú de accesibilidad"></i>
+                    <span class="hidden-lg"><language>Menú de accesibilidad</language></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-left" style="min-width: 290px !important;">
+                    <a title="Cerrar" onclick="showAccess()" style="color: #000 !important; margin-left: 256px;">
+                        <i style="font-size: 20px !important;" class="icon-cross"></i>
+                    </a>
+                    <li id="keyboard" title="Navegar por teclado">
+                        <a onclick="keydownOn()" style="color: #000 !important;">
+                            <i class="icon-keyboard"></i>
+                            Navegar por teclado
+                        </a>
+                    </li>
+                    <li id="grayscale" title="Escala de Grises">
+                        <a onclick="grayscaleOn()" style="color: #000 !important;">
+                            <i class="icon-eye-blocked"></i>
+                            Escala de Grises
+                        </a>
+                    </li>
+
+                    <li id="zoom1" title="Lupa Agrandar">
+                        <a id="zoom-in" style="color: #000 !important;">
+                            <i class="icon-zoomin3"></i>
+                            Lupa Agrandar
+                        </a>
+                    </li>
+
+                    <li id="zoom2" title="Lupa Minimizar">
+                        <a id="zoom-out" style="color: #000 !important;">
+                            <i class="icon-zoomout3"></i>
+                            Lupa Minimizar
+                        </a>
+                    </li>
+
+                    <li id="animation2" title="Bloquear Animaciones">
+                        <a onclick="animationOn()" style="color: #000 !important;">
+
+                            <i><img src="files/configuration/icon_image/lightbulb.png"
+                                    alt="Verificar la ruta de la imagen" width="23"
+                                    style="margin-left: -4px;margin-top: -4px;"></i>
+                            Bloquear Animaciones
+                        </a>
+                    </li>
+
+                    <li title="Restablecer opciones de accesibilidad">
+                        <a onclick="STORAGE.restore()" style="color: #000 !important;">
+                            <i class="icon-loop"></i>
+                            Restablecer opciones de accesibilidad
+                        </a>
+                    </li>
+
+                </ul>
+
+            </li>
+
+            <li ng-if="false">
+                <a class="sidebar-control"
+                   onclick="MODAL.rawModal('Repositorio de Archivos', 'information/filemanager', 'folder6', 'modal-full', 'information')"
+                   data-popup="tooltip"
+                   data-placement="bottom" data-container="body" dragonlanguage
+                   title="Repositorio de Archivos">
+                    <i class=" icon-folder6"></i>
+                </a>
+            </li>
+
+            <!--            <li ng-if="baseController.features.configuration===true">-->
+            <!--                <a id="configuration" class="sidebar-control"-->
+            <!--                   onclick="MODAL.rawModal('Administrar Menú', 'information/taxonomia', 'menu6', 'modal-full', 'information')"-->
+            <!--                   data-popup="tooltip"-->
+            <!--                   data-placement="bottom" data-container="body" dragonlanguage-->
+            <!--                   title="Administrar Menú">-->
+            <!--                    <i class=" icon-menu6"></i>-->
+            <!--                </a>-->
+            <!--            </li>-->
+
+
+            <li ng-show="!baseController.session.nombre"
+                ng-if="baseController.features.configuration===true && (baseController.isSuper || baseController.isAdmin)">
+                <a id="configuration" class="sidebar-control" onclick="CONFIGURATION.OPEN()" data-popup="tooltip"
+                   data-placement="bottom" data-container="body" dragonlanguage
+                   title="MESSAGE.ic('mono.config_toolkit')">
+                    <i class=" icon-cog2"></i>
+                </a>
+            </li>
+
+
+        </ul>
+
+        <div class="navbar-right" ng-show="baseController.isLogged">
+            <ul class="nav navbar-nav">
+
+                <li class="dropdown dropdown-poa" ng-show="false">
+                    <a class="dropdown-toggle legitRipple" data-toggle="dropdown" aria-expanded="false"
+                       title="Documentación en Línea" style="padding-top: 11px;">
+                        <i class="icon-info22"></i>
+                        <i class="caret"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right  bg-<%= COLOR.primary %>-700">
+                        <li ng-show="baseController.CONFIGCOMPANY.planificacion || baseController.CONFIGCOMPANY.asignaciones_especiales || baseController.CONFIGCOMPANY.estatus_productoXactividades || baseController.CONFIGCOMPANY.instrumentos || baseController.CONFIGCOMPANY.sectorial">
+                            <a target="_blank" data-popup="tooltip"
+                               data-placement="bottom"
+                               href="/CBS/docs/CBS-Documentación-Funcional-online-version-Planificacion.html"
+                               data-container="body"> Planificación </a>
+                        </li>
+                        <li ng-show="baseController.CONFIGCOMPANY.proceso || baseController.CONFIGCOMPANY.documento || baseController.CONFIGCOMPANY.auditoria || baseController.CONFIGCOMPANY.norma_iso">
+                            <a target="_blank" data-popup="tooltip"
+                               data-placement="bottom"
+                               href="/CBS/docs/CBS-Documentaci%C3%B3n-Funcional.html"
+                               data-container="body"> Calidad </a>
+                        </li>
+                        <li ng-show="baseController.CONFIGCOMPANY.proyectos_especiales || baseController.CONFIGCOMPANY.gestion_indicadores || baseController.CONFIGCOMPANY.riesgo_var || baseController.CONFIGCOMPANY.riesgo_amfe || baseController.CONFIGCOMPANY.plan_accion || baseController.CONFIGCOMPANY.salidas || baseController.CONFIGCOMPANY.servicio || baseController.CONFIGCOMPANY.reporte_configurable || baseController.CONFIGCOMPANY.formularios || baseController.CONFIGCOMPANY.documentos_externos">
+                            <a target="_blank" data-popup="tooltip"
+                               data-placement="bottom"
+                               href="/CBS/docs/CBS-Documentaci%C3%B3n-Funcional.html"
+                               data-container="body"> Opciones individuales </a>
+                        </li>
+                    </ul>
+
+                </li>
+
+                <li ng-if="baseController.CONFIGCOMPANY.mesa_ayuda">
+                    <a href="http://186.150.200.131:8081/sstickets_eis" target="_blank" data-popup="tooltip"
+                       data-placement="bottom"
+                       data-container="body" title="Mesa de Ayuda"><i class="icon-headset"></i></a>
+                </li>
+
+
+                <li>
+                    <hr style="border: none;border-left: 1px solid hsla(200, 10%, 50%,100);height: 28px;width: 1px;margin-top: 10px;margin-bottom: 10px;">
+                </li>
+<!--                <li>-->
+<!--                    <a ></a>-->
+<!--                </li>-->
+                <li>
+                    <hr style="border: none;border-left: 1px solid hsla(200, 10%, 50%,100);height: 28px;width: 1px;margin-top: 10px;margin-bottom: 10px;">
+                </li>
+                <li class="dropdown dropdown-user" style="color:#000 !important;">
+                    <a class="dropdown-toggle legitRipple" data-toggle="dropdown" aria-expanded="false">
+
+                        <img id="profileImage"
+                             data-dragonfile="/{{::baseController.path}}/profileimage/{{::baseController.userID}}"
+                             src="assets/images/placeholder.jpg" alt="">
+
+                        <span>{{::baseController.fullName}}</span>
+                        <i class="caret"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>
+                            <a style="color: #000 !important;user-select: none">
+                                <b>Nombre</b>: {{baseController.session.fullName()}}
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a style="color: #000 !important;user-select: none">
+                                <b>Correo</b>: {{baseController.session.correo}}
+                            </a>
+                        </li>
+                        <!--<li><a href="#"><span class="badge badge-warning pull-right">58</span> <i class="icon-comment-discussion"></i> Messages</a></li>-->
+                        <li class="divider"></li>
+                        <!--<li><a href="#"><i class="icon-cog5"></i> Account settings </a></li>-->
+                        <li>
+                            <a style="color: #000 !important;" onclick="new SESSION().logoff()" dragonlanguage><i
+                                        class="icon-switch2"></i>
+                                <language>MESSAGE.i('navbar.Logout')</language>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- /main navbar -->
+
+<script>
+    //function show and hide dropdown
+    function showAccess() {
+        var bool = false;
+        bool = $('#helpOptions').hasClass("open");
+        if (bool) {
+            $('#helpOptions').removeClass("open");
+        } else
+            $('#helpOptions').addClass("open");
+    }
+
+    //function zoom
+    $('#zoom-in').click(function () {
+        updateZoom(0.1);
+        $('#zoom1').addClass("active2");
+        $('#zoom2').removeClass("active2");
+    });
+    $(document).on("click", ".gasbomenu a:not(.has-ul)", function () {
+        $('.menutote').trigger("click");
+
+    });
+    $('#zoom-out').click(function () {
+        updateZoom(-0.1)
+        $('#zoom2').addClass("active2");
+        $('#zoom1').removeClass("active2");
+    });
+    zoomLevel = 1;
+    var updateZoom = function (zoom) {
+        zoomLevel += zoom;
+        $('body').css({zoom: zoomLevel, '-moz-transform': 'scale(' + zoomLevel + ')'});
+    }
+
+    //function zoom keydown
+    keydownOnOf = STORAGE.get('keydownOn');
+
+    function keydownOn() {
+        if (keydownOnOf || !STORAGE.exist('keydownOn')) {
+            document.onkeydown = function (e) {
+                if (e.ctrlKey && e.altKey && e.which == 76) {
+                    $("#LiteMenu").click();
+                }
+                if (e.ctrlKey && e.altKey && e.which == 72) {
+                    $("#HideMenu").click();
+                }
+                if (e.ctrlKey && e.altKey && e.which == 82) {
+                    $("#RestoreallConfiguration").click();
+                }
+                if (e.ctrlKey && e.altKey && e.which == 67) {
+                    $("#configuration").click();
+                }
+                if (e.which == 27) {
+                    $("#closeModal").click();
+                }
+            };
+            keydownOnOf = false;
+            $('#keyboard').addClass("active2");
+            STORAGE.add('keydownOn', true);
+        } else {
+            document.onkeydown = function (e) {
+                if (e.ctrlKey && e.altKey && e.which == 76) {
+                }
+                if (e.ctrlKey && e.altKey && e.which == 72) {
+                }
+                if (e.ctrlKey && e.altKey && e.which == 82) {
+                }
+                if (e.ctrlKey && e.altKey && e.which == 67) {
+                }
+                if (e.which == 27) {
+                }
+            };
+            keydownOnOf = true;
+            $('#keyboard').removeClass("active2");
+            STORAGE.add('keydownOn', false);
+        }
+    }
+
+    //function grayscale
+    grayscaleOnOf = STORAGE.get('grays');
+
+    function grayscaleOn() {
+        if (grayscaleOnOf || !STORAGE.exist('grays')) {
+            $('body').css("filter", "grayscale(1)");
+            grayscaleOnOf = false;
+            $('#grayscale').addClass("active2");
+            STORAGE.add('grays', true);
+        } else {
+            $('body').css("filter", "grayscale(0)");
+            grayscaleOnOf = true;
+            $('#grayscale').removeClass("active2");
+            STORAGE.add('grays', false);
+        }
+    }
+
+    //function animation
+    animationOnOf = STORAGE.get('animation');
+
+    function animationOn() {
+        if (!animationOnOf) {
+            STORAGE.add('animation', true);
+            $('#animation2').removeClass("active2");
+        } else {
+            STORAGE.add('animation', false);
+            $('#animation2').addClass("active2");
+        }
+        location.reload();
+    }
+
+    //execute default functions
+    if (STORAGE.exist('keydownOn')) {
+        keydownOn();
+    }
+    if (STORAGE.exist('grays')) {
+        grayscaleOn();
+    }
+    $(document).ready(function () {
+        if (!animationOnOf) {
+            $('#animation2').removeClass("active2");
+        } else {
+            $('#animation2').addClass("active2");
+        }
+    });
+
+    var editar_menu = function () {
+        $(".edit-hide").hide();
+        $(".editar-menu").show();
+    }
+
+    var ejecutadora = function () {
+        SERVICE.planificacion_exec_functions.rollback({}, function (data) {
+            location.reload();
+        });
+    }
+
+    var restaurar_menu = function () {
+        SWEETALERT.loading({message: "Restaurando..."});
+        location.reload();
+    }
+
+    var cancelar_edicion = function () {
+        $(".editar-menu").hide();
+        $(".edit-hide").show();
+    }
+
+    var guardar_menu = function () {
+        SWEETALERT.confirm({
+            message: "Desea guardar los cambios realizados en el menú?",
+            confirm: function () {
+                baseController.refreshAngular();
+                var jsonMenu = baseController.menus;
+                console.log(jsonMenu);
+                SWEETALERT.loading({message: "Guardando..."});
+                BASEAPI.ajax.post('/menu/edit', {json: JSON.stringify(jsonMenu)}, function () {
+                    SWEETALERT.loading({message: MESSAGE.ic('mono.saving')});
+                    setTimeout(() => {
+                        location.reload();
+                    }, 8000);
+                });
+            }
+        });
+    }
+</script>

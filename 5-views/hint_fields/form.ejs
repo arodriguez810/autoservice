@@ -1,0 +1,26 @@
+<div class="tab-content">
+    <div class="tab-pane active" id="basic">
+        <div class="row">
+            <div dragoncontrol="selectsimple" label="Entities" cols="4" name="entities" scope="<%= scope %>"
+                 id="<%= scope %>__entities" cache="false">
+                {data: ENTITIES, value: "id", icon: {class: 'archive'}}
+            </div>
+            <div dragoncontrol="selectsimple" label="Field Names" cols="4" name="field_names" scope="<%= scope %>"
+                 id="<%= scope %>__field_names" cache="false">
+                {data: FIELDS, icon: {class: 'archive'}, condition: 'item.entity == hint_fields.entities'}
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-sm-12 col-md-12'>
+                <%- FORM.textarea('text', scope, {}) %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- FORM.footer(scope) %>
+
+
+
+
+

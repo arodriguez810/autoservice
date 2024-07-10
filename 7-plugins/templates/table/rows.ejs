@@ -1,0 +1,28 @@
+<td ng-if="<%= scope %>.characterist('batch')">
+     <span style="margin-top: 1px;"
+
+           ng-bind-html="<%= scope %>.drawCheck(key,row)"
+           ng-click="<%= scope %>.check(row)"
+     >
+     </span>
+</td>
+<td ng-repeat="(key, value) in <%= scope %>.columns() track by key"
+    ng-show="value.visible!=false"
+    class="{{::value.class || ''}} context-control {{value.responsive}}"
+    style="border: 1px solid #ddd;{{::value.style || ''}}"
+    data-column="{{::key}}"
+    ng-if="value.label != 'metas' && (value.dead!==true) && (value.rowspan?value.rowspan(rowkey,((<%= scope %>.records||{}).data||[]),'seeme'):true)"
+    rowspan="{{(value.rowspan?value.rowspan(rowkey,((<%= scope %>.records||{}).data||[]),'span'):1)}}"
+    oncontextmenu="return false;"
+    ng-click="<%= scope %>.cell.select($event,row);<%= scope %>.cell.click(key,value,row)"
+    ng-dblclick="<%= scope %>.cell.dblselect(row);<%= scope %>.cell.dblclick(key,value,row)"
+
+>
+    <span ng-if="!value.fileicon" ng-bind-html="<%= scope %>.cellValue(key,value,row)"></span>
+    <span class="ladelfile" ng-if="value.fileicon" ng-click="<%= scope %>.verFile(<%= scope %>,row,value.fileicon);"
+          ng-bind-html="<%= scope %>.cellValue(key,value,row)"></span>
+    <span class="handle"
+          ng-show="value.drag===true && <%= scope %>.dragrow"
+          ng-bind-html="<%= scope %>.drawHandler()">
+    </span>
+</td>

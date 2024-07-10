@@ -1,0 +1,126 @@
+@media (max-width: 768px) {
+    .modal-dialog {
+        position: relative;
+        width: auto;
+        margin: 0;
+    }
+
+    .modal-body {
+        min-height: 800px;
+    }
+}
+
+.checkbox-switchery .switchery {
+    position: relative;
+    left: 0;
+    margin-top: -2px;
+}
+
+/**/
+table tr td {
+    font-size: 15px !important;
+}
+
+table tr th {
+    font-weight: normal;
+}
+
+.breadcrumb a {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.table > thead > tr > th {
+    font-size: 15px;
+}
+
+.table [class^="icon-"], [class*=" icon-"] {
+
+}
+
+table tr th i {
+    font-size: 15px !important;
+}
+
+table tr th i.icon-checkbox-unchecked {
+    font-size: 15px !important;
+}
+
+table tr th i.icon-eye-blocked {
+    font-size: 16px !important;
+    margin-top: 2px;
+}
+
+table .icon-file-download2,
+table .icon-cog2 {
+    /*color: #333333c7;*/
+    opacity: 0.7;
+}
+
+table .icons-list > li > a:hover,
+table .icon-cog2:hover,
+table .icon-file-download2:hover {
+    opacity: 1 !important;
+}
+
+.page-header-default {
+    margin-bottom: 15px;
+}
+
+.style-none {
+    background: none;
+    border: none;
+}
+
+.style-none i {
+    font-size: 22px;
+    margin-bottom: -18px;
+    opacity: 0.7;
+}
+
+.style-none:hover i {
+    opacity: 1 !important;
+}
+
+.width-custom1 {
+    width: 4%;
+}
+
+select,
+textarea,
+input {
+    padding-bottom: 0 !important;
+    padding-top: 16px !important;
+}
+
+.has-feedback label ~ .form-control-feedback {
+    top: 39px;
+}
+
+.dragoncheck {
+    font-size: 15px !important;
+}
+
+.draganddroghandler {
+    opacity: 0.7;
+}
+
+.content .panel-flat {
+    margin-bottom: 0px !important;
+}
+
+.monthselect {
+    padding-top: 0px !important;
+}
+
+.yearselect {
+    padding-top: 0px !important;
+}
+
+.calendar-time select {
+    padding-top: 0px !important;
+}
+
+.drp-calendar {
+    border: 1px solid #ccc;
+}

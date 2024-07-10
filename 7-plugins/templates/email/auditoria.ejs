@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <%- include('css.ejs') %>
+    <style>
+        <%- include('../../../files/configuration/themes/primary.css') %>
+    </style>
+    <style>
+        <%- include('../../../files/configuration/themes/secundary.css') %>
+    </style>
+    <style>
+        <%- include('../../../files/configuration/themes/extra.css') %>
+    </style>
+</head>
+<body>
+<table class="body-wrap">
+    <tr>
+        <td class="container">
+            <table>
+                <tr>
+                    <td align="center" style="background-color: #002e4d;padding-top: 8px;padding-bottom: 8px;" class="masthead bg-<%= COLOR.primary %>-800">
+                        <!--<h1 style="color: #ffffff;"><%= CONFIG.logo %></h1>-->
+                        <img src="https://www.dgcp.gob.do/wp-content/themes/dgcp/img/logo-dgcp-extendido.svg" alt="Logo" title="Logo" style="display:block" width="82" height="auto" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="content">
+                        <pre style="font-size: 14px"><%= DATA.message %></pre>
+                        <% if (DATA.list2 != undefined) {%>
+                            <ul>
+                                <% for(var i=0; i< DATA.list2.length; i++){%>
+                                    <li><pre style="font-size: 14px; margin: 0"><%= DATA.list2[i] %></pre></li>
+                                <%}%>
+                            </ul>
+                        <%}%>
+                        <pre style="font-size: 14px"><%= DATA.message_2 %></pre>
+                        <% if (DATA.list != undefined) {%>
+                            <ul>
+                                <% for(var i=0; i< DATA.list.length; i++){%>
+                                     <li><pre style="font-size: 14px; margin: 0"><%= DATA.list[i] %></pre></li>
+                                <%}%>
+                            </ul>
+                        <%}%>
+                        <pre style="font-size: 14px"><%= DATA.message_3 %></pre>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="background-color: #002e4d;"  class="container bg-<%= COLOR.primary %>-300">
+            <table>
+                <tr>
+                    <td class="content footer" align="center" style="padding-top: 5px;padding-bottom: 5px;">
+                        <p style="color: #FFFFFF;" dragonlanguage>
+                            Sent by <a style="color: #FFFFFF;" href="http://www.eisdr.com"><%= CONFIG.appName %></a>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td class="container">
+            <table>
+                <tr>
+                    <td class="content footer" align="center">
+                        <p style="font-size: 15px;" dragonlanguage>
+                            <a href="<%= CONFIG.developerBy.site %>"><%= CONFIG.developerBy.name %></a> © <language>All rights reserved</language> <%= new Date().getFullYear() %>.
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

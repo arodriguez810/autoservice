@@ -1,0 +1,378 @@
+<style>
+    .notsupportitem i {
+        font-size: 140px;
+    }
+</style>
+<script>
+    var viewModel = baseController.viewDataToto;
+    <%= scope %>.galleryFiles = {};
+    <%= scope %>.galleryFiles.viewModel = viewModel;
+    <%= scope %>.galleryFiles.data = {};
+    <%= scope %>.galleryFiles.data.files = [];
+    <%= scope %>.galleryFiles.upload = false;
+    <%= scope %>.galleryFiles.rootFolder = viewModel.root;
+    <%= scope %>.galleryFiles.folderSteps = [];
+    var firstThis = true;
+    <%= scope %>.galleryFiles.refresh = function () {
+        var http = new HTTP();
+        if (!firstThis) {
+            $(`[data-dragonfile='/${viewModel.root}']:not(:hidden)`).each(function () {
+                FILE.runServerFile($(this))
+            });
+        }
+        BASEAPI.ajax.get(http.path(["files", "api"]), {folder: viewModel.root}, async function (data) {
+            let users = await BASEAPI.listp('usuario', {
+                limit: 0,
+                where: [{
+                    field: 'compania',
+                    value: new SESSION().current().compania_id
+                }]
+            });
+            if (users.data)
+                users = users.data;
+            for (var i in data.data.files) {
+                var file = data.data.files[i];
+                let metadata = file.split('___');
+                data.data.files[i] = {
+                    url: `${http.path([FOLDERS.files, viewModel.root])}/${encodeURIComponent(file)}`,
+                    cleanUrl: http.cleanRoot(`${http.path([FOLDERS.files, viewModel.root])}/${encodeURIComponent(file)}`),
+                    selected: false,
+                    fileName: file,
+                    original: file.split('___')[0],
+                    ext: FILE.extension(file),
+                }
+                if (metadata.length > 3) {
+                    data.data.files[i].fecha = LAN.datetime(new Date(parseInt(metadata[2])));
+                    if (users) {
+                        if (users.filter) {
+                            let deuser = users.filter(d => {
+                                return d.id == metadata[3].split('.')[0];
+                            })[0];
+                            if (deuser)
+                                data.data.files[i].usuario = `${deuser.nombre} ${deuser.apellido}`;
+                            else
+                                data.data.files[i].usuario = "N/A";
+                        }
+                    } else
+                        data.data.files[i].usuario = "N/A";
+                } else {
+                    data.data.files[i].fecha = "N/A";
+                    data.data.files[i].usuario = "N/A";
+                }
+                data.data.files[i].originalCrop = DSON.substringif(data.data.files[i].original, 12);
+            }
+            <%= scope %>.
+            galleryFiles.data = data.data;
+
+
+            <%= scope %>.
+            galleryFiles.columns = (12 / viewModel.columns);
+            <%= scope %>.
+            refreshAngular();
+            firstThis = false;
+        });
+    };
+    <%= scope %>.galleryFiles.refresh();
+    <%= scope %>.galleryFiles.isSingle = function () {
+        return <%= scope %>.
+        galleryFiles.viewModel.maxfiles === 1;
+    };
+    <%= scope %>.galleryFiles.reachMaxFiles = function () {
+        return <%= scope %>.
+        galleryFiles.data.files.length < <%= scope %>.
+        galleryFiles.viewModel.maxfiles;
+    };
+    <%= scope %>.galleryFiles.uploadview = function (file) {
+        $(".dz-default").click();
+    };
+    <%= scope %>.galleryFiles.Icon = function (file) {
+        if (DSON.oseaX(file))
+            return "";
+        if (file.isFolder) {
+            return "folder-open";
+        } else {
+            return FILE.fileToIconClass(file.fileName);
+        }
+    };
+    <%= scope %>.galleryFiles.view = function (file) {
+        var load = new LOAD();
+        if (FILE.isImage(file.fileName)) {
+            load.template('templates/components/crop', {src: file.url}, function (html) {
+                <%= scope %>.
+                modal.simpleModal(html, {header: {title: MESSAGE.i('mono.preview')}});
+            });
+        } else {
+            load.template('templates/components/object', {src: file.url}, function (html) {
+                <%= scope %>.
+                modal.simpleModal(html, {header: {title: MESSAGE.ic('mono.preview')}});
+            });
+        }
+    };
+    <%= scope %>.galleryFiles.check = function (file) {
+        file.selected = !file.selected;
+    };
+    <%= scope %>.galleryFiles.allChecked = function () {
+        var allSelected = <%= scope %>.
+        galleryFiles.data.files.filter(function (file) {
+            return !file.selected;
+        });
+        return allSelected.length === 0;
+    };
+    <%= scope %>.galleryFiles.allCheckedText = function () {
+        return <%= scope %>.
+        galleryFiles.allChecked() ? "UnCheck" : "Check";
+    };
+    <%= scope %>.galleryFiles.allCheckedIcon = function () {
+        return !<%= scope %>.
+        galleryFiles.allChecked() ? "checkbox-unchecked" : "checkbox-checked";
+    };
+    <%= scope %>.galleryFiles.checkAll = function () {
+        if (<%= scope %>.
+        galleryFiles.allChecked()
+    )
+
+        {
+            for (var file of <%= scope %>.
+            galleryFiles.data.files
+        )
+            {
+                file.selected = false;
+            }
+        }
+    else
+        {
+            for (var file of <%= scope %>.
+            galleryFiles.data.files
+        )
+            {
+                file.selected = true;
+            }
+        }
+    };
+    <%= scope %>.galleryFiles.getIcon = function (file) {
+        return !file.selected ? "checkbox-unchecked" : "checkbox-checked";
+    };
+    <%= scope %>.galleryFiles.deleteSelected = function () {
+        var allSelected = <%= scope %>.
+        galleryFiles.data.files.filter(function (file) {
+            return file.selected;
+        });
+        <%= scope %>.
+        galleryFiles.delete(allSelected);
+    };
+    <%= scope %>.galleryFiles.delete = function (files) {
+        var finalArray = [];
+        if (!Array.isArray(files)) {
+            finalArray.push(files.cleanUrl);
+        } else
+            for (var i in files) {
+                finalArray.push(files[i].cleanUrl);
+            }
+        SWEETALERT.confirm({
+            message: MESSAGE.i('alerts.AYSDeleteFileFolder'),
+            confirm: function () {
+                var http = new HTTP();
+                SWEETALERT.loading({message: MESSAGE.i('mono.deleting')});
+                BASEAPI.ajax.post(http.path(["files", "api", "delete"]), {filename: finalArray}, function (data) {
+                    SWEETALERT.stop();
+                    if (data.data.deleted) {
+                        <%= scope %>.
+                        galleryFiles.refresh();
+                    }
+                });
+            }
+        });
+    };
+    <%= scope %>.galleryFiles.downloadAll = function () {
+        if (<%= scope %>.
+        galleryFiles.data.files.length > 0
+    )
+        {
+            let menu = " de CBS";
+            if (<%= scope %>.
+            MENU
+        )
+            if (<%= scope %>.
+            MENU.menu
+        )
+            if (<%= scope %>.
+            MENU.menu.text
+        )
+            menu = " de " + <%= scope %>.
+            MENU.menu.text.trim() + " - CBS";
+            var allFileName = `Archivos ${menu}`;
+            allFileName = allFileName.replaceAll("/", "-").replaceAll(" ", "_") + ".zip";
+            SWEETALERT.confirm({
+                message: MESSAGE.i('alerts.AYSDownloadAll'),
+                confirm: function () {
+                    var http = new HTTP();
+                    SWEETALERT.loading({message: MESSAGE.i('mono.Preparingdownloadforfiles')});
+                    BASEAPI.ajax.get(http.path(["files", "api", "download"]), {
+                        folder: viewModel.root,
+                        name: allFileName
+                    }, function (data) {
+                        console.log(data);
+                        if (data)
+                            if (data.data) {
+                                if (data.data.zipped) {
+                                    SWEETALERT.stop();
+
+                                    var url = http.path(["files", viewModel.root, allFileName]);
+                                    console.log(url)
+                                    DOWNLOAD.fileUrl(url, MODAL.current().header.title + ".zip");
+                                    return;
+                                }
+                            }
+                        SWEETALERT.show({
+                            type: "error",
+                            message: "Los archivos no se pudieron descargar, favor asegurese de que en esta sección de archivos haya por lo menos 1 archivos subido para ejecutar 'Descargar Todo'"
+                        });
+                    });
+                }
+            });
+        }
+    else
+        {
+
+            SWEETALERT.show({
+                type: "error",
+                message: "Favor asegurese de que en esta sección de archivos haya por lo menos 1 archivos subido para ejecutar 'Descargar Todo'"
+            });
+        }
+    };
+    <%= scope %>.galleryFiles.openFolder = function (file) {
+        <%= scope %>.
+        galleryFiles.folderSteps.push(<%= scope %>.galleryFiles.rootFolder
+    )
+        ;
+        if (<%= scope %>.
+        galleryFiles.rootFolder === '/'
+    )
+        <%= scope %>.
+        galleryFiles.rootFolder = `${file.fileName}/`;
+    else
+        <%= scope %>.
+        galleryFiles.rootFolder = `${<%= scope %>.galleryFiles.rootFolder}/${file.fileName}/`;
+        viewModel.root = <%= scope %>.
+        galleryFiles.rootFolder;
+        <%= scope %>.
+        galleryFiles.refresh();
+    };
+    <%= scope %>.galleryFiles.back = function (file) {
+        var last = ARRAY.last(<%= scope %>.galleryFiles.folderSteps
+    )
+        ;
+        <%= scope %>.
+        galleryFiles.rootFolder = last;
+        viewModel.root = <%= scope %>.
+        galleryFiles.rootFolder;
+        ARRAY.removeLast(<%= scope %>.galleryFiles.folderSteps
+    )
+        ;
+        <%= scope %>.
+        galleryFiles.refresh();
+    };
+</script>
+
+<div class="row" style="margin-top: 16px;">
+    <div class='col-sm-12 col-md-12'>
+        <a ng-if="!<%= scope %>.galleryFiles.data.files[0]"
+            class="btn btn-primary" style="width: 100%"
+            ng-click="<%= scope %>.galleryFiles.uploadview()"
+            title="{{baseController.viewDataToto.showMymessag?(baseController.viewDataToto.Mymessage+', '):''}}El límite de cada archivo es de >{{<%= scope %>.maxsize || 20}}mb">
+            <i class="icon-upload"></i>
+            {{<%= scope %>.<%= name %>_DragonCountFile>0 ? (<%= scope %>.form.options.<%= name %>.truetext + " " + "(" + <%= scope %>
+            .<%= name %>_DragonCountFile + ")" ) : <%= scope %>.form.options.<%= name %>.truetext || (<%= scope %>.form.options.<%= name %>.text + " " + "(" + <%= scope %>
+            .<%= name %>_DragonCountFile+")") || <%= scope %>.form.options.<%= name %>.text}}
+        </a>
+    </div>
+    <div class='col-sm-6 col-md-6' ng-if="<%= scope %>.galleryFiles.data.files[0]">
+        <a title="{{<%= scope %>.galleryFiles.data.files[0].original}}, subido por {{<%= scope %>.galleryFiles.data.files[0].usuario}} en la fecha  {{<%= scope %>.galleryFiles.data.files[0].fecha}}"
+           class="" ng-click="<%= scope %>.galleryFiles.view(<%= scope %>.galleryFiles.data.files[0])"
+           style="display: block;width: 98%;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size: 20px;">
+            <i class="{{<%= scope %>.galleryFiles.Icon(<%= scope %>.galleryFiles.data.files[0])}}"></i>
+            {{<%= scope %>
+            .galleryFiles.data.files[0].original}}
+        </a>
+    </div>
+    <div class='col-sm-6 col-md-6 text-center' style="padding: 3px;" ng-if="<%= scope %>.galleryFiles.data.files[0]">
+        <div ng-if="!<%= scope %>.galleryFiles.data.files[0].isFolder" class="visible-lg-inline">
+            <a title="Vista Previa"
+               ng-click="<%= scope %>.galleryFiles.view(<%= scope %>.galleryFiles.data.files[0])"
+               ng-if="baseController.viewDataToto.options.preview"
+               class="btn  border-<%= COLOR.primary %>-300 text-black btn-icon">
+                <i class="icon-zoomin3"></i>
+            </a>
+            <a title="Descargar" href="{{<%= scope %>.galleryFiles.data.files[0].url}}"
+               download="{{<%= scope %>.galleryFiles.data.files[0].original}}"
+               ng-if="baseController.viewDataToto.options.download"
+               class="btn  border-<%= COLOR.primary %>-300 text-black btn-icon">
+                <i class="icon-download"></i>
+            </a>
+        </div>
+        <a title="Eliminar" ng-click="<%= scope %>.galleryFiles.delete(<%= scope %>.galleryFiles.data.files[0])"
+           ng-if="baseController.viewDataToto.options.remove"
+           class="btn  text-danger border-<%= COLOR.danger %>-300 text-black btn-icon">
+            <i class="icon-trash"></i>
+        </a>
+    </div>
+
+    <div class="panel panel-flat" style="display: none"
+         ng-show="(<%= scope %>.galleryFiles.upload && <%= scope %>.galleryFiles.columns) && <%= scope %>.galleryFiles.reachMaxFiles()">
+        <div class="panel-body">
+            <form class="dropzone" id="filesForm" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="folder" value="{{<%= scope %>.galleryFiles.rootFolder}}">
+                <input type="hidden" name="user" value="{{baseController.userID}}">
+
+            </form>
+        </div>
+    </div>
+</div>
+<div id="galleryFiles">
+
+</div>
+<script>
+    $(document).ready(function () {
+        var http = new HTTP();
+        $("#filesForm").attr('action', http.path(["files", "api", "upload"]));
+        $("#filesForm").dropzone({
+            paramName: "toupload",
+            dictDefaultMessage: MESSAGE.i('alerts.upload'),
+            maxFilesize: viewModel.maxsize || 20, // MB
+            maxFiles: viewModel.maxfiles || 20,
+            acceptedFiles: viewModel.acceptedFiles || null,
+            accept: function (file, done) {
+                if (file.type.indexOf("application/x-msdownload") !== -1) {
+                    SWEETALERT.show({
+                        type: 'error',
+                        message: "Error! este archivo no es permitido",
+                        confirm: function () {
+                            done("Error! este archivo no es permitido");
+                        }
+                    })
+                } else {
+                    done();
+                }
+            },
+            init: function () {
+                this.on('complete', function (file) {
+                    this.removeFile(file);
+                    if ((file.size / 1000000) > viewModel.maxsize) {
+                        SWEETALERT.show({message: `El tamaño del archivo excede el límite soportado por el sistema. El límite es  (` + viewModel.maxsize + ` MB).`});
+                    } else {
+                        <%= scope %>.
+                        galleryFiles.refresh();
+                    }
+                });
+                this.on('completemultiple', function (file) {
+                    if ((file.size / 1000000) > viewModel.maxsize) {
+                        SWEETALERT.show({message: `El tamaño del archivo excede el límite soportado por el sistema. El límite es  (` + viewModel.maxsize + ` MB).`});
+                    } else {
+                        <%= scope %>.
+                        galleryFiles.refresh();
+                    }
+                });
+            }
+        });
+    });
+</script>

@@ -1,0 +1,13 @@
+{
+  "ColumnsinFirstRow": "Exportar nombres de columnas",
+  "ColumnsPosition": "Mantener orden actual de las columnas",
+  "OriginalFormat": "Mantener el formato default del tipo de archivo exportado",
+  "Exampletoimportrecords": "Ejemplo para importar registros",
+  "Importfilesof": "Importar archivos para",
+  "Exampletoimport": "Ejemplo para importar",
+  "used": "Este archivo será usado para impotar datos a la entidad corresponiente",
+  "Sort": "Mantener organización actual de la tabla",
+  "Filters": "Exportar datos filtrados por la selección actual",
+  "CurrentPage": "Exportar sólo la cantidad de registros de la paginación actual",
+  "Selecteds": "Exportar sólo los registros seleccionados"
+}

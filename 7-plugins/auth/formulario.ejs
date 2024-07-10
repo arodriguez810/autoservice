@@ -1,0 +1,436 @@
+<%
+OBJECT = {
+    merge: function (target, ...sources) {
+        if (!sources.length) return target;
+        const source = sources.shift();
+        if (OBJECT.isObject(target) && OBJECT.isObject(source)) {
+            for (const key in source) {
+                if (OBJECT.isObject(source[key])) {
+                    if (!target[key]) Object.assign(target, {[key]: {}});
+                    OBJECT.merge(target[key], source[key]);
+                } else {
+                    Object.assign(target, {[key]: source[key]});
+                }
+            }
+        }
+        return OBJECT.merge(target, ...sources);
+    },
+    isObject: function (item) {
+        return (item && typeof item === 'object' && !Array.isArray(item));
+    }
+};
+%>
+<%
+FORM = {
+    template: function (view, data) {
+        return include('../../7-plugins/templates/' + view, data);
+    },
+    checkbox: function (name, model, options) {
+        return FORM.template('form/checkbox', {name: name, model: model, opts: options});
+    },
+    checkboxlist: function (name, model, options) {
+        return FORM.template('form/checkboxlist', {name: name, model: model, opts: options});
+    },
+    date: function (name, model, options) {
+        options.singleDatePicker = true;
+        options.from = name;
+        return FORM.template('form/range', {name: name + "_label", model: model, opts: options});
+    },
+    datetime: function (name, model, options) {
+        options.singleDatePicker = true;
+        options.timepicker = true;
+        options.from = name;
+        return FORM.template('form/range', {name: name + "_label", model: model, opts: options});
+    },
+    daterange: function (name, model, options) {
+        return FORM.template('form/range', {name: name, model: model, opts: options});
+    },
+    datetimerange: function (name, model, options) {
+        options.timepicker = true;
+        return FORM.template('form/range', {name: name, model: model, opts: options});
+    },
+    timerange: function (name, model, options) {
+        options.timepicker = true;
+        options.isTime = true;
+        return FORM.template('form/range', {name: name, model: model, opts: options});
+    },
+    time: function (name, model, options) {
+        options.singleDatePicker = true;
+        options.timepicker = true;
+        options.isTime = true;
+        options.from = name;
+        return FORM.template('form/range', {name: name + "_label", model: model, opts: options});
+    },
+    input: function (name, model, options) {
+        return FORM.template('form/input', {name: name, model: model, opts: options});
+    },
+    format: function (name, model, options) {
+        return FORM.template('form/inputformat', {name: name, model: model, opts: options});
+    },
+    integer: function (name, model, options) {
+        return FORM.template('form/integer', {name: name, model: model, opts: options});
+    },
+    decimal: function (name, model, options) {
+        return FORM.template('form/decimal', {name: name, model: model, opts: options});
+    },
+    hour: function (name, model, options) {
+        options.isNumber = false;
+        options.icon = {class: "alarm", position: "left"};
+        options.mask = "99:59";
+        options.restrict = "reject";
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    year: function (name, model, options) {
+        options.isNumber = false;
+        options.icon = {class: "calendar3", position: "left"};
+        options.mask = "9999";
+        options.restrict = "reject";
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    percentage: function (name, model, options) {
+        return FORM.template('form/percentage', {name: name, model: model, opts: options});
+    },
+    phone: function (name, model, options) {
+        options.isNumber = false;
+        options.icon = {class: "phone", position: "left"};
+        options.mask = "(999) 999-9999";
+        options.restrict = "reject";
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    creditcard: function (name, model, options) {
+        options.isNumber = false;
+        options.icon = {class: "credit-card2", position: "left"};
+        options.mask = "9999-9999-9999-9999";
+        options.restrict = "reject";
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    identification: function (name, model, options) {
+        options.isNumber = false;
+        options.icon = {class: "vcard", position: "left"};
+        options.mask = "999-9999999-9";
+        options.restrict = "reject";
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    cellphone: function (name, model, options) {
+        options.isNumber = false;
+        options.icon = {class: "iphone", position: "left"};
+        options.mask = "(999) 999-9999";
+        options.restrict = "reject";
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    money: function (name, model, options) {
+        return FORM.template('form/money', {name: name, model: model, opts: options});
+    },
+    valor_absoluto: function (name, model, options) {
+        return FORM.template('form/valor_absoluto', {name: name, model: model, opts: options});
+    },
+    indice: function (name, model, options) {
+        return FORM.template('form/indice', {name: name, model: model, opts: options});
+    },
+    mask: function (name, model, options) {
+        return FORM.template('form/inputmask', {name: name, model: model, opts: options});
+    },
+    ngmask: function (name, model, options) {
+        return FORM.template('form/ngmask', {name: name, model: model, opts: options});
+    },
+    normalpassword: function (name, model, options) {
+        return FORM.template('form/normalpassword', {name: name, model: model, opts: options});
+    },
+    password: function (name, model, options) {
+        return FORM.template('form/password', {name: name, model: model, opts: options});
+    },
+    color: function (name, model, options) {
+        options.icon = {class: "brush"};
+        return FORM.template('form/color', {name: name, model: model, opts: options});
+    },
+    textarea: function (name, model, options) {
+        return FORM.template('form/textarea', {name: name, model: model, opts: options});
+    },
+    html: function (name, model, options) {
+        return FORM.template('form/html', {name: name, model: model, opts: options});
+    },
+    box: function (name, model, options) {
+        return FORM.template('form/box', {name: name, model: model, opts: options});
+    },
+    custom_box: function (name, model, options) {
+        return FORM.template('form/custom_box', {name: name, model: model, opts: options});
+    },
+    select: function (name, model, options) {
+        return FORM.template('form/select', {name: name, model: model, opts: options});
+    },
+    selectsimple: function (name, model, options) {
+        return FORM.template('form/selectsimple', {name: name, model: model, opts: options});
+    },
+    relation: function (name, model, options) {
+        return FORM.template('form/relation', {name: name, model: model, opts: options});
+    },
+    tags: function (name, model, options) {
+        return FORM.template('form/tags', {name: name, model: model, opts: options});
+    },
+    file: function (name, model, options) {
+        return FORM.template('form/file', {name: name, model: model, opts: options});
+    },
+    inputview: function (name, model, options) {
+        return FORM.template('form/inputview', {name: name, model: model, opts: options});
+    },
+    inputviewvalue: function (name, model, options) {
+        return FORM.template('form/inputviewvalue', {name: name, model: model, opts: options});
+    },
+    location: function (name, model, options) {
+        return FORM.template('form/location', {name: name, model: model, opts: options});
+    },
+    button: function (name, model, options) {
+        return FORM.template('form/button', {name: name, model: model, opts: options});
+    },
+    footer: function (model) {
+        return FORM.template('form/footer', {model: model});
+    },
+    tabs: function (model, tabs) {
+        return FORM.template('form/tabs', {model: model, tabs: tabs});
+    }
+};
+%>
+<div id="<%= scope %>" ng-controller="<%= scope %> as <%= scope %>">
+    <div class="col-lg-12 text-right" ng-show="baseController.formulario.en_view" style="margin-top: 20px; z-index: 999999">
+        <button title="Atrás"
+                ng-click="<%= scope %>.goHome_formulario();"
+                type="button"
+                class="btn bg-info btn-xs"
+                id="backBTN">
+            <i class="icon-arrow-left7"></i>
+            Atrás
+        </button>
+    </div>
+    <div class="panel panel-default" ng-show="baseController.formulario.en_view">
+        <div class="panel-body">
+            <div class="row">
+
+
+                <div class="col-lg-9 text-left" style="height: 150px">
+                    <h1>{{baseController.formulario.nombre}}</h1>
+                    <p>{{baseController.formulario.descripcion}}</p>
+                </div>
+                <div class="col-lg-3">
+                    <img alt="logo" width="100" height="125" style="float: right !important"
+                         src="files/configuration/logo/logo.webp"
+                         alt="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-{{field.config.col||3}}" style="margin-top: 15px"
+                     ng-repeat="(ix,field) in baseController.formulario.config.fields">
+                    <label>{{field.field}}
+                        <span ng-if="field.config.required"
+                              ng-class="[!baseController.formulario.registro[field.field]?'text-danger':'text-success']">
+                            (*)
+                        </span>
+
+                        <span ng-if="field.tipo==='numérico'"
+                              ng-class="[baseController.formulario.registro[field.field]===undefined?'text-danger':'text-success']">
+                            ({{(baseController.formulario.registro[field.field]===undefined?'Valor Incorrecto':'Valor Correcto')}})
+                        </span>
+                    </label>
+                    <input ng-if="field.tipo==='alfanumérico'" type="text" class="form-control"
+                           maxlength="{{field.config.max}}"
+                           ng-model="baseController.formulario.registro[field.field]"
+                           placeholder="Digite {{field.field}}" disabled>
+                    <input ng-if="field.tipo==='numérico'" type="number" class="form-control" min="{{field.config.min}}"
+                           max="{{field.config.max}}"
+                           ng-model="baseController.formulario.registro[field.field]"
+                           placeholder="Digite {{field.field}}" disabled>
+                    <input ng-if="field.tipo==='fecha'" type="date" class="form-control"
+                           ng-model="baseController.formulario.registro[field.field]"
+                           placeholder="Seleccione {{field.field}}" disabled>
+                    <input ng-if="field.tipo==='fecha y hora'" type="datetime-local" class="form-control"
+                           ng-model="baseController.formulario.registro[field.field]" disabled
+                           placeholder="Seleccione {{field.field}}">
+                    <input ng-if="field.tipo==='check'" type="checkbox" class="form-control"
+                           ng-model="baseController.formulario.registro[field.field]" disabled>
+                    <select ng-if="field.tipo==='booleano'" class="form-control"
+                            ng-options="opt as opt for opt in ['Sí','No']"
+                            ng-model="baseController.formulario.registro[field.field]" disabled></select>
+                    <select ng-if="field.tipo==='desición'" class="form-control"
+                            ng-options="opt as opt for opt in [field.config.goodoption,field.config.badoption]"
+                            ng-model="baseController.formulario.registro[field.field]" disabled></select>
+                    <select3 ng-if="field.tipo==='lista'" class="form-control"
+                             s2-options="opt as opt for opt in field.realOptions"
+                             ng-model="baseController.formulario.registro[field.field]" disabled></select3>
+                    <select3 ng-if="field.tipo==='lista múltiple'" class="form-control" multiple
+                             s2-options="opt as opt for opt in field.realOptions"
+                             ng-model="baseController.formulario.registro[field.field]" disabled></select3>
+                </div>
+            </div>
+
+        </div>
+        <div class="panel-footer text-center">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="panel panel-body">
+                        <div style="text-align: center;color: white">
+                            <label style="opacity: 0.7;"><img alt="logoeis" width="30" height="30"
+                                                              src="../../../assets/images/logoeis.webp">
+                                Diseñado y
+                                desarrollado por <a rel="noopener" rel="noreferrer" href="https://eisdr.com/"
+                                                    target="_blank">Excellent
+                                    Integrity Solutions</a>
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" ng-show="!baseController.formulario.end && !baseController.formulario.en_view">
+        <div class="panel-body">
+            <div class="row">
+
+
+                <div class="col-lg-9 text-left" style="height: 150px">
+                    <h1>{{baseController.formulario.nombre}}</h1>
+                    <p>{{baseController.formulario.descripcion}}</p>
+                </div>
+                <div class="col-lg-3">
+                    <img alt="logo" width="100" height="125" style="float: right !important"
+                         src="files/configuration/logo/logo.webp"
+                         alt="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-{{field.config.col||3}}" style="margin-top: 15px"
+                     ng-repeat="(ix,field) in baseController.formulario.config.fields">
+                    <label>{{field.field}}
+                        <span ng-if="field.config.required"
+                              ng-class="[!baseController.formulario.registro[field.field]?'text-danger':'text-success']">
+                            (*)
+                        </span>
+
+                        <span ng-if="field.tipo==='numérico'"
+                              ng-class="[baseController.formulario.registro[field.field]===undefined?'text-danger':'text-success']">
+                            ({{(baseController.formulario.registro[field.field]===undefined?'Valor Incorrecto':'Valor Correcto')}})
+                        </span>
+                    </label>
+                    <input ng-if="field.tipo==='alfanumérico'" type="text" class="form-control"
+                           maxlength="{{field.config.max}}"
+                           ng-model="baseController.formulario.registro[field.field]"
+                           placeholder="Digite {{field.field}}">
+                    <input ng-if="field.tipo==='numérico'" type="number" class="form-control" min="{{field.config.min}}"
+                           max="{{field.config.max}}"
+                           ng-model="baseController.formulario.registro[field.field]"
+                           placeholder="Digite {{field.field}}">
+                    <input ng-if="field.tipo==='fecha'" type="date" class="form-control"
+                           ng-model="baseController.formulario.registro[field.field]"
+                           placeholder="Seleccione {{field.field}}">
+                    <input ng-if="field.tipo==='fecha y hora'" type="datetime-local" class="form-control"
+                           ng-model="baseController.formulario.registro[field.field]"
+                           placeholder="Seleccione {{field.field}}">
+                    <input ng-if="field.tipo==='check'" type="checkbox" class="form-control"
+                           ng-model="baseController.formulario.registro[field.field]">
+                    <select ng-if="field.tipo==='booleano'" class="form-control"
+                            ng-options="opt as opt for opt in ['Sí','No']"
+                            ng-model="baseController.formulario.registro[field.field]"></select>
+                    <select ng-if="field.tipo==='desición'" class="form-control"
+                            ng-options="opt as opt for opt in [field.config.goodoption,field.config.badoption]"
+                            ng-model="baseController.formulario.registro[field.field]"></select>
+                    <select3 ng-if="field.tipo==='lista'" class="form-control"
+                             s2-options="opt as opt for opt in field.realOptions"
+                             ng-model="baseController.formulario.registro[field.field]"></select3>
+                    <select3 ng-if="field.tipo==='lista múltiple'" class="form-control" multiple
+                             s2-options="opt as opt for opt in field.realOptions"
+                             ng-model="baseController.formulario.registro[field.field]"></select3>
+                </div>
+                <div class="col-lg-12 text-center" style="margin-top: 20px;">
+                    <button ng-click="<%= scope %>.enviarFormulario();"
+                            type="button"
+                            class="btn bg-success btn-xs">
+                        Enviar mis respuestas
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <div class="panel-footer text-center">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="panel panel-body">
+                        <div style="text-align: center;color: white">
+                            <label style="opacity: 0.7;"><img alt="logoeis" width="30" height="30"
+                                                              src="../../../assets/images/logoeis.webp">
+                                Diseñado y
+                                desarrollado por <a rel="noopener" rel="noreferrer" href="https://eisdr.com/"
+                                                    target="_blank">Excellent
+                                    Integrity Solutions</a>
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" ng-show="baseController.formulario.end && !baseController.formulario.en_view">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-9 text-left" style="height: 150px">
+                    <h1>{{baseController.formulario.nombre}}</h1>
+                    <p>{{baseController.formulario.descripcion}}</p>
+                </div>
+                <div class="col-lg-3">
+                    <img alt="logo" width="100" height="125" style="float: right !important"
+                         src="files/configuration/logo/logo.webp"
+                         alt="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center" ng-show="!baseController.formulario.internoyalleno">
+                    <h1>Gracias por enviarnos tus respuestas, estaremos trabajando en tus recomendaciones.</h1>
+                </div>
+            </div>
+
+        </div>
+        <div class="panel-footer text-center">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="panel panel-body">
+                        <div style="text-align: center;color: white">
+                            <label style="opacity: 0.7;"><img alt="logoeis" width="30" height="30"
+                                                              src="../../../assets/images/logoeis.webp">
+                                Diseñado y
+                                desarrollado por <a rel="noopener" rel="noreferrer" href="https://eisdr.com/"
+                                                    target="_blank">Excellent
+                                    Integrity Solutions</a>
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        auth.createForm();
+    </script>
+</div>
+<style>
+    .footer {
+        display: none;
+    }
+
+    .content {
+        display: block !important;
+        overflow: paged-y !important;
+    }
+
+    .spinner222 {
+        display: none;
+    }
+
+    .panel {
+        margin-bottom: 0px !important;
+    }
+</style>
+<style>
+    .page-container {
+        border: none !important;
+    }
+</style>

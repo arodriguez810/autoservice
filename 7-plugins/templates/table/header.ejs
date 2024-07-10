@@ -1,0 +1,201 @@
+<div class="page-header-lg page-header-sm page-header page-header-default border-bottom-lg border-bottom-<%= COLOR.secundary %>">
+    <!--Breadcrumb and Table Options-->
+    <div class="breadcrumb-line">
+
+        <%- include('../header/rastro',{scope:scope}); %>
+        <ul class="breadcrumb-elements visible-elements" style="margin-right: -20px;">
+            <li class="visible-lg visible-md">
+                <a ng-click="<%= scope %>.restoreStorage()"
+                   ng-show="<%= scope %>.characterist('persist')"
+                   class="legitRipple">
+                    <i dragonlanguage="" title="MESSAGE.i('restore.Restoreconfigurationforthistable')"
+                       class="icon-loop"></i> 
+                </a>
+            </li>
+            <li class="visible-lg visible-md" ng-show="<%= scope %>.allow('audit') && !<%= scope %>.table.noaudit">
+                <a ng-click="<%= scope %>.auditRecords()"
+                   class="legitRipple">
+                    <i dragonlanguage="" title="MESSAGE.i('mono.audit')"
+                       class="icon-stack-text"></i> 
+                </a>
+            </li>
+            <li class="dropdown visible-lg visible-md" dragonlanguage=""
+                ng-show="<%= scope %>.hideColumnsCount() && !<%= scope %>.buttonhidecolumns">
+                <a href="#" class="dropdown-toggle legitRipple" data-toggle="dropdown"
+                   aria-expanded="false">
+                    <i dragonlanguage="" title="MESSAGE.i('navbar.HideColumns')" class=" icon-list3 "></i>
+                    <span class="label bg-<%= COLOR.secundary %>-400">{{<%= scope %>.hideColumns().length}}</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li ng-repeat="(keyblock,item) in <%= scope %>.columns() track by keyblock"
+                        ng-show="item.visible===false&&item.dead!==true">
+                        <a class="legitRipple" title="Column" ng-click="<%= scope %>.showColumn(keyblock);">
+                            {{<%= scope %>.columnLabel(item,keyblock,false)}}
+                            <i dragonlanguage="" title="MESSAGE.i('navbar.ShowColumns')" class="icon-eye-plus"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a ng-click="<%= scope %>.showallColumn();" class="legitRipple">
+                            <language>MESSAGE.i('mono.ShowAll')</language>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown visible-lg visible-md" ng-show="<%= scope %>.records.data.length>1">
+                <a dragonlanguage title="MESSAGE.i('navbar.RecordsPerPage')" href="#"
+                   class="dropdown-toggle legitRipple" data-toggle="dropdown"
+                   aria-expanded="false" dragonlanguage="">
+                    <i dragonlanguage="" title="MESSAGE.i('navbar.RecordsPerPage')" class="icon-list"></i>
+                    ({{<%= scope %>.table.currentLimit===0?'All':<%= scope %>.table.currentLimit}})
+                    <span ng-show="<%= scope %>.getLimits().length>1" class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right" ng-show="<%= scope %>.getLimits().length>1">
+                    <li class="{{<%= scope %>.limitActive(row)}}"
+                        ng-repeat="(key, row) in <%= scope %>.getLimits() track by key">
+                        <a ng-click="<%= scope %>.goLimit(row)">{{row==0? '*' :row}}</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown" ng-if="<%= scope %>.allow('filter') && <%= scope %>.filters!==undefined">
+                <a href="#"
+                   ng-show="<%= scope %>.filters.blocks.length"
+                   class="dropdown-toggle legitRipple" data-toggle="dropdown"
+                   aria-expanded="false">
+                    <i dragonlanguage="" title="MESSAGE.ic('mono.filters')" class=" icon-filter4 "></i>
+                    <span ng-show="<%= scope %>.filters.blocks.length"
+                          class="label bg-<%= COLOR.secundary %>-400">
+                        {{<%= scope %>.filters.blocks.length}}
+                    </span>
+                     
+                    <span class="caret" ng-show="<%= scope %>.filters.blocks.length"></span>
+                </a>
+                <a href="#"
+                   ng-show="!<%= scope %>.filters.blocks.length"
+                   ng-click="<%= scope %>.openFilters();"
+                   class="dropdown-toggle legitRipple" data-toggle="dropdown"
+                   aria-expanded="false">
+                    <i dragonlanguage="" title="MESSAGE.ic('mono.filters')" class=" icon-filter4 "></i>
+                    <span ng-show="<%= scope %>.filters.blocks.length"
+                          class="label bg-<%= COLOR.secundary %>-400">
+                        {{<%= scope %>.filters.blocks.length}}
+                    </span>
+                     
+                    <span class="caret" ng-show="<%= scope %>.filters.blocks.length"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right" dragonlanguage
+                    ng-show="<%= scope %>.filters.blocks.length">
+                    <li>
+                        <a ng-click="<%= scope %>.openFilters();" class="legitRipple">
+                            <language>MESSAGE.ic('mono.open')</language>
+                        </a>
+                    </li>
+                    <li ng-repeat="(keyblock,item) in <%= scope %>.filters.blocksDescription() track by keyblock">
+                        <a dragonlanguage="" class="legitRipple"
+                           ng-click="<%= scope %>.filters.removeApply(keyblock,item);">
+                            <b>{{<%= scope %>.filters.label(item.column)}}</b> {{item.operator.text}}
+                            <b ng-if="!Array.isArray(item.showvalue)">{{item.showvalue}}</b>
+                            <span ng-if="Array.isArray(item.showvalue)"
+                                  class="label bg-<%= COLOR.secundary %> label-rounded"
+                                  ng-repeat="(id,sub) in item.showvalue track by id">
+                                {{sub}}
+                            </span>
+                            [
+                            <language>MESSAGE.ic('mono.remove')</language>
+                            ]
+                        </a>
+                    </li>
+                    <li ng-if="<%= scope %>.filters.blocksDescription().length>0">
+                        <a dragonlanguage="" ng-click="<%= scope %>.filters.clearApply(true);" class="legitRipple"
+                           title="Filter">
+                            Limpiar Filtros
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown"
+                ng-show="<%= scope %>.allow(['export.PDF','export.CSV','export.XLS','export.DOC','export.Clipboard'])"
+                dragonlanguage="">
+                <a href="#" class="dropdown-toggle legitRipple" data-toggle="dropdown"
+                   aria-expanded="false">
+                    <i dragonlanguage="" title="MESSAGE.i('mono.Exportas')" class=" icon-database-export "></i>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li ng-show="<%= scope %>.allow('export.Clipboard')">
+                        <a ng-click="<%= scope %>.export.go('Clipboard')"><i class="icon-copy3"></i>
+                            <language>MESSAGE.ic('mono.Clipboard')</language>
+                        </a>
+                    </li>
+                    <li ng-show="<%= scope %>.allow('export.PDF')">
+                        <a ng-click="<%= scope %>.export.go('PDF')"> <i class="icon-file-pdf"></i>PDF</a></li>
+                    <li ng-show="<%= scope %>.allow('export.XLS')">
+                        <a ng-click="<%= scope %>.export.go('XLS')"><i class="icon-file-excel"></i>XLS</a></li>
+                </ul>
+            </li>
+            <li class="dropdown visible-lg visible-md" dragonlanguage=""
+                ng-show="!<%= scope %>.report && <%= scope %>.allow('import')  && <%= scope %>.allow('add')">
+                <a href="#" class="dropdown-toggle legitRipple" data-toggle="dropdown"
+                   aria-expanded="false">
+                    <i dragonlanguage="" title="MESSAGE.ic('mono.import')" class="icon-database-upload"></i>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a ng-click="<%= scope %>.export.downloadExample()"><i class="icon-file-download"></i>
+                            <language>MESSAGE.i('navbar.DonwloadExample')</language>
+                        </a>
+                    </li>
+                    <li>
+                        <a ng-click="<%= scope %>.export.importModal()"> <i class="icon-import"></i>
+                            <language>MESSAGE.ic('mono.import')</language>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown" dragonlanguage=""
+                ng-show="!<%= scope %>.report && <%= scope %>.characterist('batch') && <%= scope %>.records.data.length>1 && <%= scope %>.allow(['remove','active','copy'])">
+                <a href="#" class="dropdown-toggle legitRipple" data-toggle="dropdown"
+                   aria-expanded="false">
+                    <i dragonlanguage="" title="MESSAGE.i('mono.Actions')" class="icon-cog2 "></i>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li ng-show="<%= scope %>.allow('remove')">
+                        <a ng-click="<%= scope %>.deleteSelected()"><i
+                                    class="icon-trash"></i>
+                            <language>MESSAGE.ic('mono.remove')</language>
+                        </a>
+                    </li>
+                    <li ng-show="<%= scope %>.activeColumn() && <%= scope %>.allow('active')">
+                        <a ng-click="<%= scope %>.activeSelected(1)">
+                            <i class="icon-checkmark-circle"></i>
+                            <language>MESSAGE.ic('mono.enable')</language>
+                        </a>
+                    </li>
+                    <li ng-show="<%= scope %>.activeColumn() && <%= scope %>.allow('active')">
+                        <a ng-click="<%= scope %>.activeSelected(0)"><i class="icon-circle"></i>
+                            <language>MESSAGE.ic('mono.disable')</language>
+                        </a>
+                    </li>
+                    <li ng-show="<%= scope %>.allow('copy') && !<%= scope %>.dragrow">
+                        <a ng-click="<%= scope %>.copyMultiple()"><i class="icon-copy"></i>
+                            <language>MESSAGE.i('mono.CopySelected')</language>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a ng-click="<%= scope %>.refresh()" class="legitRipple" id="refreshBtn">
+                    <i dragonlanguage="" title="MESSAGE.ic('mono.refresh')" class="icon-rotate-cw3 loadingButton"></i> 
+                </a>
+            </li>
+            <li ng-show="!<%= scope %>.report && <%= scope %>.allow('add')">
+                <a ng-click="<%= scope %>.formulary(null,'new')" class="legitRipple">
+                    <i dragonlanguage="" title="MESSAGE.ic('mono.add')" class="icon-plus-circle2 "></i> 
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!--Breadcrumb and Table Options-->
+</div>

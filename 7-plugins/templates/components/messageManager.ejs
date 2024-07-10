@@ -1,0 +1,40 @@
+<script>
+    <%= scope %>.MMessages = baseController.viewData.staticdata;
+</script>
+<div class="dragon-panel" id="TablePanel" style="overflow-x: scroll;overflow-y: visible">
+    <div class="panel-group content-group-lg" id="accordion1">
+        <div class="panel" ng-repeat="(key,message) in <%= scope %>.MMessages track by key">
+            <div class="panel-heading bg-<%= COLOR.secundary %>">
+                <h6 class="panel-title">
+                    <a>{{key}}</a>
+                </h6>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li ng-repeat="(index,obj) in message.messages track by index">
+                        "{{obj}}":"{{obj}}",
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    <%= scope %>.refreshAngular();
+    // $(".collapsible-sortable").sortable({
+    //     connectWith: '.collapsible-sortable',
+    //     items: '.panel',
+    //     helper: 'original',
+    //     cursor: 'move',
+    //     handle: '[data-action=move]',
+    //     revert: 100,
+    //     containment: '.content-wrapper',
+    //     forceHelperSize: true,
+    //     placeholder: 'sortable-placeholder',
+    //     forcePlaceholderSize: true,
+    //     tolerance: 'pointer',
+    //     start: function (e, ui) {
+    //         ui.placeholder.height(ui.item.outerHeight());
+    //     }
+    // });
+</script>

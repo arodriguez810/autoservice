@@ -1,0 +1,9 @@
+{
+  "entities": [
+    {
+      "id": "34",
+      "controllerName": "notificacion",
+      "displayName": "(Dashboard) Dashboard de Inicio"
+    }
+  ]
+}

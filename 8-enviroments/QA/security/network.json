@@ -1,0 +1,14 @@
+{
+  "domain": "localhost",
+  "subdomain": "",
+  "folder": "CBS",
+  "ssl": false,
+  "port": 5050,
+  "proxy": {
+    "domain": "localhost",
+    "subdomain": "",
+    "folder": "CBS",
+    "ssl": false,
+    "port": 5050
+  }
+}

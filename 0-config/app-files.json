@@ -1,0 +1,84 @@
+{
+  "fileType_general": {
+    "image": [
+      "AIS",
+      "BMP",
+      "GIF",
+      "ICO",
+      "JPE",
+      "JPEG",
+      "JPG",
+      "PNG",
+      "PS",
+      "PSD",
+      "PSP",
+      "SVG",
+      "TIF"
+    ],
+    "video": [
+      "3G2",
+      "3GP",
+      "AVI",
+      "FLV",
+      "MKV",
+      "MOV",
+      "MP4",
+      "MPA",
+      "MPE",
+      "MPEG",
+      "MPG",
+      "SWF",
+      "VOB",
+      "WMV"
+    ],
+    "audio": [
+      "AIF",
+      "CDA",
+      "MID",
+      "MP3",
+      "MPA",
+      "OGG",
+      "WAV",
+      "WMA",
+      "WPL"
+    ],
+    "compressed": [
+      "7Z",
+      "ARJ",
+      "DEB",
+      "PKG",
+      "RAR",
+      "RPM",
+      "TAR",
+      "ZIP"
+    ],
+    "text": [
+      "DOC",
+      "DOCX",
+      "DOCHTML",
+      "RTF",
+      "SCP",
+      "TXT"
+    ],
+    "readonlytext": [
+      "PDF"
+    ],
+    "excel": [
+      "CSV",
+      "ODS",
+      "XLM",
+      "XLS",
+      "XLSHTML",
+      "XLSM",
+      "XLSX"
+    ],
+    "powerpoint": [
+      "KEY",
+      "ODP",
+      "PPS",
+      "PPT",
+      "PPTHTML",
+      "PPTX"
+    ]
+  }
+}

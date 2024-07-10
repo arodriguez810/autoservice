@@ -1,0 +1,21 @@
+{
+  "routes": {
+    "notoken": [
+      "/",
+      "/${CONFIG.folder}/",
+      "/${CONFIG.folder}/error/error",
+      "/${CONFIG.folder}/error/base",
+      "/${CONFIG.folder}/auth/login",
+      "/${CONFIG.folder}/auth/forgot",
+      "/${CONFIG.folder}/auth/restore",
+      "/api/my_user/list",
+      "/email/send",
+      "/service/base_auth/md5",
+      "/service/base_auth/changePassword",
+      "/service/base_auth/matchtoken",
+      "/service/base_auth/login",
+      "/post/templates/pdf/table",
+      "/post/templates/pdf/table"
+    ]
+  }
+}

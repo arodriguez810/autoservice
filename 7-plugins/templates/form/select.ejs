@@ -1,0 +1,507 @@
+<%
+if (DATA.name !== undefined) {
+    var name, model, opts;
+    name = DATA.name;
+    model = DATA.model;
+    opts = DATA.opts;
+}
+var name = name || "";
+var options = {
+    forme: "form",
+    label: params.capitalize(name),
+    default: 'Select ' + params.capitalize(name),
+    icon: {
+        class: "none",
+        position: "left",
+        color: COLOR.secundary + "-800"
+    },
+    self: true,
+    allownull: true,
+    allownew: true,
+    allowedit: true,
+    allowview: true,
+    allowlist: true,
+    refresh: true,
+    condition: "true",
+    multiple: false,
+    disabled: false,
+    overall: false,
+    helptext: '',
+    value: "id",
+    text: "item.name",
+    //table: "",
+    get: {
+        table: '',
+        field: ''
+    },
+    parent: false,
+    childs: false,
+    todos: false,
+    search: false,
+    query: {
+        limit: 0,
+        page: 1,
+        where: [],
+        orderby: "id",
+        order: "asc",
+        distinct: false
+        // join: [
+        //     {
+        //         table: "ms_category",
+        //         base: "category",
+        //         field: "id",
+        //         columns: ["id", "name"]
+        //     },
+        //     {
+        //         table: "otratable",
+        //         base: "ms_category_id",
+        //         field: "id",
+        //         columns: ["id", "name"]
+        //     }
+        // ]
+    },
+    groupby: "",
+    data: [],
+    hint: null,
+    posttype: "select"
+};
+options = OBJECT.merge(options, opts);
+var nameclean = name.replace(/\./g, '_');
+options.model = options.model ? options.model : false;
+
+
+
+options.controller = options.controller || options.table;
+options.permission = options.permission || options.controller;
+if (options.join) {
+    console.log(options.join);
+    options.query.join = options.join;
+}
+
+popopme = function (entity, field) {
+    var prueba = HINTS.filter(d => {
+        return (d.trueEntity === entity || d.entities === entity) && d.field_names === field
+    })
+
+    function sortArray() {
+        options.mess = prueba.sort(function (a, b) {
+            return b.id - a.id
+        });
+    }
+
+    sortArray();
+}
+popopme(model, nameclean);
+var toclient = JSON.stringify(options);
+%>
+<script>
+    <%= model %>.selectMessage = MESSAGE.ic('mono.youselect');
+    <%= model %>.triggers.table.before.control("<%= nameclean %>");
+    if (DSON.oseaX(<%= model + "." + name %>))
+            <%= model + "." + nameclean %> = "[NULL]";
+
+    <% if(options.multiple){ %>
+    <%= model %>.<%= nameclean %> = [];
+    <%= model + "." + options.forme %>.schemas.insert["<%= name %>"] = FORM.schemasType.selectMultiple;
+    <%= model + "." + options.forme %>.schemas.select["<%= name %>"] = `{
+                    toTable: "<%= options.table %>",
+                    toDeleteTable: "<%= (options.get || {tableDelete: options.table}).tableDelete || options.table %>",
+                    text: MESSAGE.i('actions.Loading'),
+                    fields: {
+                        <%= options.get.fieldTo %>: "$id",
+                    },
+                }`;
+    <% } %>
+
+    <%= model + "." + options.forme %>.registerField("<%= name %>", "<%= toclient %>", "'[NULL]'");
+    <%= model + "." + options.forme %>.options
+        .<%= name %>.default
+        = `${MESSAGE.ic('mono.youselect')}`;
+    if (MESSAGE.exist('columns.<%= nameclean %>') && <%= model + "." + options.forme %>.
+    options
+        .<%= name %>.traduce !== false
+    )
+    {
+        <%= model + "." + options.forme %>.
+        options
+            .<%= name %>.label = MESSAGE.ic('columns.<%= nameclean %>');
+        <%= model + "." + options.forme %>.
+        options
+            .<%= name %>.default
+            = `${MESSAGE.ic('mono.youselect')}`;
+    }
+    if (new SESSION().isLogged()) {
+        <%= model + "." + options.forme %>.
+        options
+            .<%= name %>.mess = <%= model + "." + options.forme %>.
+        options
+            .<%= name %>.mess.filter(d => {
+            return d.company == new SESSION().current().compania_id;
+        })
+        if (<%= model + "." + options.forme %>.
+        options
+            .<%= name %>.mess.length == 0
+    )
+        {
+            delete <%= model + "." + options.forme %>.
+            options
+                .<%= name %>.mess
+        }
+        if (<%= model + "." + options.forme %>.
+        options
+            .<%= name %>.mess
+    )
+        {
+            <%= model + "." + options.forme %>.
+            options
+                .<%= name %>.popover = {
+                title:
+                <%= model + "." + options.forme %>.options
+                    .<%= name %>.mess[0].field_names,
+                content:
+                <%= model + "." + options.forme %>.options
+                    .<%= name %>.mess[0].text,
+                label: MESSAGE.exist('columns.<%= nameclean %>') ? MESSAGE.i('columns.<%= nameclean %>') :
+                <%= model + "." + options.forme %>.options
+                    .<%= name %>.trueplaceholder ||
+                <%= model + "." + options.forme %>.options
+                    .<%= name %>.placeholder
+            }
+        }
+    }
+
+
+    var isReadProgram = <%= model + "." + options.forme %>.isReadOnly('<%= name %>');
+    <% if(options.overall !== true){ %>
+    if (isReadProgram !== false) {
+        <%= model + "." + options.forme %>.
+        options
+            .<%= name %>.disabled = true;
+        if (isReadProgram !== undefined) {
+            <%= model %>.<%= name %> = isReadProgram;
+        }
+    }
+    <% } %>
+    <%= model + "." + options.forme %>.loadDropDown("<%= name %>");
+
+    <% if (options.permission) { %>
+    var permissions = eval('PERMISSIONS.mypermission.<%= options.permission %>');
+    permissions = permissions ? permissions.allow : {allow: {}};
+    if (permissions.edit === false)
+            <%= model + "." + options.forme %>.
+    options
+        .<%= name %>.allowedit = false;
+    if (permissions.view === false)
+            <%= model + "." + options.forme %>.
+    options
+        .<%= name %>.allowview = false;
+    if (permissions.add === false)
+            <%= model + "." + options.forme %>.
+    options
+        .<%= name %>.allownew = false;
+    if (permissions.menu === false)
+            <%= model + "." + options.forme %>.
+    options
+        .<%= name %>.allowlist = false;
+    <% } %>
+</script>
+
+<div class="form-group-material form-group has-feedback has-{{<%= model %>.validate['<%= name %>'].type || 'success' }}  has-feedback-<%= options.icon.position %>"
+     id="input<%= model %>_<%= nameclean %>">
+    <label class="control-label is-visible animate" style="color:#000000 !important;">
+        {{<%= model + "." + options.forme %>.options.<%= name %>.truelabel || <%= model + "." + options.forme %>
+        .options.<%= name %>.label}}
+        <i ng-show="<%= model + "." + options.forme %>.options.<%= name %>.mess.length>0"
+           id="popover<%= model %>_<%= nameclean %>" class="icon-help">
+        </i>
+    </label>
+
+    <% if(options.allownew || options.allowedit || options.allowview || options.allowlist || options.refresh){ %>
+        <li class="dropdown" style="float: right;list-style: none"
+            ng-show="<%= model + "." + options.forme %>.options.<%= name %>.disabled!==true">
+
+            <a href="#" class="dropdown-toggle legitRipple " data-toggle="dropdown"
+               aria-expanded="false">
+                <i dragonlanguage="" title="MESSAGE.i('mono.options')"
+                   class="text-<%= COLOR.secundary %> icon-list-unordered"></i>
+                <span class="caret"></span>
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-right">
+
+                <% if(options.refresh){ %>
+                    <li>
+                        <a dragonlanguage="" title="MESSAGE.i('mono.RefreshList')"
+                           id="reload<%= model %>_<%= nameclean %>"
+                        >
+                            <i class="icon-reload-alt"></i>
+                            <language>MESSAGE.ic('mono.RefreshList')</language>
+                        </a>
+                    </li>
+                <% } %>
+                <% if(options.allowlist){ %>
+                    <li>
+                        <a dragonlanguage="" title="MESSAGE.ic('mono.list')" id="list<%= model %>_<%= nameclean %>">
+                            <i class="icon-list"></i>
+                            <language>MESSAGE.ic('mono.list')</language>
+                        </a>
+                    </li>
+                <% } %>
+                <% if(!options.multiple){ %>
+                    <li ng-show="<%= model + "." + name %>!='[NULL]' && <%= model + "." + options.forme %>.options.<%= name %>.allowview">
+                        <a dragonlanguage="" title="MESSAGE.i('mono.Viewitem')"
+
+                           id="view<%= model %>_<%= nameclean %>">
+                            <i class="icon-eye"></i>
+                            <language>MESSAGE.ic('mono.Viewitem')</language>
+                        </a>
+                    </li>
+                <% } %>
+                <li ng-show="<%= model + "." + options.forme %>.options.<%= name %>.allownew">
+                    <a dragonlanguage="" title="MESSAGE.i('mono.Additem')" id="new<%= model %>_<%= nameclean %>"
+                    >
+                        <i class="icon-plus-circle2"></i>
+                        <language>MESSAGE.ic('mono.Additem')</language>
+                    </a>
+                </li>
+                <% if(!options.multiple){ %>
+                    <li ng-show="<%= model + "." + name %>!='[NULL]' &&  <%= model + "." + options.forme %>.options.<%= name %>.allowedit">
+                        <a dragonlanguage="" title="MESSAGE.i('mono.Edititem')"
+                           id="edit<%= model %>_<%= nameclean %>">
+                            <i class="icon-pencil"></i>
+                            <language>MESSAGE.ic('mono.Edititem')</language>
+                        </a>
+                    </li>
+                <% } %>
+            </ul>
+        </li>
+    <% } %>
+
+
+
+    <% if(options.search && !options.disabled){ %>
+        <script>
+            <%= model + "." + options.forme %>.options
+                .<%= name %>.onsearch = async () => {
+
+
+                if (<%= model %>["<%= name %>_beforesearch"])
+                        <%= model %>["<%= name %>_beforesearch"]();
+
+                if (<%= model + "." + name + "_search" %>) {
+                    <%= model %>.
+                    selectQueries["<%= name %>"] = [
+                        {
+                            "field": "<%= options.search %>",
+                            "operator": " ",
+                            "value": "$ like'%" + <%= model + "." + name + "_search" %> +"%'"
+                        }
+                    ];
+                } else {
+                    <%= model %>.
+                    selectQueries["<%= name %>"] = [];
+                }
+                <%= model + "." + options.forme %>.
+                loadDropDown("<%= name %>", undefined, function () {
+                    if (<%= model %>["<%= name %>_aftersearch"])
+                            <%= model %>["<%= name %>_aftersearch"]();
+                    $('[name="<%= model %>_<%= nameclean %>"]').select2("open");
+                });
+            };
+        </script>
+    <div>
+        <div style="width: 50%;">
+            <input ng-model-onblur type="text" style="padding-top: 5px !important; padding-right: 50px !important"
+                   maxlength="50"
+                   ng-model="<%= model + "." + name + "_search" %>" class="form-control">
+            <a
+                    style="float: right !important; border-radius: 3px; padding: 0 2px; margin-top: -25px;"
+                    class="bg-<%= COLOR.secundary %>"
+                    ng-click="<%= model + "." + options.forme %>.options.<%= name %>.onsearch()">
+                Buscar
+            </a>
+            <i style="margin-bottom: -31px;
+    margin-top: -21px;" class="icon-search4 text-secundary"></i>
+        </div>
+        <div>
+            <% } %>
+            <select
+                    <%= options.multiple ? "multiple='multiple'" : "" %>
+                    style="display: inline;"
+                    ng-model="<%= model + "." + name %>"
+                    name="<%= model %>_<%= nameclean %>"
+                    ng-disabled="<%= model + "." + options.forme %>.options.<%= name %>.disabled"
+                    class="form-control bootstrap-select js-example-basic-single">
+                <% if(!options.allownull){ %>
+                    <option></option>
+
+                <% }else{ %>
+                    <% if(!options.multiple && !options.todos){ %>
+                        <option value="[NULL]">{{<%= model %>.selectMessage}}</option>
+                    <% } %>
+                    <% if(options.todos){ %>
+                        <option value="[NULL]">Todos</option>
+                    <% } %>
+                <% } %>
+
+                <% if(options.groupby){ %>
+                    <optgroup
+                            ng-repeat="(key,categories) in <%= model %>.form.options.<%= name %>.groupbydata track by key"
+                            label="{{key}}">
+                        <option
+
+                                ng-if="<%= options.condition %>"
+                                data-object="{{item}}" ng-repeat="(sub,item) in categories track by sub"
+                                value="{{item.<%= options.value %>}}">
+                            {{<%= options.text %>}}
+                        </option>
+                    </optgroup>
+                <% } else{ %>
+                    <% if(options.evalvalue){ %>
+                        <option data-object="{{item}}"
+                                ng-if="<%= options.condition %>"
+                                ng-repeat="(key,item) in <%= model + "." + options.forme %>.options.<%= name %>.data track by key"
+                                value="{{<%= options.value %>}}">
+                            {{<%= options.text %>}}
+                        </option>
+                    <% } else if(!options.search || options.disabled){ %>
+                        <option data-object="{{item}}"
+                                ng-if="<%= options.condition %>"
+                                ng-repeat="(key,item) in <%= model + "." + options.forme %>.options.<%= name %>.data track by key"
+                                value="{{item.<%= options.value %>}}">
+                            {{<%= options.text %>}}
+                        </option>
+                    <% } else { %>
+                        <option data-object="{{item}}"
+                                ng-if="<%= options.condition %>"
+                                ng-repeat="(key,item) in <%= model + "." + options.forme %>.options.<%= name %>.data track by key"
+                                value="{{item.<%= options.value %>}}">
+                            {{<%= options.text %>}}
+                        </option>
+                    <% } %>
+                <% } %>
+            </select>
+            <% if(options.search && !options.disabled){ %>
+        </div>
+    </div>
+    <% }else{ %>
+    <% } %>
+
+    <div class="form-control-feedback" ng-if="!<%= model + "." + options.forme %>.options.<%= name %>.disabled"
+         style="<%= options.search && !options.disabled ? "margin: 40px 0 0 0;" : "" %>">
+        <i id="icon<%= name %>" class="icon-<%= options.icon.class %> text-secundary"></i>
+    </div>
+    <span ng-if="<%= model + "." + options.forme %>.options.<%= name %>.helptext!=''"
+          class="help-block text-muted">
+            {{<%= model + "." + options.forme %>.options.<%= name %>.helptext}}
+        </span>
+    <span ng-show="<%= model %>.validate['<%= name %>'].messages.length>0" class="help-block">
+            <p class="text-{{validation.type}}"
+               ng-show="validation.visible!==false || <%= model + "." + options.forme %>.intent===true"
+               ng-repeat="(key,validation) in <%= model %>.validate['<%= name %>'].messages track by key">
+                   <i class="{{validation.icon}}"></i> {{validation.message}}
+            </p>
+        </span>
+</div>
+
+<script>
+    function reloadMe<%= model %>_<%= nameclean %>() {
+        if (PRUDENTS["<%= options.controller %>"] !== undefined) {
+            <% if(options.multiple){ %>
+            if (<%= model %>.<%= nameclean %>===
+            "[NULL]"
+        )
+            <%= model %>.<%= nameclean %> = [];
+            <%= model %>.<%= nameclean %>.
+            push(PRUDENTS["<%= options.controller %>"].toString());
+            delete PRUDENTS["<%= options.controller %>"];
+            <% }else { %>
+            <%= model %>.<%= nameclean %> = PRUDENTS["<%= options.controller %>"].toString();
+            delete PRUDENTS["<%= options.controller %>"];
+            <% } %>
+        }
+
+    }
+
+    $(document).ready(function () {
+        if (new SESSION().isLogged()) {
+            if (<%= model + "." + options.forme %>.
+            options.<%= name %>.mess
+        )
+            {
+                $('#popover<%= model %>_<%= nameclean %>').popover({
+                    container: 'body',
+                    title: eval("`" +<%= model + "." + options.forme %>.options.<%= name %>.label + "`"),
+                    content:eval("`" +<%= model + "." + options.forme %>.options.<%= name %>.popover.content + "`"),
+                trigger: 'manual'
+                });
+                // Obtén el elemento que deseas observar
+                const elemento = document.getElementById("popover<%= model %>_<%= nameclean %>");
+
+                // Agrega un event listener al objeto document
+                document.addEventListener("click", function (evento) {
+                    // Verifica si el evento ocurrió fuera del elemento que estamos observando
+                    if (elemento !== evento.target && !elemento.contains(evento.target)) {
+                        // Se hizo clic fuera del elemento
+                        $('#popover<%= model %>_<%= nameclean %>').popover('hide')
+
+                    }
+                });
+                $('#popover<%= model %>_<%= nameclean %>').on('click', function (evento) {
+                    evento.stopPropagation();
+                    $(this).popover('show');
+                });
+            }
+        }
+        <%= model + "." + options.forme %>.
+        beginFunctions.push(`reloadMe<%= model %>_<%= nameclean %>();`);
+
+        <%= model %>.
+        <%= name %>_object = {};
+        $('[name="<%= model %>_<%= nameclean %>"]').change(function () {
+            var selectedss = $(this).children("option:selected").data('object');
+            <%= model %>.
+            <%= nameclean %>_object = selectedss;
+
+
+        });
+        $('[name="<%= model %>_<%= nameclean %>"]').on('select2:open', function (e) {
+            const evt = "scroll.select2";
+            $(e.target).parents().off(evt);
+            $(window).off(evt);
+        });
+        $('#reload<%= model %>_<%= nameclean %>').click(function () {
+            <%= model + "." + options.forme %>.
+            loadDropDown("<%= name %>");
+            return false;
+        });
+        $('#new<%= model %>_<%= nameclean %>').click(function () {
+            CURRENTPRUDENTS = "<%= options.controller %>";
+            <%= model %>.
+            modalAction("<%= options.controller %>", MESSAGE.ic("columns.<%= options.controller %>"), '', 'new', {});
+            return false;
+        });
+        $('#list<%= model %>_<%= nameclean %>').click(function () {
+            <%= model %>.
+            modalAction("<%= options.controller %>", MESSAGE.ic("columns.<%= options.controller %>"), '', 'list', {});
+            return false;
+        });
+
+        $('#edit<%= model %>_<%= nameclean %>').click(function () {
+            <%= model %>.
+            modalAction("<%= options.controller %>", MESSAGE.ic("columns.<%= options.controller %>"), '', 'edit', <%= model %>.<%= name %>)
+            ;
+            return false;
+        });
+        $('#view<%= model %>_<%= nameclean %>').click(function () {
+            <%= model %>.
+            modalAction("<%= options.controller %>", MESSAGE.ic("columns.<%= options.controller %>"), '', 'view', <%= model + "." + options.forme %>.selected("<%= options.controller %>")
+        )
+            ;
+            return false;
+        });
+
+
+    });
+    MESSAGE.run();
+</script>

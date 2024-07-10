@@ -1,0 +1,91 @@
+<div id="<%= scope %>" ng-controller="<%= scope %> as <%= scope %>">
+    <ul class="nav nav-<%= COLOR.primary %> nav-tabs <%= COLOR.primary %> nav-justified" dragonlanguage="">
+        <li class="active">
+            <a href="#create" data-toggle="tab" id="tabcreate" ng-click="dragon_audit.openTab('insert')">
+                <i class="icon-database-add position-left"></i>
+                <language>MESSAGE.icspace('columns.Create', 'Creados')</language>
+                <i class="border-white  position-right"></i>
+            </a>
+        </li>
+        <li class="">
+            <a href="#delete" data-toggle="tab" id="tabdelete" ng-click="dragon_audit.openTab('delete')">
+                <i class="icon-database-remove position-left"></i>
+                <language>MESSAGE.icspace('columns.Delete', 'Eliminados')</language>
+                <i class="border-white  position-right"></i>
+            </a>
+        </li>
+        <li class="">
+            <a href="#update" data-toggle="tab" id="tabupdate" ng-click="dragon_audit.openTab('update')">
+                <i class="icon-database-edit2 position-left"></i>
+                <language>MESSAGE.icspace('columns.Update', 'Actualizados')</language>
+                <i class="border-white  position-right"></i>
+            </a>
+        </li>
+        <li class="" ng-show="<%= scope + ".show_aplication_tab"%>">
+            <a href="#update" data-toggle="tab" id="tabupdate" ng-click="dragon_audit.openTab('app')">
+                <i class="icon-database-edit2 position-left"></i>
+                <language>MESSAGE.icspace('columns.Update', 'Aplicación')</language>
+                <i class="border-white  position-right"></i>
+            </a>
+        </li>
+    </ul>
+    <div class="row" ng-show="<%= scope + ".showfields" %>">
+        <div class='col-sm-3 col-md-3'>
+            <%- FORM.select("audit_action", scope, {
+                allownull: false,
+                allownew: false,
+                allowedit: false,
+                allowview: false,
+                allowlist: false,
+                column: "nombre",
+                text: "item.nombre ",
+                table: "audit_action",
+                icon: {class: "archive"},
+                label: "Acción",
+                condition: "item.compania == dragon_audit.session.compania_id && item.modelName == dragon_audit.storageModel"
+            }) %>
+        </div>
+        <div class='col-sm-3 col-md-3'>
+            <%- FORM.button("filter", scope, {text: "Filtrar", type: "normal", icon: {class: "filter4"}}) %>
+        </div>
+
+
+    </div>
+    <div class="tab-content" id="container-create-request">
+        <div class="tab-pane active" id="create">
+            <div>
+                <div class="panel panel-flat">
+                    <%- include('../../7-plugins/templates/table/header',{scope:scope}); %>
+                    <div class="subcontent">
+                        <%- include('../../7-plugins/templates/table/base',{scope:scope}); %>
+                    </div>
+                </div>
+            </div><!--end-->
+        </div>
+        <div class="tab-pane" id="delete">
+            <div>
+                <div class="panel panel-flat">
+                    <%- include('../../7-plugins/templates/table/header',{scope:scope}); %>
+                    <div class="subcontent">
+                        <%- include('../../7-plugins/templates/table/base',{scope:scope}); %>
+                    </div>
+                </div>
+            </div><!--end-->
+        </div>
+        <div class="tab-pane" id="update">
+            <div>
+                <div class="panel panel-flat">
+                    <%- include('../../7-plugins/templates/table/header',{scope:scope}); %>
+                    <div class="subcontent">
+                        <%- include('../../7-plugins/templates/table/base',{scope:scope}); %>
+                    </div>
+                </div>
+            </div><!--end-->
+            <%- //include('updateview')   %>
+        </div>
+        <div class="tab-pane" id="app">
+            <%- //include('appview') %>
+        </div>
+    </div>
+</div>
+

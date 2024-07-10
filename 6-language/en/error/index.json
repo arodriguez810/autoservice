@@ -1,0 +1,8 @@
+{
+  "Oopsanerrorhasoccurred": "Oops, an error has occurred",
+  "e404": "Not Found",
+  "dbreference": "Registration cannot be deleted because it is related to another entity: ${field}",
+  "isserver": "The server has started another version of the application please reload the page (F5) to access",
+  "dbexist1": "A record with the value already exists ",
+  "dbexist2": " for the field"
+}

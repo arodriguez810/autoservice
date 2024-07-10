@@ -1,0 +1,150 @@
+{
+  "permissions": {
+    "entities": [
+      "usuario"
+    ],
+    "terms": [
+      {
+        "name": "group",
+        "relation": "user_group"
+      }
+    ],
+    "excludes": [
+      "A las opciones que tengan el type 'empty' hay que ponerles en el allow menu true si estás opciones están en el menú para que se puedan trabajar en la opción de roles y permisos"
+    ],
+    "list": {
+      "usuario": {
+        "type": "full",
+        "allow": {
+          "active": true,
+          "unlock": true,
+          "unlock_action": true
+        }
+      },
+      "cargo": {
+        "type": "full",
+        "allow": {}
+      },
+      "departamento": {
+        "type": "full",
+        "allow": {}
+      },
+      "dragon_audit": {
+        "type": "report",
+        "allow": {}
+      },
+      "hint_entity": {
+        "type": "full",
+        "allow": {}
+      },
+      "hint_fields": {
+        "type": "full",
+        "allow": {}
+      },
+      "notificacion": {
+        "type": "full",
+        "allow": {
+          "active": true
+        }
+      },
+      "ws_connection": {
+        "type": "full",
+        "allow": {}
+      },
+      "ws_connection_field": {
+        "type": "full",
+        "allow": {}
+      },
+      "ws_periods": {
+        "type": "full",
+        "allow": {}
+      },
+      "login_history": {
+        "type": "report",
+        "allow": {
+          "work": true,
+          "comment_activities": true
+        }
+      },
+      "group": {
+        "type": "full",
+        "allow": {}
+      },
+      "code_generator": {
+        "type": "empty",
+        "allow": {
+          "menu": true,
+          "actions": true,
+          "audit": true,
+          "view": false,
+          "edit": true,
+          "add": false,
+          "comment": false,
+          "work": false,
+          "file": {
+            "download": true,
+            "remove": true,
+            "upload": true
+          }
+        }
+      },
+      "modulo_notificacion": {
+        "type": "empty",
+        "allow": {
+          "file": {
+            "download": true,
+            "remove": true,
+            "upload": true
+          },
+          "actions": true,
+          "view": false,
+          "audit": true,
+          "remove": false,
+          "menu": true,
+          "edit": true,
+          "add": true,
+          "export": {
+            "Clipboard": false,
+            "PDF": false,
+            "CSV": false,
+            "XLS": false,
+            "DOC": false
+          }
+        }
+      },
+      "modulo_formulario": {
+        "type": "full",
+        "allow": {}
+      },
+      "modulo_formulario_registro": {
+        "type": "report",
+        "allow": {
+        }
+      },
+      "compania_config": {
+        "type": "empty",
+        "allow": {
+          "file": {
+            "download": true,
+            "remove": true,
+            "upload": true
+          },
+          "actions": true,
+          "view": false,
+          "audit": false,
+          "remove": false,
+          "menu": true,
+          "edit": true,
+          "add": false,
+          "export": {
+            "Clipboard": false,
+            "PDF": false,
+            "CSV": false,
+            "XLS": false,
+            "DOC": false
+          }
+        }
+      }
+    }
+  }
+}

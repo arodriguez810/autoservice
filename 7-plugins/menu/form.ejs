@@ -1,0 +1,40 @@
+<div class="tab-content">
+    <div class="tab-pane active" id="basic">
+        <div class="row">
+            <div class="col-sm-3 col-md-3">
+                <%- FORM.input("name", scope, {maxlength: 50}) %>
+            </div>
+            <div class="col-sm-3 col-md-3 ">
+                <%-
+                FORM.selectsimple("homePage", scope, {
+                    label: "Home Page",
+                    data: MENUONEROW,
+                    groupby: "category",
+                    icon: {class: "home"}
+                }) %>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <%- FORM.checkbox("isAdmin", scope, {text: 'Admin?'}) %>
+            </div>
+            <div class='col-sm-3 col-md-3'>
+                <%- FORM.select('caracteristica', scope, {
+                    value: 'code',
+                    text: 'item.nombre',
+                    table: 'caracteristica'
+                }) %>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <%- FORM.textarea("description", scope, {maxlength: 200}) %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- FORM.footer(scope) %>
+
+
+
+
+

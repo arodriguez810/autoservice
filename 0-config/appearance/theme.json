@@ -1,0 +1,36 @@
+{
+  "hidemenus": [],
+  "ui": {
+    "animation": {
+      "outanimation": "",
+      "inanimation": ""
+    },
+    "console": {
+      "text": "white",
+      "bg": "bgYellow"
+    },
+    "theme": {
+      "primary": "192649",
+      "primaryShades": "Dark",
+      "secundary": "9c282d",
+      "secundaryShades": "Balanced",
+      "extra": "192649",
+      "extraShades": "Dark",
+      "text1": "#FFF",
+      "text2": "#FFF",
+      "text3": "#FFF",
+      "primaryShades_object": {
+        "id": "7,7,7,8,8,8,9,9,9,10",
+        "name": "Oscuro"
+      },
+      "secundaryShades_object": {
+        "id": "1,2,3,4,5,6,7,8,9,10",
+        "name": "Balanceado"
+      },
+      "extraShades_object": {
+        "id": "7,7,7,8,8,8,9,9,9,10",
+        "name": "Oscuro"
+      }
+    }
+  }
+}

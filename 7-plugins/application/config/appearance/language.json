@@ -1,0 +1,18 @@
+{
+  "languages": [
+    {
+      "code": "en",
+      "name": "English",
+      "flag": "us",
+      "time": "en-gb",
+      "money": "USD"
+    },
+    {
+      "code": "es",
+      "name": "Español",
+      "flag": "es",
+      "time": "es-do",
+      "money": "DOP"
+    }
+  ]
+}
