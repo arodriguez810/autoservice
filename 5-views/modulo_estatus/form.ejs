@@ -1,0 +1,161 @@
+<div class="tab-content">
+    <div class="tab-pane active" id="basic">
+        <div class="row">
+            <div class='col-sm-2 col-md-4'>
+                <%- FORM.select('tipo_estatus', scope, {
+                    allownew: false,
+                    allowedit: false,
+                    allowview: false,
+                    allowlist: false,
+                    text: "item.nombre",
+                    table: 'tipo_estatus',
+                    label: "Tipo del Estatus",
+                    icon: {class: "archive"}
+                }) %>
+            </div>
+            <div class="col-sm-2 col-md-4">
+                <%- FORM.checkbox("es_autorizado", scope, {text: '¿Este estatus es autorizado?'}) %>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2 col-md-4">
+                <%- FORM.select('modulo_entidad', scope, {
+                    allownew: false,
+                    allowedit: false,
+                    allowview: false,
+                    allowlist: false,
+                    text: "item.nombre",
+                    table: 'modulo_entidad',
+                    label: "Módulo",
+                    icon: {class: "archive"}
+                }) %>
+            </div>
+            <div class='col-sm-2 col-md-4'>
+                <%- FORM.select('icon', scope, {
+                    allownew: false,
+                    allowedit: false,
+                    allowview: false,
+                    allowlist: false,
+                    text: "item.nombre",
+                    table: 'iconos',
+                    label: "Ícono",
+                    icon: {class: "archive"}
+                }) %>
+            </div>
+            <div class='col-sm-12 col-md-6'>
+                <%- FORM.input('nombre', scope, {placeholder: "Nombre"}) %>
+            </div>
+
+            <div class='col-sm-12 col-md-6'>
+                <%- FORM.input('action', scope, {trueplaceholder: "Nombre de la acción"}) %>
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-sm-12 col-md-4'>
+                <label class="control-label is-visible animate" style="color:#000000 !important;">
+                    Estatus posterior
+                </label>
+                <select ng-model="modulo_estatus.estatus_posterior" class="js-select2-multiple"
+                        name="states[]" id="estatus_posterior" multiple="multiple">
+                    <option ng-repeat="(key, item) in  modulo_estatus.estatus_list" value="{{item.id}}">
+                        {{item.nombre}}
+                    </option>
+                </select>
+            </div>
+            <div class='col-sm-12 col-md-4'>
+                <label class="control-label is-visible animate" style="color:#000000 !important;">
+                    Rol Permitido
+                    <i id="popoverrol_permite" class="icon-help">
+                    </i>
+                </label>
+                <select ng-model="modulo_estatus.rol_permite" class="js-select2-multiple" name="states[]"
+                        id="rol_permite" multiple="multiple">
+                    <option ng-repeat="(key, item) in  modulo_estatus.roles_list" value="{{item.id}}">
+                        {{item.name}}
+                    </option>
+                </select>
+            </div>
+            <div class='col-sm-12 col-md-4'>
+                <label class="control-label is-visible animate" style="color:#000000 !important;">
+                    Rol Permitido (full)
+                    <i id="popoverrol_permite_full" class="icon-help">
+                    </i>
+                </label>
+                <select ng-model="modulo_estatus.rol_permite_full" class="js-select2-multiple" name="states[]"
+                        id="rol_permite_full" multiple="multiple">
+                    <option ng-repeat="(key, item) in  modulo_estatus.roles_list" value="{{item.id}}">
+                        {{item.name}}
+                    </option>
+                </select>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class='col-sm-12 col-md-12'>
+                <%- FORM.input('descripcion', scope, {placeholder: "Descripción"}) %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- FORM.footer(scope) %>
+
+<script>
+    $(function () {
+        setTimeout(function () {
+            $(".js-select2-multiple").select2({
+                placeholder: 'Seleccione an opción'
+            });
+            modulo_estatus.refreshAngular();
+        }, 100);
+
+        $('#popoverrol_permite_full').popover({
+            container: 'body',
+            title: "Rol Permitido (full)",
+            content: "Aquí se definen los roles que podrán utilizar el estatus que se está definiendo independientemente las reglas definidas.",
+            trigger: 'manual'
+        });
+        const elemento_full = document.getElementById("popoverrol_permite_full");
+
+        // Agrega un event listener al objeto document
+        document.addEventListener("click", function (evento) {
+            // Verifica si el evento ocurrió fuera del elemento que estamos observando
+            if (elemento_full !== evento.target && !elemento_full.contains(evento.target)) {
+                // Se hizo clic fuera del elemento
+                $('#popoverrol_permite_full').popover('hide')
+
+            }
+        });
+        $('#popoverrol_permite_full').on('click', function (evento) {
+            evento.stopPropagation();
+            $(this).popover('show');
+        });
+
+        $('#popoverrol_permite').popover({
+            container: 'body',
+            title: "Rol Permitido",
+            content: "Aquí se definen los roles que podrán utilizar el estatus que se está definiendo.",
+            trigger: 'manual'
+        });
+        const elemento = document.getElementById("popoverrol_permite");
+
+        // Agrega un event listener al objeto document
+        document.addEventListener("click", function (evento) {
+            // Verifica si el evento ocurrió fuera del elemento que estamos observando
+            if (elemento !== evento.target && !elemento.contains(evento.target)) {
+                // Se hizo clic fuera del elemento
+                $('#popoverrol_permite').popover('hide')
+
+            }
+        });
+        $('#popoverrol_permite').on('click', function (evento) {
+            evento.stopPropagation();
+            $(this).popover('show');
+        });
+    })
+</script>
+
+
+
+
+

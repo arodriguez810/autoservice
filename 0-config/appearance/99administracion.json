@@ -5,6 +5,20 @@
       "icon": "home",
       "href": "#hometwo",
       "text": "Inicio"
+    },
+    {
+      "menus": [
+        {
+          "modal": "",
+          "icon": "diff-modified",
+          "href": "#modulo_estatus",
+          "text": "Módulo de estatus"
+        }
+      ],
+      "modal": "",
+      "icon": "cogs",
+      "href": "#",
+      "text": "Administración"
     }
   ]
 }

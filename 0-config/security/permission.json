@@ -84,7 +84,7 @@
         "type": "full",
         "allow": {}
       },
-      "cbs_autorizacion_estatus": {
+      "modulo_estatus": {
         "type": "full",
         "allow": {}
       },

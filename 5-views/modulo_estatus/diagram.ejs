@@ -1,0 +1,40 @@
+<div class="tab-content">
+    <div class="tab-pane active" id="basic">
+        <div class="row">
+            <div class='col-sm-12 col-md-12' style="height: 700px">
+                <div name="myDiagramDiv" id="myDiagramDiv" style="height: 700px">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal-footer dragonformfooter" dragonlanguage="" id="btnformfooter" style="margin-top: 20px">
+    <button
+            dragonlanguage="" title="MESSAGE.ic('mono.cancel')"
+            type="button" class="btn bg-<%= COLOR.warning %> btn-labeled btn-xs pull-right"
+            onclick="MODAL.close()">
+        <b><i class="icon-cross2"></i></b>
+        Cerrar
+    </button>
+    <button title="Descargar"
+            type="button" role="button"
+            class=" btn bg-<%= COLOR.primary %>-800 btn-labeled btn-xs pull-right"
+            ng-click="<%= scope %>.downloadDiagram()">
+        <b><i class="icon-floppy-disk"></i></b>
+        Descargar
+    </button>
+</div>
+
+<script>
+    $(function () {
+
+    });
+</script>
+
+
+
+
+
