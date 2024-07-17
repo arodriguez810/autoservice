@@ -1,6 +1,54 @@
 <div class="tab-content">
     <div class="tab-pane active" id="basic">
         <div class="row">
+            <div id="info-box" class="alert alert-info alert-styled-left alert-bordered" style="margin-top: -15px; padding: 5px">
+                <ol style="margin: 0px;">
+                    <li>
+                        <strong><i>Crear un nuevo estatus: </i></strong>
+                    </li>
+                    <ul>
+                        <li>
+                            <i>Haz doble clic en el fondo del gráfico.</i>
+                        </li>
+                    </ul>
+                    <li>
+                        <strong><i>Editar un estatus existente: </i></strong>
+                    </li>
+                    <ul>
+                        <li>
+                            <i>Haz doble clic en el nodo del estatus que deseas modificar.</i>
+                        </li>
+                    </ul>
+                    <li>
+                        <strong><i>Eliminar un estatus: </i></strong>
+                    </li>
+                    <ul>
+                        <li>
+                            <i>Haz clic en el estatus que deseas eliminar y presiona las teclas “Backspace” o “Delete”.</i>
+                        </li>
+                    </ul>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2 col-md-4">
+                <%- FORM.select('modulo_entidad_diagram', scope, {
+                    allownew: false,
+                    allowedit: false,
+                    allowview: false,
+                    allowlist: false,
+                    allownull: false,
+                    text: "item.nombre",
+                    table: 'modulo_entidad',
+                    label: "Módulo",
+                    icon: {class: "archive"}
+                }) %>
+            </div>
+            <div class='col-sm-3 col-md-3' style="padding-left: 0">
+                <div style="margin-top: 20px; margin-left: 5px;">
+                    <button class="btn btn-primary" ng-click="<%= scope %>.reload_diagram()">Buscar</button>
+                </div>
+            </div>
             <div class='col-sm-12 col-md-12' style="height: 700px">
                 <div name="myDiagramDiv" id="myDiagramDiv" style="height: 700px">
 

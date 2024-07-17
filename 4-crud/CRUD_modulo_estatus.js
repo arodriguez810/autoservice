@@ -49,6 +49,15 @@ DSON.keepmerge(CRUD_modulo_estatus, {
                 exportExample: false,
                 nofilter: true
             },
+            modulo_entidad_nombre: {
+                label: "Módulo",
+                linkfilter: {
+                    from: "modulo_entidad",
+                    value: "id",
+                    text: "item.nombre",
+                    whereColumn: "modulo_entidad",
+                }
+            },
             tipo_estatus_nombre: {
                 label: "Tipo",
                 linkfilter: {
@@ -105,7 +114,13 @@ DSON.keepmerge(CRUD_modulo_estatus, {
                 'field': 'id',
                 'columns': ['id', 'nombre']
             },
-        ]
+            {
+                'table': 'modulo_entidad',
+                'base': 'modulo_entidad',
+                'field': 'id',
+                'columns': ['id', 'nombre']
+            }
+        ],
 
     }
 });
