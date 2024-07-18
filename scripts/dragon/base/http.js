@@ -114,6 +114,7 @@ HTTP = function () {
             if (session.current() !== null) {
                 $http.defaults.headers.common['x-access-token'] = session.current().token;
                 $http.defaults.headers.common['x-access-userid'] = session.current().getID();
+                $http.defaults.headers.common['Access-Control-Allow-Origin'] = "*";
                 try {
                     $http.defaults.headers.common['x-access-geturl'] = new HTTP().tagpath("#" + baseController.currentModel.modelName);
                 } catch (e) {

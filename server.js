@@ -287,7 +287,9 @@ app.use(bodyParser.urlencoded({extended: false, limit: '100mb'}));
 app.use(bodyParser.json({limit: '100mb'}));
 app.use(bodyParser.json({type: "application/vnd.api+json"}));
 console.log(modules);
-app.use(cors());
+app.use(cors({
+    origin: '*'
+}));
 app.use(methodOverride());
 app.use(session({
     secret: CONFIG.appKey,
@@ -522,29 +524,29 @@ if (CONFIG.postgreactive !== false) {
     var types = PARAMS.postgre.types;
     console.log(PARAMS.postgre);
 
-    types.setTypeParser(1114, (stringValue) => {
+    types.setTypeParser(1114,  (stringValue)=> {
         var temp = new Date(stringValue);
-        let convertida = new Date(Date.UTC(temp.getUTCFullYear(), temp.getUTCMonth(), temp.getUTCDate(), temp.getUTCHours() + (CONFIG.postgre.timezone), temp.getUTCMinutes(), temp.getUTCSeconds()));
-        console.log("datetime", stringValue, convertida);
+        let convertida =new Date(Date.UTC(temp.getUTCFullYear(), temp.getUTCMonth(), temp.getUTCDate(), temp.getUTCHours() + (CONFIG.postgre.timezone), temp.getUTCMinutes(), temp.getUTCSeconds()));
+        console.log("datetime",stringValue,convertida);
         return convertida;
     });
-    types.setTypeParser(1082, (stringValue) => {
+    types.setTypeParser(1082,  (stringValue)=> {
         var temp = new Date(stringValue);
-        let convertida = new Date(Date.UTC(temp.getUTCFullYear(), temp.getUTCMonth(), temp.getUTCDate(), 0 + (CONFIG.postgre.timezone), 0, 0));
-        console.log("date", stringValue, convertida);
+        let convertida = new Date(Date.UTC(temp.getUTCFullYear(), temp.getUTCMonth(), temp.getUTCDate(), 0+ (CONFIG.postgre.timezone), 0, 0));
+        console.log("date",stringValue,convertida);
         return convertida;
     });
-    types.setTypeParser(1184, (stringValue) => {
+    types.setTypeParser(1184,  (stringValue)=> {
         var temp = new Date(stringValue);
-        let convertida = new Date(Date.UTC(temp.getUTCFullYear(), temp.getUTCMonth(), temp.getUTCDate(), temp.getUTCHours() + (CONFIG.postgre.timezone), temp.getUTCMinutes(), temp.getUTCSeconds()));
-        console.log("datetimez", stringValue, convertida);
+        let convertida =new Date(Date.UTC(temp.getUTCFullYear(), temp.getUTCMonth(), temp.getUTCDate(), temp.getUTCHours() + (CONFIG.postgre.timezone), temp.getUTCMinutes(), temp.getUTCSeconds()));
+        console.log("datetimez",stringValue,convertida);
         return convertida;
     });
 
 
     modelpostgre = [];
     modules.postgre.lacone = new PARAMS.postgre.Pool(PARAMS.CONFIG.postgre);
-    console.log(PARAMS.postgre.types);
+    console.log( PARAMS.postgre.types);
     modules.postgre.data(`select * from viewcache`, PARAMS, false).then(y => {
         cacheobjects = y.data;
         PARAMS.cacheobjects = cacheobjects;

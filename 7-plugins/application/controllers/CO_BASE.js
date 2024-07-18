@@ -92,14 +92,18 @@ app.factory('logTimeTaken', [function () {
 app.config(['$httpProvider', function ($httpProvider) {
     $httpProvider.interceptors.push('logTimeTaken');
     var session = new SESSION();
-    if (session.isLogged())
+    if (session.isLogged()) {
         $httpProvider.defaults.headers.common['x-access-token'] = session.current().token;
+        $httpProvider.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
+    }
 }]);
 $.ajaxSetup({
     beforeSend: function (xhr) {
         var session = new SESSION();
-        if (session.isLogged())
+        if (session.isLogged()) {
             xhr.setRequestHeader("x-access-token", session.current().token);
+            xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+        }
     }
 });
 app.controller('baseController', function ($scope, $http, $compile, $controller) {

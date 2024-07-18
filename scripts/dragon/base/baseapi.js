@@ -74,22 +74,44 @@ BASEAPI = {
         },
     },
     cedula: (cedula) => new Promise((resolve, reject) => {
-        let config = {
-            "async": true,
-            "crossDomain": true,
-            "url": `http://151.106.62.86/satte/public/admin/offlineservices/cedula?cedula=` + cedula,
-            "method": "GET"
-        }
-        $.ajax(config).done((response) => {
-            if (response.data) {
-                console.log(response.data);
-                resolve(response.data);
-            }
-        }).fail((e) => {
-            console.log(e);
-            resolve(e);
+
+        fetch(`http://151.106.62.86/satte/public/admin/offlineservices/cedula?cedula=` + cedula).then(function (response) {
+            resolve(response.json());
+        }).then(function (data) {
+            resolve(data);
+        }).catch(function (err) {
+            resolve('Fetch Error :-S', err);
         });
-        
+        //
+        // var xmlHttp = new XMLHttpRequest();
+        // xmlHttp.onreadystatechange = function (data) {
+        //     debugger
+        //     try {
+        //         let data = JSON.parse(data?.target?.response);
+        //         resolve(data);
+        //     } catch (e) {
+        //         resolve(data?.target?.response);
+        //     }
+        // }
+        // xmlHttp.open("GET", `http://151.106.62.86/satte/public/admin/offlineservices/cedula?cedula=` + cedula, true); // true for asynchronous
+        // xmlHttp.send(null);
+        //
+        // let config = {
+        //     "async": true,
+        //     "crossDomain": true,
+        //     "url": `http://151.106.62.86/satte/public/admin/offlineservices/cedula?cedula=` + cedula,
+        //     "method": "GET"
+        // }
+        // $.ajax(config).done((response) => {
+        //     if (response.data) {
+        //         console.log(response.data);
+        //         resolve(response.data);
+        //     }
+        // }).fail((e) => {
+        //     console.log(e);
+        //     resolve(e);
+        // });
+
 
     }),
     cedula2: (cedula) => new Promise((resolve, reject) => {
