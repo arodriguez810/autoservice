@@ -76,16 +76,21 @@ BASEAPI = {
     cedula: (cedula) => new Promise((resolve, reject) => {
         let config = {
             "async": true,
+            "crossDomain": true,
             "url": `http://151.106.62.86/satte/public/admin/offlineservices/cedula?cedula=` + cedula,
-            method: 'get',
-            crossDomain: true,
-            contentType: 'application/json'
+            "method": "GET"
         }
         $.ajax(config).done((response) => {
-            resolve(response.data);
+            if (response.data) {
+                console.log(response.data);
+                resolve(response.data);
+            }
         }).fail((e) => {
+            console.log(e);
             resolve(e);
         });
+        
+
     }),
     cedula2: (cedula) => new Promise((resolve, reject) => {
         var http = new HTTP();
