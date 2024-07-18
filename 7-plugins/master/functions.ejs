@@ -232,8 +232,18 @@ addMenu([], CONFIG.menus);
                 }).then(result => {
                     console.log(result);
                     if (result.dismiss == "cancel") {
-                        new SESSION().destroy();
-                        location.reload();
+                        BASEAPI.updateall('usuario',{
+                            fecha_sesion: "$null",
+                            where: [
+                                {
+                                    field: "id",
+                                    value: new SESSION().current().id
+                                }
+                            ]
+                        }, function (result) {
+                            new SESSION().destroy();
+                            location.reload();
+                        });
                     }
                 });
             },

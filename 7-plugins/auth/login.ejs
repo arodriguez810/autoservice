@@ -239,22 +239,22 @@ FORM = {
                     </div>
                     <h5 class="content-group" dragonlanguage>
                         Iniciar Sesión
-                        <small class="display-block">
+                        <small class="display-block" style="<%= CONFIG.microsoft_graph_testing ? "display:none;" : "display:block;" %>">
                             <language>MESSAGE.i('login.Enteryourcredentialsbelow')</language>
                         </small>
-                        <small class="text-center" dragonlanguage>
+                        <small class="text-center" style="<%= CONFIG.microsoft_graph_testing ? "display:none;" : "display:block;" %>">
                             <a ng-click="<%= scope %>.create()">
                                 No tienes una cuenta?. Crea una.
                             </a>
                         </small>
                     </h5>
                 </div>
-                <label style="    width: 100%;">
+                <label style="<%= CONFIG.microsoft_graph_testing ? "display:none;" : "display:block;" %> width: 100%;">
                     <%- FORM.input("username", scope, {text: "Remember", icon: {class: "user"}}) %>
                 </label>
                 <span id="alert_container_1" class="help-block"><p class="text-error" style="color: #ff751a ;"><i
                                 class="icon-spam"></i> Advertencia! están activadas las mayúsculas</p></span>
-                <label style="    width: 100%;">
+                <label style="<%= CONFIG.microsoft_graph_testing ? "display:none;" : "display:block;" %>    width: 100%;">
                     <%- FORM.normalpassword("password", scope, {
                         text: "Remember",
                         type: "password",
@@ -263,14 +263,23 @@ FORM = {
                 </label>
                 <span id="alert_container_2" class="help-block"><p class="text-error" style="color: #ff751a ;"><i
                                 class="icon-spam"></i> Advertencia! están activadas las mayúsculas</p></span>
-                <button type="button" role="button" ng-click="auth.login_click()"
-                        class="btn bg-primary btn-block legitRipple" style="font-size: 18px;font-weight: 700;">
+                <button
+                        type="button" role="button" ng-click="auth.login_click()"
+                        class="btn bg-primary btn-block legitRipple" style="<%= CONFIG.microsoft_graph_testing ? "display:none;" : "display:block;" %> font-size: 18px;font-weight: 700;">
                     Iniciar sesión
                     <i ng-if="auth.form.options.login.icon.class!=='none'"
                        class="icon-circle-right2 position-left ng-scope">
                     </i>
                 </button>
-                <div class="text-center" dragonlanguage>
+                <a type="button" role="button" href="outlook"
+                   class="btn bg-primary btn-block legitRipple"
+                   style="<%= CONFIG.microsoft_graph_testing ? "display:block;" : "display:none;" %>font-size: 18px;font-weight: 700;">
+                    Iniciar sesión
+                    <i ng-if="auth.form.options.login.icon.class!=='none'"
+                       class="icon-circle-right2 position-left ng-scope">
+                    </i>
+                </a>
+                <div class="text-center" dragonlanguage style="<%= CONFIG.microsoft_graph_testing ? "display:none;" : "display:block;" %>">
                     <a ng-click="<%= scope %>.forgotPassword()">
                         <language>MESSAGE.ic('login.forgotpassword')</language>
                         ?

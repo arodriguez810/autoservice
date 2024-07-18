@@ -480,7 +480,20 @@ app.controller('baseController', function ($scope, $http, $compile, $controller)
 
             var session2 = session.current();
             var condition = false;
-
+            let fecha_sesion = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+            BASEAPI.updateall('usuario',{
+                    fecha_sesion: fecha_sesion,
+                    where: [
+                    {
+                        field: "id",
+                        value: session2.id
+                    }
+                ]
+            }, function (result) {
+                new SESSION().update({
+                    fecha_sesion: fecha_sesion
+                })
+            });
 
             CONFIG.languages[1].money = session2.monedacode;
             LAN.money = value => currency(value, {
