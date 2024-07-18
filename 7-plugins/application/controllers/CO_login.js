@@ -419,6 +419,10 @@ app.controller("auth", function ($scope, $http, $compile) {
                 if (response.count[0] > 0) {
                     var user = response.data[0];
                     if (user.active == 1) {
+                        if (user.fecha_sesion || moment().diff(user.fecha_sesion, 'hours') < 1){
+                            SWEETALERT.show({type: "error", message: "El usuario ya tiene una sesión iniciada"})
+                            return;
+                        }
                         let session = {
                             current: () => {
                                 return new SESSION().current(user);

@@ -983,36 +983,36 @@ exports.init = function (params) {
     });
     params.app.get(`/${params.CONFIG.folder}/outlook`, async function (req, res) {
         console.log("loadEJSSimple");
-        if (params.CONFIG.microsoft_graph_testing) {
-            let cnnX = params.modules.mssql;
-            let finalname = req.query.tempname || "Sin Nombre";
-            let user_info = {
-                nombre: finalname,
-                apellido: "*",
-                correo: finalname.replaceAll(" ", "") + "@dgcp.gob.do",
-                password: "572011BACE358A0A6AC4B3760DB7228E",
-                confirmpassword: "572011BACE358A0A6AC4B3760DB7228E",
-                active: 1,
-                allinfo: {}
-            };
-            let modelo_usuariox = new cnnX.Model("usuario", params);
-            let usuario_creadox = await modelo_usuariox.where([
-                {
-                    field: "correo",
-                    value: user_info.correo
-                }
-            ]);
-            if (!usuario_creadox.data.length)
-                await cnnX.data(`INSERT INTO usuario (nombre, apellido, correo, password, repeatPassword, profile, active ) values('${(user_info.nombre) + ''}', '${user_info.apellido || ''}', '${user_info.correo}', '572011BACE358A0A6AC4B3760DB7228E', '572011BACE358A0A6AC4B3760DB7228E', 1, 1) `, params, false);
-            res.render("../" + params.folders.viewsDragon + "/base/indexclean.ejs",
-                {
-                    DATA: user_info,
-                    params: params,
-                    scope: req.query.scope,
-                    url: req.originalUrl,
-                    user_info: {}
-                });
-        }
+        // if (params.CONFIG.microsoft_graph_testing) {
+        //     let cnnX = params.modules.mssql;
+        //     let finalname = req.query.tempname || "Sin Nombre";
+        //     let user_info = {
+        //         nombre: finalname,
+        //         apellido: "*",
+        //         correo: finalname.replaceAll(" ", "") + "@dgcp.gob.do",
+        //         password: "572011BACE358A0A6AC4B3760DB7228E",
+        //         confirmpassword: "572011BACE358A0A6AC4B3760DB7228E",
+        //         active: 1,
+        //         allinfo: {}
+        //     };
+        //     let modelo_usuariox = new cnnX.Model("usuario", params);
+        //     let usuario_creadox = await modelo_usuariox.where([
+        //         {
+        //             field: "correo",
+        //             value: user_info.correo
+        //         }
+        //     ]);
+        //     if (!usuario_creadox.data.length)
+        //         await cnnX.data(`INSERT INTO usuario (nombre, apellido, correo, password, repeatPassword, profile, active ) values('${(user_info.nombre) + ''}', '${user_info.apellido || ''}', '${user_info.correo}', '572011BACE358A0A6AC4B3760DB7228E', '572011BACE358A0A6AC4B3760DB7228E', 1, 1) `, params, false);
+        //     res.render("../" + params.folders.viewsDragon + "/base/indexclean.ejs",
+        //         {
+        //             DATA: user_info,
+        //             params: params,
+        //             scope: req.query.scope,
+        //             url: req.originalUrl,
+        //             user_info: {}
+        //         });
+        // }
 
         req.originalUrl = req.originalUrl.replace(params.CONFIG.folder + "/", "");
         req.originalUrl = req.originalUrl.replace("/" + params.CONFIG.folder, "");

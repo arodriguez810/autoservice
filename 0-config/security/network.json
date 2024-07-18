@@ -10,5 +10,18 @@
     "folder": "AUTOSERVICE",
     "ssl": false,
     "port": 9090
+  },
+  "microsoft_graph_testing": false,
+  "microsoft_graph" : {
+    "clientId": "7dd5c8c8-0a4d-4e04-91a9-4993dfe427d6",
+    "clientSecret": "48328d74-f0a3-4ccc-95f6-a8002ca3b37c",
+    "tenantId": "7a23af41-722c-4f0e-99fe-c4908a296b98",
+    "redirectUri": "http://localhost:9090/AUTOSERVICE/outlook",
+    "scopes": ["https://graph.microsoft.com/email", "https://graph.microsoft.com/offline_access", "https://graph.microsoft.com/openid", "https://graph.microsoft.com/profile", "https://graph.microsoft.com/User.Read"]
+  },
+  "redmine_api": {
+    "X_Redmine_API_Key": "c1361828868fb84accad06777ce0ffcc0607564a",
+    "Authorization": "Basic YWJjZDEyMzQ6YWJjZDEyMzQ=",
+    "Cookie": "_redmine_session=WmhQQklnWkpxd09vUUpGQUV3bDdCeCtOM2EyMk4vMmxCZGlxeTkybXRyZGN3MUk3cVh3RDB2ajZQSmdQNjVnUFlWWTlRWDVPeVpweG9OelFqQWcvaEVpZGZDbGVvNElWenpYWmRFU3BVSDVhZkcvQU84eGpTR20vSE5UR0prZldnZ3lEbGp1NTBzalNnd1pZdVJDK1hEY25qZk95UVp6TmNDSksyZk5UUjMxQkk2YVUyQklBU044aVRYWUpkMkgrOHZFTW9HTGhvYUprY2plTWwzNWQ3KzJJanpLaGNaeGxyRXo2VlB4bEY1a3h1UHFyMG9MeWd4ckxCZmRuMXREbk9tYW5wRElyR1k3RlMwaEQ2dUhSMXQvbndDcDk0anhlV1JyUzFMVXAyYmJYYm90Mnk5cWVaNmRWc1lYTTg4MHktLURaK2Jhb1dPVTYxZG9KOS9OYlIrV0E9PQ%3D%3D--6901981c9e22bf368297f96d6ff04298f1cd7318"
   }
 }

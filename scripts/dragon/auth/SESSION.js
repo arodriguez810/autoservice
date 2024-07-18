@@ -197,8 +197,18 @@ SESSION = function () {
             message: MESSAGE.i('alerts.AYSCloseSession'),
             confirm: function () {
                 STORAGE.add("YOERADELTIPO", new SESSION().current().tipo_institucion);
-                new SESSION().destroy();
-                location.reload();
+                BASEAPI.updateall('usuario',{
+                    fecha_sesion: "$null",
+                    where: [
+                        {
+                            field: "id",
+                            value: new SESSION().current().id
+                        }
+                    ]
+                }, function (result) {
+                    new SESSION().destroy();
+                    location.reload();
+                });
             }
         });
     };
@@ -208,9 +218,19 @@ SESSION = function () {
             title: MESSAGE.ic('mono.session'),
             message: MESSAGE.i('alerts.SessionEnd'),
             confirm: function () {
-                MODAL.closeAll();
-                new SESSION().destroy();
-                location.reload();
+                BASEAPI.updateall('usuario',{
+                    fecha_sesion: "$null",
+                    where: [
+                        {
+                            field: "id",
+                            value: new SESSION().current().id
+                        }
+                    ]
+                }, function (result) {
+                    MODAL.closeAll();
+                    new SESSION().destroy();
+                    location.reload();
+                });
             }
         });
     };
