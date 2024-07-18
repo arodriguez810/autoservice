@@ -123,6 +123,7 @@ HTTP = function () {
     };
     this.allowOrigin = function ($http) {
         $http.defaults.headers.common['Access-Control-Allow-Origin'] = "*";
+        console.log($http.defaults.headers);
     };
     this.evaluate = function (data) {
         if (STORAGE.exist('warningRequests')) {

@@ -77,11 +77,9 @@ BASEAPI = {
         let config = {
             "async": true,
             "url": `http://151.106.62.86/satte/public/admin/offlineservices/cedula?cedula=` + cedula,
-            "method": "GET",
-            headers: {'Access-Control-Allow-Origin': '*'},
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-            }
+            method: 'get',
+            crossDomain: true,
+            contentType: 'application/json'
         }
         $.ajax(config).done((response) => {
             resolve(response.data);
