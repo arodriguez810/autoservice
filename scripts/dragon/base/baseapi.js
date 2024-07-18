@@ -73,6 +73,31 @@ BASEAPI = {
             });
         },
     },
+    cedula: (cedula) => new Promise((resolve, reject) => {
+        let config = {
+            "async": true,
+            "url": `http://151.106.62.86/satte/public/admin/offlineservices/cedula?cedula=` + cedula,
+            "method": "GET",
+            headers: {'Access-Control-Allow-Origin': '*'},
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+            }
+        }
+        $.ajax(config).done((response) => {
+            resolve(response.data);
+        }).fail((e) => {
+            resolve(e);
+        });
+    }),
+    cedula2: (cedula) => new Promise((resolve, reject) => {
+        var http = new HTTP();
+        http.allowOrigin($http);
+        $http.get(`http://151.106.62.86/satte/public/admin/offlineservices/cedula?cedula=` + cedula).then(function (data) {
+            resolve(data);
+        }, function (data) {
+            resolve(data);
+        });
+    }),
     csv: function (engine, tableName, paramenters) {
         var rootPath = '/api/' + model;
         BASEAPI.ajax.post(`${engine}_csv`, {

@@ -121,6 +121,9 @@ HTTP = function () {
 
             }
     };
+    this.allowOrigin = function ($http) {
+        $http.defaults.headers.common['Access-Control-Allow-Origin'] = "*";
+    };
     this.evaluate = function (data) {
         if (STORAGE.exist('warningRequests')) {
             WARNINGREQUESTS = STORAGE.get('warningRequests');
@@ -208,7 +211,7 @@ $(document).ready(function () {
     $(window).bind('hashchange', function () { //detect hash change
         CHANGINGMENU = true;
         $("body").removeClass("sidebar-mobile-main");
-        if(location.href.indexOf("#information/about")===-1){
+        if (location.href.indexOf("#information/about") === -1) {
             location.reload();
 
         }
