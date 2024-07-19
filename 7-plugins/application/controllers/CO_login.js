@@ -250,18 +250,43 @@ app.controller("auth", function ($scope, $http, $compile) {
     };
     auth.restorePassword = async function () {
         VALIDATION.save(auth, async function () {
-            var animation = new ANIMATION();
-            animation.loadingPure($("#idsend"), "", $("#spinersend"), '30');
-            SERVICE.base_auth.changePassword({
-                restore: auth.queries.restore,
-                newpassword: auth.newpassword
-            }, function (result) {
-                animation.stoploading($("#idsend"), $("#spinersend"));
-                if (result.data.success) {
-                    SWEETALERT.show({message: MESSAGE.i('login.passwordrestored')});
-                    MODAL.close(auth);
+            var http = new HTTP();
+            let querystring = http.hrefToObj();
+            if (Object.keys(querystring).length === 0) {
+                if (auth.password === auth.newpassword) {
+                    SWEETALERT.show({type: "error", message: "La nueva contraseña no puede ser la misma a la anterior"});
+                    return;
                 }
-            });
+                var animation = new ANIMATION();
+                animation.loadingPure($("#idsend"), "", $("#spinersend"), '30');
+                SERVICE.base_auth.changePassword({
+                    restore: auth.queries.restore,
+                    newpassword: auth.newpassword
+                }, function (result) {
+                    animation.stoploading($("#idsend"), $("#spinersend"));
+                    if (result.data.success) {
+                        SWEETALERT.show({message: MESSAGE.i('login.passwordrestored')});
+                        auth.password = "";
+                        auth.$scope.$digest();
+                        MODAL.close(auth);
+                    }
+                });
+            }else{
+                var animation = new ANIMATION();
+                animation.loadingPure($("#idsend"), "", $("#spinersend"), '30');
+                SERVICE.base_auth.changePassword({
+                    restore: auth.queries.restore,
+                    newpassword: auth.newpassword
+                }, function (result) {
+                    animation.stoploading($("#idsend"), $("#spinersend"));
+                    if (result.data.success) {
+                        SWEETALERT.show({message: MESSAGE.i('login.passwordrestored')});
+                        auth.password = "";
+                        auth.$scope.$digest();
+                        MODAL.close(auth);
+                    }
+                });
+            }
         }, ["newpassword", "confirmpassword"]);
     };
     auth.forgotPassword = function () {
@@ -419,6 +444,30 @@ app.controller("auth", function ($scope, $http, $compile) {
                 if (response.count[0] > 0) {
                     var user = response.data[0];
                     if (user.active == 1) {
+                        if (!user.fecha_cambio_contraseña || moment().diff(user.fecha_cambio_contraseña, 'days') > parseInt(CONFIG.users.expire)){
+                            SWEETALERT.show({
+                                type: "error",
+                                message: "Su contraseña se ha vencido, por favor ingrese una nueva contraseña para iniciar sesión.",
+                                confirm: function (){
+                                    auth.updatepassword();
+                                    auth.modal.modalView("auth/restore", {
+                                        width: ENUM.modal.width.large,
+                                        header: {
+                                            title: MESSAGE.ic("login.resetpassword"),
+                                            icon: "lock"
+                                        },
+                                        footer: {
+                                            cancelButton: false
+                                        },
+                                        content: {
+                                            loadingContentText: `${MESSAGE.i('actions.Loading')}...`,
+                                            sameController: true
+                                        },
+                                    });
+                                }
+                            })
+                            return;
+                        }
                         if (user.fecha_sesion || moment().diff(user.fecha_sesion, 'hours') < 1){
                             SWEETALERT.show({type: "error", message: "El usuario ya tiene una sesión iniciada"})
                             return;
@@ -617,6 +666,21 @@ app.controller("auth", function ($scope, $http, $compile) {
             });
         });
     };
-
+    auth.updatepassword = async function () {
+        var user = await BASEAPI.firstp('usuario', {
+            where: [{
+                field: 'correo',
+                value: auth.username
+            }]
+        });
+        if (user !== null) {
+            user = new SESSION().runFunction(user);
+            var date = new Date();
+            var token = `${date.getFullYear()}${date.getMonth()}${date.getDay()}${user.id}`;
+            SERVICE.base_auth.md5({value: token}, function (result) {
+                auth.queries.restore = result.data.md5;
+            });
+        }
+    }
 
 });

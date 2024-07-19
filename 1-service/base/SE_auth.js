@@ -362,6 +362,7 @@ exports.api = {
                 for (var usr of result.data) {
                     var date = new Date();
                     var generate = `${date.getFullYear()}${date.getMonth()}${date.getDay()}${usr[config.fields.id]}`;
+                    var fecha_cambio_contraseña = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
                     var mdf5 = params.md5(params.CONFIG.appKey + generate);
                     console.log(usr, mdf5, request.restore);
                     if (mdf5 === request.restore) {
@@ -370,6 +371,7 @@ exports.api = {
                         console.log(true_users);
                         return await true_users.update({
                             password: newpassword,
+                            fecha_cambio_contraseña: fecha_cambio_contraseña,
                             where: [{field: 'id', value: usr[config.fields.id]}]
                         }).then(upda => {
                             return {success: true};

@@ -91,6 +91,7 @@ app.controller("usuario", function ($scope, $http, $compile) {
 
             usuario.triggers.table.before.insert = (data) => new Promise((resolve, reject) => {
                 data.inserting.usuario_activo = undefined;
+                data.inserting.fecha_cambio_contraseña = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
                 resolve(true);
             });
 
