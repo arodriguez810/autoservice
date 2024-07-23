@@ -640,6 +640,7 @@ app.controller("modulo_estatus", function ($scope, $http, $compile) {
     // };
     modulo_estatus.triggers.table.before.insert = (data) => new Promise((resolve, reject) => {
         //console.log(`$scope.triggers.table.before.insert ${$scope.modelName}`);
+        console.log(data);
         ["estatus_posterior", "rol_permite", "rol_permite_full"].forEach(d => {
             if (Array.isArray(modulo_estatus[d]))
                 modulo_estatus[d] = "[" + modulo_estatus[d].join(",") + "]";
@@ -655,6 +656,7 @@ app.controller("modulo_estatus", function ($scope, $http, $compile) {
     // };
     modulo_estatus.triggers.table.before.update = (data) => new Promise((resolve, reject) => {
         //console.log(`$scope.triggers.table.before.update ${$scope.modelName}`);
+        console.log(data);
         ["estatus_posterior", "rol_permite", "rol_permite_full"].forEach(d => {
             if (Array.isArray(modulo_estatus[d]))
                 modulo_estatus[d] = "[" + modulo_estatus[d].join(",") + "]";
@@ -672,6 +674,14 @@ app.controller("modulo_estatus", function ($scope, $http, $compile) {
             modulo_estatus.loaded = true;
         }
         if (data === 'modulo_entidad' && modulo_estatus.form.mode === 'edit' && !modulo_estatus.loaded_entidad){
+            if (modulo_estatus.form.options.solicitud_documentofile.folder_construct){
+                var root = `${modulo_estatus.modelName}`;
+                for(var folders of modulo_estatus.form.options.solicitud_documentofile.folder_construct){
+                    root += `/${eval(`modulo_estatus.${folders}`)}`;
+                }
+                modulo_estatus.form.options.solicitud_documentofile.old_rootfolder = root;
+                modulo_estatus.form.options.solicitud_documentofile.new_rootfolder = root;
+            }
             modulo_estatus.modulo_entidad = modulo_estatus.modulo_entidad + "";
             modulo_estatus.form.loadDropDown('tipo_estatus');
             modulo_estatus.loaded_entidad = true;

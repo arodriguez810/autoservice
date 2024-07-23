@@ -22,11 +22,7 @@
         }
         BASEAPI.ajax.get(http.path(["files", "api"]), {folder: viewModel.root}, async function (data) {
             let users = await BASEAPI.listp('usuario', {
-                limit: 0,
-                where: [{
-                    field: 'compania',
-                    value: new SESSION().current().compania_id
-                }]
+                limit: 0
             });
             if (users.data)
                 users = users.data;
@@ -42,7 +38,9 @@
                     ext: FILE.extension(file),
                 }
                 if (metadata.length > 3) {
-                    data.data.files[i].fecha = LAN.datetime(new Date(parseInt(metadata[2])));
+                    console.log(users);
+                    let fecha = new Date();
+                    data.data.files[i].fecha = LAN.datetime(`${fecha.getFullYear()}-${fecha.getMonth() + 1}-${fecha.getDate()} ${fecha.getHours()}:${fecha.getMinutes()}:${fecha.getSeconds()}`);
                     if (users) {
                         if (users.filter) {
                             let deuser = users.filter(d => {

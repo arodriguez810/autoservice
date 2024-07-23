@@ -566,7 +566,9 @@ FORM = {
                             if ($scope.pages !== null)
                                 $scope.pages.form.subRequestCompleteVar = $scope[forme].relations.length;
                             if ($scope.pages.form.subRequestCompleteVar === 0) {
-
+                                BASEAPI.ajax.post(new HTTP().path(["files", "api", "move"]), {moves: $scope[forme].uploading}, function (data) {
+                                    $scope.filesToMove = [];
+                                });
                                 $scope.pages.form.close(undefined, undefined, close);
                                 SWEETALERT.stop();
                                 NOTIFY.success(`${$scope.singular} ${MESSAGE.i('mono.saved')}`);
@@ -722,10 +724,25 @@ FORM = {
                         var typeField = eval(`$scope[forme].schemas.insert.${field}`);
                         switch (typeField) {
                             case FORM.schemasType.upload: {
-                                $scope[forme].uploading.push({
-                                    from: `${FOLDERS.files}/${eval(`$scope.${field}`).replace('upload:', '')}`,
-                                    to: `${FOLDERS.files}/${$scope.modelName}/${field}/$id`
-                                });
+                                if (eval(`$scope[forme].options.${field}.folder_construct`)){
+                                    var root = `${$scope.modelName}`;
+                                    for(var folders of eval(`$scope[forme].options.${field}.folder_construct`)){
+                                        root += `/${eval(`$scope.${folders}`)}`;
+                                    }
+                                    eval(`$scope[forme].options.${field}.new_rootfolder = "${root}";`)
+                                    if (!eval(`$scope[forme].options.${field}.old_rootfolder`)){
+                                        eval(`$scope[forme].options.${field}.old_rootfolder = "${root}";`)
+                                    }
+                                    $scope[forme].uploading.push({
+                                        from: `${FOLDERS.files}/${eval(`$scope[forme].options.${field}.old_rootfolder`).replace('upload:', '')}`,
+                                        to: `${FOLDERS.files}/${eval(`$scope[forme].options.${field}.new_rootfolder`)}`
+                                    });
+                                }else{
+                                    $scope[forme].uploading.push({
+                                        from: `${FOLDERS.files}/${eval(`$scope.${field}`).replace('upload:', '')}`,
+                                        to: `${FOLDERS.files}/${$scope.modelName}/${field}/$id`
+                                    });
+                                }
                                 break;
                             }
                             case FORM.schemasType.selectMultiple: {

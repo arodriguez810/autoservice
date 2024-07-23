@@ -75,38 +75,21 @@ var toclient = JSON.stringify(options);
     <%= model %>.form.schemas.insert["<%= name %>"] = FORM.schemasType.upload;
     <%= model %>.form.registerField("<%= name %>", "<%= toclient %>");
     <%= model %>.form.registerField("<%= name %>_DragonCountFile", "<%= toclient %>");
-    if (MESSAGE.exist('columns.<%= nameclean %>') && !<%= model %>.
-    form.options.<%= name %>.truetext
-    )
-    {
-        <%= model %>.
-        form.options.<%= name %>.text = MESSAGE.ic('columns.<%= nameclean %>');
+    if (MESSAGE.exist('columns.<%= nameclean %>') && !<%= model %>.form.options.<%= name %>.truetext) {
+        <%= model %>.form.options.<%= name %>.text = MESSAGE.ic('columns.<%= nameclean %>');
     }
-    else
-    {
-        <%= model %>.
-        form.options.<%= name %>.text = <%= model %>.
-        form.options.<%= name %>.truetext
+    else {
+        <%= model %>.form.options.<%= name %>.text = <%= model %>.form.options.<%= name %>.truetext
     }
     if (new SESSION().isLogged()) {
-        <%= model %>.
-        form.options.<%= name %>.mess = <%= model %>.
-        form.options.<%= name %>.mess.filter(d => {
+        <%= model %>.form.options.<%= name %>.mess = <%= model %>.form.options.<%= name %>.mess.filter(d => {
             return d.company == new SESSION().current().compania_id;
         })
-        if (<%= model %>.
-        form.options.<%= name %>.mess.length == 0
-    )
-        {
-            delete <%= model %>.
-            form.options.<%= name %>.mess
+        if (<%= model %>.form.options.<%= name %>.mess.length == 0) {
+            delete <%= model %>.form.options.<%= name %>.mess
         }
-        if (<%= model %>.
-        form.options.<%= name %>.mess
-    )
-        {
-            <%= model %>.
-            form.options.<%= name %>.popover = {
+        if (<%= model %>.form.options.<%= name %>.mess) {
+            <%= model %>.form.options.<%= name %>.popover = {
                 title:
                 <%= model %>.form.options.<%= name %>.mess[0].field_names.replace('_', ' '),
                 content:
@@ -120,12 +103,8 @@ var toclient = JSON.stringify(options);
     <%= model %>.<%= name %>_DragonCountFile = 0;
     var thisID = <%= model %>.form.options.<%= name %>.alwaysnew ? undefined : eval(`<%= model %>.${keyColumn}`);
 
-    if (<%= model %>.
-    form.options.<%= name %>.file !== '' && !<%= model %>.form.options.<%= name %>.alwaysnew
-    )
-    {
-        thisID = <%= model %>.
-        form.options.<%= name %>.file;
+    if (<%= model %>.form.options.<%= name %>.file !== '' && !<%= model %>.form.options.<%= name %>.alwaysnew){
+        thisID = <%= model %>.form.options.<%= name %>.file;
     }
 
 </script>
@@ -170,16 +149,11 @@ var toclient = JSON.stringify(options);
     </div>
 <% } %>
 <script>
-    if (!<%= model %>.
-    filesToMove
-    )
+    if (!<%= model %>.filesToMove)
     <%= model %>.filesToMove = [];
     <%= model %>.filesToMove.push("<%= nameclean %>");
     <%= model %>.saveAllFiles = (id, folder, file) => new Promise(async (resolve, reject) => {
-        for (var save of <%= model %>.
-        filesToMove
-    )
-        {
+        for (var save of <%= model %>.filesToMove) {
             var pass = true;
             if (file) {
                 if (file != save) {
@@ -219,8 +193,8 @@ var toclient = JSON.stringify(options);
                 container: 'body',
                 title: eval("`" +<%= model %>.form.options.<%= name %>.popover.label + "`"),
                 content: eval("`" +<%= model %>.form.options.<%= name %>.popover.content + "`"),
-            trigger: 'manual'
-        });
+                trigger: 'manual'
+            });
             // Obtén el elemento que deseas observar
             const elemento = document.getElementById("popover<%= model %>_<%= nameclean %>");
 
@@ -266,23 +240,18 @@ var toclient = JSON.stringify(options);
                 }
             }
             $("#showImage<%= model %>_<%= nameclean %>").hide();
-        }
-    )
-        ;
+        });
         <% } %>
         if (amLoad<%= name %> || direct === true) {
             BASEAPI.ajax.get(new HTTP().path(["files", "api"]), {
                     folder: <%= model %>.form.options.<%= name %>.folder
-                },
-
-                function (data) {
+                }, function (data) {
                     <%= model %>.
                     <%= name %>_DragonCountFile = data.data.files.length;
                     <%= model %>.
                     $scope.$digest();
                 }, 'notLoad'
-            )
-            ;
+            );
             amLoad<%= name %> = false;
         }
     }
@@ -405,67 +374,64 @@ var toclient = JSON.stringify(options);
         modal.modalView("templates/components/filetype", modal);
     }
     if (!DSON.oseaX(thisID)) {
-        if (<%= model %>.
-        form.options.<%= name %>.file === ''
-    )
-        {
-            if ( <%= model %>.
-            form.options.<%= name %>.alone === true
-        )
-            <%= model %>.
-            form.options.<%= name %>.folder = `<%= options.folder %>`;
-
+        if (<%= model %>.form.options.<%= name %>.file === ''){
+            if ( <%= model %>.form.options.<%= name %>.alone === true)
+            <%= model %>.form.options.<%= name %>.folder = `<%= options.folder %>`;
         else
-            <%= model %>.
-            form.options.<%= name %>.folder = <%= model %>.
-            form.options.<%= name %>.tempfolder ? (`<%= modelfolder %>/temp_files/<%= name %>/` + new Date().getTime()) : `<%= modelfolder %>/<%= name %>/${thisID}`;
+            <%= model %>.form.options.<%= name %>.folder = <%= model %>.form.options.<%= name %>.tempfolder ? (`<%= modelfolder %>/temp_files/<%= name %>/` + new Date().getTime()) : `<%= modelfolder %>/<%= name %>/${thisID}`;
         }
         ShowCount<%= name %>(true);
-
     }
 
     <%= model %>.form.beginFunctions.push("ShowCount<%= name %>()");
 
     $(document).ready(function () {
 
-        <%= model %>.<%= name %> = "upload:" + <%= model %>.
-        form.options.<%= name %>.folder;
+        <%= model %>.<%= name %> = "upload:" + <%= model %>.form.options.<%= name %>.folder;
 
 
         $('[name="<%= model %>_<%= nameclean %>"]').click(function () {
 
             amLoad<%= name %> = true;
-            var root = <%= model %>.
-            form.options.<%= name %>.folder;
+            if (<%= model %>.form.options.<%= name %>.folder_construct_validate){
+                var root = `${<%= model %>.modelName}`;
+                var campos = [];
+                <%= model %>.form.options.<%= name %>.folder_construct_validate.forEach(d =>{
+                    campos.push(eval(`<%= model %>.form.options.${d}.label`) || eval(`<%= model %>.form.options.${d}.truelabel`) || eval(`<%= model %>.form.options.${d}.placeholder`) || eval(`<%= model %>.form.options.${d}.trueplaceholder`))
+                });
+                for(var folders of <%= model %>.form.options.<%= name %>.folder_construct_validate){
+                    if (DSON.oseaX(eval(`${root}.${folders}_object`) || eval(`${root}.${folders}`))) {
+                        SWEETALERT.show({
+                            type: 'error',
+                            message: `<p>El formulario debe tener los siguientes campos completados antes de subir un archivo:</p>${campos}`
+                        })
+                        break;
+                    }
+                }
+            }
+
+            if (<%= model %>.form.options.<%= name %>.folder_construct){
+                var root = `${<%= model %>.modelName}`;
+                for(var folders of <%= model %>.form.options.<%= name %>.folder_construct){
+                    root += `/${eval(`<%= model %>.${folders}`)}`;
+                }
+                <%= model %>.form.options.<%= name %>.new_rootfolder = root;
+            }else{
+                var root = <%= model %>.form.options.<%= name %>.folder;
+            }
             baseController.viewData = {
-                root: root,
+                root: <%= model %>.form.options.<%= name %>.old_rootfolder ? <%= model %>.form.options.<%= name %>.old_rootfolder : root,
                 botonsubir: "<%= options.botonsubir %>",
-                file:
-                <%= model %>.form.options.<%= name %>.file,
+                file: <%= model %>.form.options.<%= name %>.file,
                 scope: <%= model %>,
                 nameclean: "<%= model %>_<%= nameclean %>",
                 options: <%= model %>.form.options.<%= nameclean %>,
-                maxsize:
-                <%= model %>.
-                form.options.<%= name %>.maxsize_mb,
-                maxfiles:
-                <%= model %>.
-                form.options.<%= name %>.maxfiles,
-                acceptedFiles:
-                <%= model %>.
-                form.options.<%= name %>.acceptedFiles,
-                columns:
-                <%= model %>.
-                form.options.<%= name %>.columns,
-                showMymessage:
-                <%= model %>.form.options.<%= name %>.acceptedFiles !== null ? true : false,
-                Mymessage:
-                <%= model %>.form.options.<%= name %>.acceptedFiles_message !== null ?
-                <%= model %>.form.options.<%= name %>.acceptedFiles_message
-        :
-            ""
-        }
-            ;
+                maxsize:<%= model %>.form.options.<%= name %>.maxsize_mb,
+                maxfiles:<%= model %>.form.options.<%= name %>.maxfiles,
+                acceptedFiles:<%= model %>.form.options.<%= name %>.acceptedFiles,
+                columns:<%= model %>.form.options.<%= name %>.columns,
+                showMymessage:<%= model %>.form.options.<%= name %>.acceptedFiles !== null ? true : false, Mymessage: <%= model %>.form.options.<%= name %>.acceptedFiles_message !== null ? <%= model %>.form.options.<%= name %>.acceptedFiles_message : ""
+            };
 
             var modal = {
                 width: <%= model %>.form.options.<%= name %>.width,

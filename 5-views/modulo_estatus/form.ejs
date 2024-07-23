@@ -16,6 +16,16 @@
             <div class="col-sm-2 col-md-4">
                 <%- FORM.checkbox("es_autorizado", scope, {text: '¿Este estatus es autorizado?'}) %>
             </div>
+            <div class="col-sm-4 col-md-4 custom-upload" style="float: right">
+                <%- FORM.file("solicitud_documentofile", scope, {
+                    title: 'Dar clic para completar el formulario de la solicitud a través de un documento existente.',
+                    truetext: 'Cargar Documento',
+                    folder_construct: ["modulo_entidad_object.nombre","nombre"],
+                    folder_construct_validate: ["modulo_entidad","nombre"],
+                    maxfiles: 3,
+                    acceptedFiles: 'image/*'
+                }) %>
+            </div>
         </div>
         <div class="row">
             <div class="col-sm-2 col-md-4">
